@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 *.pyc
 
+# Ignore Django migration files
+*/migrations/*
+!*/migrations/__init__.py
+
 # Virtual Environment
 venv/
 env/
