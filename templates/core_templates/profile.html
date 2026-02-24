@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -15,7 +14,7 @@
                 extend: {
                     colors: {
                         "primary": "#30374f",
-                        "background-light": "#f0f0db", // Adjusted to the requested light nude
+                        "background-light": "#f0f0db",
                         "background-dark": "#17181b",
                         "slate-grey": "#acbac4",
                     },
@@ -44,7 +43,6 @@
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-primary antialiased">
 <div class="flex min-h-screen">
-<!-- Sidebar -->
 <aside class="w-64 bg-primary dark:bg-black text-white flex flex-col fixed h-full z-10">
 <div class="p-8">
 <div class="flex items-center gap-2">
@@ -83,21 +81,17 @@
 </a>
 </div>
 </aside>
-<!-- Main Content -->
 <main class="flex-1 ml-64 p-12">
 <div class="max-w-4xl mx-auto">
-<!-- Header -->
 <div class="mb-10">
 <h1 class="text-3xl font-bold text-primary dark:text-white">Profile Settings</h1>
 <p class="text-slate-grey mt-1">Update your personal information and profile appearance.</p>
 </div>
-<!-- Profile Card -->
 <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm overflow-hidden">
 <div class="p-8 md:p-12">
-<!-- Avatar Section -->
 <div class="flex flex-col md:flex-row items-center gap-8 mb-12 pb-12 border-b border-gray-100 dark:border-gray-800">
 <div class="relative group">
-<img alt="Profile Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-background-light dark:border-gray-800" data-alt="Professional male portrait with a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO8YzEDjKXDJdSxhckOBopx-VzrZq0xlTlGrwQsuS674LPlELPg3JYo7M4Rva2fvtnzfrWBHfThmC6M6WEhgOvZWMzXyo_9BUp2mNGMd7L-svXnKytLwt6Jd2lH3n8wcNXsLakGuSz8pc_twwDJX7rt0tn-ixuGP4W-KGGLKojRZj-Ec18fntFeqJmnKc58ELippbeYB-8CaGz-I--TOMBprg4YBBSiEMgAtQFBgq4TeBHVwJKKeOCQ4hpPNgWOVt8M02Y7Fo-CaJs"/>
+<img alt="Profile Avatar" class="w-32 h-32 rounded-full object-cover border-4 border-background-light dark:border-gray-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO8YzEDjKXDJdSxhckOBopx-VzrZq0xlTlGrwQsuS674LPlELPg3JYo7M4Rva2fvtnzfrWBHfThmC6M6WEhgOvZWMzXyo_9BUp2mNGMd7L-svXnKytLwt6Jd2lH3n8wcNXsLakGuSz8pc_twwDJX7rt0tn-ixuGP4W-KGGLKojRZj-Ec18fntFeqJmnKc58ELippbeYB-8CaGz-I--TOMBprg4YBBSiEMgAtQFBgq4TeBHVwJKKeOCQ4hpPNgWOVt8M02Y7Fo-CaJs"/>
 <label class="absolute bottom-1 right-1 bg-primary text-white p-2 rounded-full cursor-pointer hover:bg-opacity-90 transition-all shadow-lg" for="avatar-upload">
 <span class="material-icons text-base">photo_camera</span>
 </label>
@@ -107,11 +101,10 @@
 <h3 class="text-lg font-bold text-primary dark:text-white">Profile Photo</h3>
 <p class="text-sm text-slate-grey mt-1 mb-4">JPG, GIF or PNG. Max size of 800K</p>
 <button class="px-5 py-2 text-xs font-bold border-2 border-slate-grey text-slate-grey rounded-lg hover:bg-slate-grey hover:text-white transition-all">
-                                    UPLOAD NEW PHOTO
-                                </button>
+                                UPLOAD NEW PHOTO
+                            </button>
 </div>
 </div>
-<!-- Form Section -->
 <form class="space-y-8">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div class="space-y-2">
@@ -126,8 +119,8 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div class="space-y-2 opacity-70">
 <label class="text-sm font-bold text-primary dark:text-white uppercase tracking-wider flex items-center gap-1">
-                                        Email Address
-                                        <span class="material-icons text-xs">lock</span>
+                                    Email Address
+                                    <span class="material-icons text-xs">lock</span>
 </label>
 <input class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-950 border-2 border-background-light dark:border-gray-800 rounded-lg cursor-not-allowed text-gray-500 dark:text-gray-400 font-medium outline-none" readonly="" type="email" value="julian.f@stackshop.io"/>
 </div>
@@ -137,25 +130,20 @@
 </div>
 </div>
 <div class="space-y-2">
-<div class="flex justify-between items-center">
-<label class="text-sm font-bold text-primary dark:text-white uppercase tracking-wider">Biography</label>
-<span class="text-[10px] text-slate-grey font-bold uppercase tracking-widest">340 / 500 characters</span>
+<label class="text-sm font-bold text-primary dark:text-white uppercase tracking-wider">Username</label>
+<input class="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-background-light dark:border-gray-700 rounded-lg focus:border-primary dark:focus:border-primary outline-none transition-all text-gray-800 dark:text-gray-100 font-medium" type="text" value="julian.fitz"/>
 </div>
-<textarea class="w-full px-4 py-3 bg-white dark:bg-gray-800 border-2 border-background-light dark:border-gray-700 rounded-lg focus:border-primary dark:focus:border-primary outline-none transition-all text-gray-800 dark:text-gray-100 font-medium resize-none" rows="4">Product Designer and tech enthusiast based in London. Passionate about minimalist UI/UX and e-commerce ecosystems. I've been using StackShop since its early beta and love the collection of high-end curated gear.</textarea>
-</div>
-<!-- Form Actions -->
 <div class="pt-8 mt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col-reverse md:flex-row justify-end gap-4">
 <button class="px-8 py-3 font-bold border-2 border-slate-grey text-slate-grey rounded-lg hover:bg-slate-50 transition-all uppercase text-sm tracking-widest" type="button">
-                                    Cancel
-                                </button>
+                                Cancel
+                            </button>
 <button class="px-8 py-3 font-bold bg-primary dark:bg-white dark:text-primary text-white rounded-lg hover:shadow-xl hover:-translate-y-0.5 transition-all uppercase text-sm tracking-widest" type="submit">
-                                    Save Changes
-                                </button>
+                                Save Changes
+                            </button>
 </div>
 </form>
 </div>
 </div>
-<!-- Secondary Support Links -->
 <div class="mt-8 flex justify-center gap-8 text-xs font-bold text-slate-grey uppercase tracking-widest">
 <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
 <a class="hover:text-primary transition-colors" href="#">Security Settings</a>
@@ -164,4 +152,5 @@
 </div>
 </main>
 </div>
+
 </body></html>
