@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StackShop - Customer Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#19a1e6",
+                        "background-light": "#F0F0DB", // Light Nude as requested
+                        "background-dark": "#111c21",
+                        "navy-sidebar": "#30364F",
+                        "cream-accent": "#E1D9BC",
+                        "slate-grey": "#ACBAC4"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ACBAC4;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-gray-200">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-navy-sidebar flex-shrink-0 flex flex-col h-full shadow-2xl z-50">
+<div class="p-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-icons text-white">layers</span>
+</div>
+<h1 class="text-2xl font-extrabold text-white tracking-tight">Stack<span class="text-primary">Shop</span></h1>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar">
+<a class="flex items-center gap-4 px-4 py-3.5 text-white bg-primary rounded-xl transition-all" href="#">
+<span class="material-icons">dashboard</span>
+<span class="font-semibold">Overview</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="#">
+<span class="material-icons">shopping_bag</span>
+<span class="font-medium">My Orders</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="#">
+<span class="material-icons">favorite_border</span>
+<span class="font-medium">Wishlist</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="#">
+<span class="material-icons">location_on</span>
+<span class="font-medium">Address Book</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="#">
+<span class="material-icons">credit_card</span>
+<span class="font-medium">Payment Methods</span>
+</a>
+<div class="pt-8 pb-4 px-4 text-xs font-bold uppercase tracking-widest text-gray-500">Account</div>
+<a class="flex items-center gap-4 px-4 py-3.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all" href="#">
+<span class="material-icons">settings</span>
+<span class="font-medium">Account Settings</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 text-gray-400 hover:text-red-400 hover:bg-red-400/5 rounded-xl transition-all mt-auto" href="#">
+<span class="material-icons">logout</span>
+<span class="font-medium">Sign Out</span>
+</a>
+</nav>
+<div class="p-6">
+<div class="bg-primary/10 rounded-2xl p-4 flex items-center gap-3 border border-primary/20">
+<img alt="User" class="w-10 h-10 rounded-full object-cover border-2 border-primary" data-alt="Professional profile headshot of a smiling user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt7K5RmlsCBcYPGcKZQXISpG479ylUuxGdpZzBfbxX93Wu-a8c_OvV8HlZBKCNasT3ldda9VkXE-41YmAPZEZJAz88gRrLmwll-l74ucI4MNymyIs8R_3wuJwwBvJKci1HvhoVBlxn9-FqKSSYep0vK3teOmOqpEEvpmyHT4yTP2VibkiXf4zjhAzr240RDt2AkiGi5jhL6KKjeeUtbhrg97eQh1bkopyXQuKxseMQkxcFnQGP4XklX49jyLU_-9wKxsOfywJ1Nt0s"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold text-white truncate">Alex Thompson</p>
+<p class="text-xs text-primary font-medium">Gold Member</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Dashboard Header -->
+<header class="h-20 flex items-center justify-between px-10 py-6 border-b border-cream-accent/50">
+<div>
+<h2 class="text-3xl font-extrabold text-navy-sidebar">Welcome back, Alex</h2>
+<p class="text-slate-grey text-sm font-medium mt-1">Here's what's happening with your account today.</p>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative p-2 text-navy-sidebar bg-white rounded-xl shadow-sm border border-cream-accent/30 hover:bg-primary/5 transition-colors">
+<span class="material-icons">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+</button>
+<button class="bg-navy-sidebar text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-opacity-90 transition-all shadow-lg shadow-navy-sidebar/20">
+<span class="material-icons text-sm">add</span>
+                        New Purchase
+                    </button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-10 custom-scrollbar">
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Metrics and Table -->
+<div class="col-span-12 xl:col-span-8 space-y-8">
+<!-- Metric Grid -->
+<div class="grid grid-cols-3 gap-6">
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-cream-accent/40 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-4">
+<div class="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-icons">inventory_2</span>
+</div>
+<span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded">+12%</span>
+</div>
+<div>
+<p class="text-slate-grey text-sm font-bold uppercase tracking-wider">Total Orders</p>
+<p class="text-3xl font-extrabold text-navy-sidebar">48</p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-cream-accent/40 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-4">
+<div class="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-icons">local_shipping</span>
+</div>
+<span class="text-xs font-bold text-navy-sidebar bg-slate-100 px-2 py-1 rounded">On Time</span>
+</div>
+<div>
+<p class="text-slate-grey text-sm font-bold uppercase tracking-wider">Active Shipments</p>
+<p class="text-3xl font-extrabold text-navy-sidebar">03</p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-cream-accent/40 flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-4">
+<div class="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-icons">stars</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">VIP</span>
+</div>
+<div>
+<p class="text-slate-grey text-sm font-bold uppercase tracking-wider">Reward Points</p>
+<p class="text-3xl font-extrabold text-navy-sidebar">2,450</p>
+</div>
+</div>
+</div>
+<!-- Latest Orders Table -->
+<div class="bg-white rounded-2xl shadow-sm border border-cream-accent/40 overflow-hidden">
+<div class="p-6 border-b border-cream-accent/40 flex items-center justify-between bg-white">
+<h3 class="text-xl font-bold text-navy-sidebar">Latest Orders</h3>
+<a class="text-sm font-bold text-primary hover:underline" href="#">View All Activity</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-background-light/50 text-slate-grey">
+<tr>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Order ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Date</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Total</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-cream-accent/30">
+<tr class="hover:bg-background-light/30 transition-colors">
+<td class="px-6 py-4 font-bold text-navy-sidebar">#SK-98234</td>
+<td class="px-6 py-4 text-slate-grey font-medium">Oct 12, 2023</td>
+<td class="px-6 py-4 font-bold">$249.99</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">Shipped</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:text-navy-sidebar transition-colors">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-background-light/30 transition-colors">
+<td class="px-6 py-4 font-bold text-navy-sidebar">#SK-98112</td>
+<td class="px-6 py-4 text-slate-grey font-medium">Oct 10, 2023</td>
+<td class="px-6 py-4 font-bold">$1,200.00</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Delivered</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:text-navy-sidebar transition-colors">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-background-light/30 transition-colors">
+<td class="px-6 py-4 font-bold text-navy-sidebar">#SK-97990</td>
+<td class="px-6 py-4 text-slate-grey font-medium">Oct 05, 2023</td>
+<td class="px-6 py-4 font-bold">$89.50</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">Processing</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:text-navy-sidebar transition-colors">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-background-light/30 transition-colors">
+<td class="px-6 py-4 font-bold text-navy-sidebar">#SK-97821</td>
+<td class="px-6 py-4 text-slate-grey font-medium">Sep 28, 2023</td>
+<td class="px-6 py-4 font-bold">$542.00</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Delivered</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold text-sm hover:text-navy-sidebar transition-colors">Details</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column: Recommendations -->
+<div class="col-span-12 xl:col-span-4 space-y-8">
+<div class="bg-white rounded-2xl shadow-sm border border-cream-accent/40 p-6">
+<h3 class="text-xl font-bold text-navy-sidebar mb-6">Recommended for You</h3>
+<div class="space-y-6">
+<!-- Product Card 1 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-24 h-24 bg-background-light rounded-xl overflow-hidden flex-shrink-0 border border-cream-accent/30 transition-transform group-hover:scale-105">
+<img alt="Product" class="w-full h-full object-cover" data-alt="Minimalist modern white wristwatch on a plain background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA34wgTpDGnYr0VNVwrsj1Ccnsow0PXTiuPlQQGxiVWFWWrxKHIVZtbxfSeqEMr7RKrkB6aHr4F0vNbsKYyqaDYd0xqhA1TYhKSi6QAoWPTKlR3ELH2XqV9wYJuNqzvlqERWJnXztaEN1v9wmHLHueaC8Kf-NB24zdbvmuJxKror0LcbMDyrGgTbxHf9ZdFg4EarL4CbvYGUjzj68iF2wlQPWN73CYBx7XDcC7GiLf8wZV3IlUCqhv5Ml4ApfyCU3SDMN8Nn3agkPFq"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h4 class="font-bold text-navy-sidebar line-clamp-1 group-hover:text-primary transition-colors">Lunar Edge Watch</h4>
+<p class="text-primary font-extrabold mt-1">$249.00</p>
+<button class="mt-2 text-xs font-bold text-slate-grey flex items-center gap-1 group-hover:text-navy-sidebar">
+<span class="material-icons text-sm">visibility</span> View Details
+                                        </button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-24 h-24 bg-background-light rounded-xl overflow-hidden flex-shrink-0 border border-cream-accent/30 transition-transform group-hover:scale-105">
+<img alt="Product" class="w-full h-full object-cover" data-alt="Sleek black noise cancelling wireless headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlCtbS77Pxz8OAFL7c6aCmrmmFmiEz8K6c_kp56zYSzVNparzXB0bu2Mv5pm-VGjF_Ev_wg25A6MORFckFFYoP0PkrRN3icOwdq8nKgVV4Zli23FXZ2xJOZty_4IuQSlxM4bhl7wL7y5hIElESogTqVPA-SX_La5qxPW3GN1zUKVSjfYMTbRRooZlXRkxsa94h04wsvPJvLLyFvw-vUXCM4zRFUxQGk4azfr-yCefFCRT6lzTW-B8ChwTbO2655-HPsa5bNs24Ui1W"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h4 class="font-bold text-navy-sidebar line-clamp-1 group-hover:text-primary transition-colors">Sonic Pro Headphones</h4>
+<p class="text-primary font-extrabold mt-1">$399.00</p>
+<button class="mt-2 text-xs font-bold text-slate-grey flex items-center gap-1 group-hover:text-navy-sidebar">
+<span class="material-icons text-sm">visibility</span> View Details
+                                        </button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="flex gap-4 group cursor-pointer">
+<div class="w-24 h-24 bg-background-light rounded-xl overflow-hidden flex-shrink-0 border border-cream-accent/30 transition-transform group-hover:scale-105">
+<img alt="Product" class="w-full h-full object-cover" data-alt="Modern organic ceramic vase for interior design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrF5FDAfZ-eQrwMxTkG-gnq6lCkLW6Nf2EtoQ4H_nVZykCCud_seU85afUTu6Equ5I93ZBkA7tx4Og43P9uzKWInDrNsqDcwVSTXbGVotVz65J3EmOeAh-GPpImt0yuvQP9Bjtodb5R7fWmktx6nNB1qMQlttH_GkWxOX8QxGkZgYIN4TqKHkDnVd9WsB7U7E_2GdfbcVEBwNW_LBAMi2fyWhNdZOmzrhpkuzyEqb9OfEBwJqEI0rbFvSco5Yx0lVaqL385M7m6BxE"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h4 class="font-bold text-navy-sidebar line-clamp-1 group-hover:text-primary transition-colors">Minimalist Ceramic Vase</h4>
+<p class="text-primary font-extrabold mt-1">$65.00</p>
+<button class="mt-2 text-xs font-bold text-slate-grey flex items-center gap-1 group-hover:text-navy-sidebar">
+<span class="material-icons text-sm">visibility</span> View Details
+                                        </button>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-3 bg-background-light text-navy-sidebar font-bold rounded-xl border border-cream-accent hover:bg-cream-accent/20 transition-all">
+                                Explore Store
+                            </button>
+</div>
+<!-- Special Offer Card -->
+<div class="bg-primary rounded-2xl p-8 relative overflow-hidden shadow-xl shadow-primary/20">
+<div class="relative z-10">
+<span class="bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded">Exclusive</span>
+<h3 class="text-2xl font-extrabold text-white mt-4">Upgrade to Stack+ Platinum</h3>
+<p class="text-white/80 text-sm mt-2 leading-relaxed">Unlock free worldwide shipping and 2x reward points on every order.</p>
+<button class="mt-6 bg-white text-primary px-6 py-2.5 rounded-xl font-bold hover:shadow-lg transition-all">Learn More</button>
+</div>
+<!-- Abstract decoration -->
+<div class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+<div class="absolute -left-10 -top-10 w-48 h-48 bg-navy-sidebar/10 rounded-full blur-3xl"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

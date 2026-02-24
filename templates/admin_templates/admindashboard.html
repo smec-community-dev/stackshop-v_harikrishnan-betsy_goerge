@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StackShop Unified Admin Control Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#30364F",
+                "background-light": "#f6f7f7",
+                "background-dark": "#17181b",
+                "accent-slate": "#ACBAC4",
+                "nude-soft": "#F0F0DB",
+              },
+              fontFamily: {
+                "display": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-item-active { background-color: rgba(255, 255, 255, 0.1); border-left: 4px solid #ffffff; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #30364F33; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-primary text-white flex flex-col flex-shrink-0 z-20">
+<div class="p-6 flex items-center gap-3">
+<div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+<span class="material-icons-round text-primary text-xl">layers</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-white">StackShop</h1>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+<div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-2">Operations</div>
+<a class="sidebar-item-active flex items-center gap-3 px-3 py-2.5 rounded transition-colors group" href="#">
+<span class="material-icons-round text-lg leading-none">dashboard</span>
+<span class="font-medium">System Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 transition-colors group text-slate-300" href="#">
+<span class="material-icons-round text-lg leading-none">manage_accounts</span>
+<span class="font-medium">Account Management</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded hover:bg-white/10 transition-colors group text-slate-300" href="#">
+<div class="flex items-center gap-3">
+<span class="material-icons-round text-lg leading-none">verified</span>
+<span class="font-medium">Seller Verification</span>
+</div>
+<span class="bg-red-500 text-[10px] px-1.5 py-0.5 rounded-full font-bold">12</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 transition-colors group text-slate-300" href="#">
+<span class="material-icons-round text-lg leading-none">inventory_2</span>
+<span class="font-medium">Product Audit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 transition-colors group text-slate-300" href="#">
+<span class="material-icons-round text-lg leading-none">warning</span>
+<span class="font-medium">Disputes</span>
+</a>
+<div class="pt-8 pb-2">
+<div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-2">Analytics &amp; Config</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 transition-colors group text-slate-300" href="#">
+<span class="material-icons-round text-lg leading-none">insert_chart</span>
+<span class="font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-white/10 transition-colors group text-slate-300" href="#">
+<span class="material-icons-round text-lg leading-none">settings</span>
+<span class="font-medium">Platform Settings</span>
+</a>
+</div>
+</nav>
+<div class="p-4 border-t border-white/10 flex items-center gap-3 bg-primary/50">
+<img alt="Admin Profile" class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBioBOYP95Kh3-b57I7H8eDbGPgiOK55FM3i4zM7eY7wnhCiSQMGnGjC9T3POYAEKg02Z9ZX6VhQibk5HHlHndkDW-9r9_H-PXLlVva24isVZcCFAqTotPSfpPmSAYowAoqW6KiLf1coObOqg46GA-xUBxZPwjybzU8cmIoaJgD43DOKOX1Uql6TCdL6mpVX6sHV-GzlAdliQHZfrGqxZEjWz8fr9qPbfnUmKV8c0elKYzRUw2h0h_oB4SGnYL7wTkik22vxXOM2KBL"/>
+<div class="flex-1 overflow-hidden">
+<p class="text-sm font-semibold truncate">Alex Chen</p>
+<p class="text-xs text-slate-400 truncate">Senior Superadmin</p>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-icons-round text-lg">logout</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0 bg-nude-soft/30 dark:bg-background-dark overflow-hidden">
+<header class="h-16 bg-white dark:bg-primary/5 border-b border-slate-200 dark:border-primary/20 flex items-center justify-between px-8 flex-shrink-0">
+<div class="flex items-center gap-6">
+<h2 class="text-xl font-bold text-primary dark:text-white">Unified Dashboard</h2>
+<div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full text-xs font-semibold">
+<span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    Operational
+                </div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative w-64">
+<span class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full bg-slate-100 dark:bg-primary/10 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20" placeholder="Search system..." type="text"/>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-full relative">
+<span class="material-icons-round">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+<div class="mb-8">
+<h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">System Health</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-primary/10 p-5 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm flex items-center gap-4">
+<div class="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-lg">
+<span class="material-icons-round">people_alt</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Active Users</p>
+<h3 class="text-2xl font-bold text-slate-800 dark:text-white">1,284,930</h3>
+</div>
+<div class="ml-auto text-right">
+<span class="text-green-500 text-xs font-bold flex items-center justify-end">
+<span class="material-icons-round text-sm">trending_up</span> 12.5%
+                            </span>
+</div>
+</div>
+<div class="bg-white dark:bg-primary/10 p-5 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm flex items-center gap-4">
+<div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 rounded-lg">
+<span class="material-icons-round">payments</span>
+</div>
+<div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">Total GMV (Current Month)</p>
+<h3 class="text-2xl font-bold text-slate-800 dark:text-white">$14,240,000</h3>
+</div>
+<div class="ml-auto text-right">
+<span class="text-green-500 text-xs font-bold flex items-center justify-end">
+<span class="material-icons-round text-sm">trending_up</span> 8.2%
+                            </span>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white dark:bg-primary/10 p-5 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm border-l-4 border-l-amber-400">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Pending Approvals</p>
+<h3 class="text-2xl font-bold text-slate-800 dark:text-white">43</h3>
+<p class="text-xs text-slate-400 mt-2 flex items-center gap-1">
+<span class="material-icons-round text-sm">timer</span> 12 high priority
+                        </p>
+</div>
+<div class="bg-white dark:bg-primary/10 p-5 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Active Sellers</p>
+<h3 class="text-2xl font-bold text-slate-800 dark:text-white">8,921</h3>
+<p class="text-xs text-green-500 mt-2 font-medium">+122 this week</p>
+</div>
+<div class="bg-white dark:bg-primary/10 p-5 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm border-l-4 border-l-red-500">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Critical Reports</p>
+<h3 class="text-2xl font-bold text-slate-800 dark:text-white">128</h3>
+<p class="text-xs text-red-500 mt-2 font-medium">Action required</p>
+</div>
+<div class="bg-white dark:bg-primary/10 p-5 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm">
+<p class="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1">Featured Slots</p>
+<h3 class="text-2xl font-bold text-slate-800 dark:text-white">45 / 50</h3>
+<div class="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary h-full w-[90%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<div class="xl:col-span-2 space-y-6">
+<div class="bg-white dark:bg-primary/10 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-primary/20 flex items-center justify-between">
+<h4 class="font-bold text-slate-800 dark:text-white">Active Verification Queue</h4>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 bg-slate-100 dark:bg-primary/20 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded hover:bg-slate-200 transition-colors">Filters</button>
+<button class="px-3 py-1.5 bg-slate-100 dark:bg-primary/20 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded hover:bg-slate-200 transition-colors">Export</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-primary/5 text-slate-500 dark:text-slate-400 text-[11px] uppercase tracking-wider font-bold">
+<th class="px-6 py-4">Entity</th>
+<th class="px-6 py-4">Type</th>
+<th class="px-6 py-4">Risk Level</th>
+<th class="px-6 py-4">Document Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-primary/10">
+<tr class="hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 dark:bg-primary/30 flex items-center justify-center font-bold text-primary dark:text-white text-xs">V</div>
+<div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200">Velocity Tech</div>
+<div class="text-[10px] text-slate-500">v-tech-global.com</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-primary text-white text-[10px] rounded font-bold uppercase">Seller</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-green-600 font-bold">LOW</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+<span class="material-icons-round text-sm">check_circle</span>
+                                                All Valid
+                                            </div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="bg-primary text-white px-3 py-1.5 rounded text-xs font-semibold hover:opacity-90 transition-opacity">Approve</button>
+<button class="border border-accent-slate text-accent-slate px-3 py-1.5 rounded text-xs font-semibold hover:bg-slate-50 transition-colors">Reject</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 dark:bg-primary/30 flex items-center justify-center font-bold text-primary dark:text-white text-xs">A</div>
+<div>
+<div class="text-sm font-semibold text-slate-800 dark:text-slate-200">Artemis Retail</div>
+<div class="text-[10px] text-slate-500">artemis.shop</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 bg-primary text-white text-[10px] rounded font-bold uppercase">Seller</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-amber-600 font-bold">MED</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5 text-xs text-amber-600 font-medium">
+<span class="material-icons-round text-sm">history_edu</span>
+                                                Reviewing ID
+                                            </div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="bg-primary text-white px-3 py-1.5 rounded text-xs font-semibold hover:opacity-90 transition-opacity">Approve</button>
+<button class="border border-accent-slate text-accent-slate px-3 py-1.5 rounded text-xs font-semibold hover:bg-slate-50 transition-colors">Reject</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors">
+<td class="px-6 py-4 text-center" colspan="5">
+<button class="text-primary dark:text-blue-400 text-xs font-bold hover:underline py-2">View all pending requests (43)</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-white dark:bg-primary/10 rounded-xl border border-slate-200 dark:border-primary/20 shadow-sm overflow-hidden flex flex-col h-full">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-primary/20 flex items-center justify-between">
+<h4 class="font-bold text-slate-800 dark:text-white">System Activity</h4>
+<span class="material-icons-round text-slate-400 cursor-pointer text-sm">refresh</span>
+</div>
+<div class="p-6 space-y-6 overflow-y-auto max-h-[400px] custom-scrollbar">
+<div class="flex gap-4">
+<div class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-slate-700 dark:text-slate-300">New Account Audit Started</p>
+<p class="text-[10px] text-slate-500 mt-0.5 uppercase tracking-wide">12:45 PM • TODAY</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-slate-700 dark:text-slate-300">Dispute #DS-9821 Escalated</p>
+<p class="text-[10px] text-slate-500 mt-0.5 uppercase tracking-wide">10:05 AM • TODAY</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-xs font-bold text-slate-700 dark:text-slate-300">1.2k Products Auto-Audited</p>
+<p class="text-[10px] text-slate-500 mt-0.5 uppercase tracking-wide">09:12 AM • TODAY</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-slate-100 dark:border-primary/20 text-center">
+<a class="text-primary dark:text-blue-400 text-xs font-bold hover:underline" href="#">View Full Logs</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

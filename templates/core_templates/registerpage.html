@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StackShop Account Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#30364F",
+                        "slate-grey": "#ACBAC4",
+                        "beige-gold": "#E1D9BC",
+                        "light-nude": "#F0F0DB",
+                        "background-light": "#F0F0DB", 
+                        "background-dark": "#17181b",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.375rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .form-input-custom:focus {
+            border-color: #30364F;
+            box-shadow: 0 0 0 1px #30364F;
+        }.role-radio:checked + label {
+            background-color: #30364F;
+            color: white;
+            border-color: #30364F;
+        }
+    </style>
+</head>
+<body class="bg-light-nude dark:bg-background-dark font-display antialiased min-h-screen flex flex-col md:flex-row">
+<div class="hidden md:flex md:w-1/2 bg-primary relative overflow-hidden flex-col justify-between">
+<div class="relative z-20 px-8 py-6 flex items-center gap-2">
+<div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-primary font-bold text-xl">S</div>
+<span class="text-xl font-bold text-white tracking-tight">StackShop</span>
+</div>
+<img alt="Modern office setup with plants and clean design" class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ZArKAAZMZf-1cYmUb9-7khebmKC_iLNDq5R2St6q9SKbawmX5kgE4pop04Dp2hFHawQ7A7anxyct4UAGSZ76_f9KGdKABHis0QNXBMkfJN7s2tGBh_E8B1EUmOe2btQ_lKnZ_hG-lnYOURd4uEwpa-3BiGSMEQAyiNqSxhcyrU9ELSRX92tjqflswp_S4KZCxc27wl2rNnOvWtG5NOtP0q_YDl9M5lTtSaKkOLfCnTuG0zPb-nNnd73iLr1oHHdB8X4fqZLPdVGC"/>
+<div class="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary/90 mix-blend-multiply"></div>
+<div class="relative z-20 px-12 pb-12 text-white max-w-lg">
+<h2 class="text-4xl font-bold mb-4">Join the Community</h2>
+<p class="text-lg text-gray-200 leading-relaxed opacity-90">Unlock exclusive access to premium stackable goods, curated collections, and a seamless shopping experience designed just for you.</p>
+</div>
+</div>
+<div class="w-full md:w-1/2 flex flex-col h-screen overflow-y-auto bg-light-nude relative">
+<nav class="md:hidden w-full px-6 py-4 flex justify-between items-center bg-light-nude z-10">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">S</div>
+<span class="text-xl font-bold text-primary dark:text-white tracking-tight">StackShop</span>
+</div>
+</nav>
+<div class="flex-grow flex items-center justify-center p-6 md:p-12 lg:p-16">
+<div class="w-full max-w-md space-y-8">
+<div class="text-center md:text-left">
+<h1 class="text-3xl font-bold text-primary dark:text-white mb-2">Create Account</h1>
+<p class="text-slate-grey">Enter your details below to get started.</p>
+</div>
+<form class="space-y-5">
+<div class="space-y-2">
+<label class="block text-xs font-semibold text-primary/70 dark:text-gray-300 uppercase tracking-wide">I want to register as a:</label>
+<div class="grid grid-cols-2 gap-3 p-1 bg-white/50 border border-slate-grey/20 rounded-xl">
+<div class="relative">
+<input checked="" class="peer hidden role-radio" id="role-customer" name="role" type="radio" value="customer"/>
+<label class="flex items-center justify-center py-2.5 px-4 rounded-lg border border-slate-grey/30 text-slate-grey font-medium cursor-pointer transition-all hover:bg-white/80 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary" for="role-customer">
+<span class="material-symbols-outlined text-lg mr-2">person</span>
+                                    Customer
+                                </label>
+</div>
+<div class="relative">
+<input class="peer hidden role-radio" id="role-seller" name="role" type="radio" value="seller"/>
+<label class="flex items-center justify-center py-2.5 px-4 rounded-lg border border-slate-grey/30 text-slate-grey font-medium cursor-pointer transition-all hover:bg-white/80 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary" for="role-seller">
+<span class="material-symbols-outlined text-lg mr-2">storefront</span>
+                                    Seller
+                                </label>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-primary/70 dark:text-gray-300 uppercase tracking-wide" for="firstName">First Name</label>
+<input class="w-full px-4 py-3 bg-white border border-slate-grey/30 rounded-lg text-primary focus:outline-none form-input-custom transition-all placeholder-slate-grey/50 shadow-sm" id="firstName" name="firstName" placeholder="Jane" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-primary/70 dark:text-gray-300 uppercase tracking-wide" for="lastName">Last Name</label>
+<input class="w-full px-4 py-3 bg-white border border-slate-grey/30 rounded-lg text-primary focus:outline-none form-input-custom transition-all placeholder-slate-grey/50 shadow-sm" id="lastName" name="lastName" placeholder="Doe" type="text"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-primary/70 dark:text-gray-300 uppercase tracking-wide" for="email">Email Address</label>
+<input class="w-full px-4 py-3 bg-white border border-slate-grey/30 rounded-lg text-primary focus:outline-none form-input-custom transition-all placeholder-slate-grey/50 shadow-sm" id="email" name="email" placeholder="jane@example.com" type="email"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-primary/70 dark:text-gray-300 uppercase tracking-wide" for="phone">Phone Number</label>
+<input class="w-full px-4 py-3 bg-white border border-slate-grey/30 rounded-lg text-primary focus:outline-none form-input-custom transition-all placeholder-slate-grey/50 shadow-sm" id="phone" name="phone" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-primary/70 dark:text-gray-300 uppercase tracking-wide" for="password">Password</label>
+<input class="w-full px-4 py-3 bg-white border border-slate-grey/30 rounded-lg text-primary focus:outline-none form-input-custom transition-all placeholder-slate-grey/50 shadow-sm" id="password" name="password" placeholder="••••••••" type="password"/>
+</div>
+<div class="space-y-1">
+<label class="block text-xs font-semibold text-primary/70 dark:text-gray-300 uppercase tracking-wide" for="confirmPassword">Confirm Password</label>
+<input class="w-full px-4 py-3 bg-white border border-slate-grey/30 rounded-lg text-primary focus:outline-none form-input-custom transition-all placeholder-slate-grey/50 shadow-sm" id="confirmPassword" name="confirmPassword" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 px-4 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-light-nude" type="button">
+                            Sign Up
+                        </button>
+</div>
+</form>
+<div class="relative flex py-2 items-center">
+<div class="flex-grow border-t border-slate-grey/30"></div>
+<span class="flex-shrink-0 mx-4 text-slate-grey text-xs font-medium uppercase tracking-wider">or continue with</span>
+<div class="flex-grow border-t border-slate-grey/30"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center px-4 py-3 bg-white border border-slate-grey/30 rounded-lg hover:bg-gray-50 transition-colors group shadow-sm">
+<img alt="Google Logo" class="h-5 w-5 mr-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYc-PV6cJnsuJumzSftlNzGcEPScyxCgZpMeGCob5TJkabRb8guM7_NGSHzgCeMI7huG_QA_StsZdV0-Umq2rPsk-uDLMUktOlhDU3zzbmeKHuZORxg3poV3Pcd1boLXlJk40NszQHDz4wF6xhN-U-uodRXH1Ub0tOzCMvY4KloaIJaS8f7x-Dp1h1PKmtenGCQPvMpil4-OejkrnrPcTBQBOF3xLRdjBN5jMtgLPLQ9tndGJt8rdl5HMeJOpHzO1cLr1x8Z1j71Pa"/>
+<span class="text-sm font-medium text-primary group-hover:text-primary/80">Google</span>
+</button>
+<button class="flex items-center justify-center px-4 py-3 bg-white border border-slate-grey/30 rounded-lg hover:bg-gray-50 transition-colors group shadow-sm">
+<svg class="h-5 w-5 mr-2 text-black" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 12.625c0-2.6 2.125-3.85 2.225-3.9-.025-.075-1.35-4.625-5.325-4.625-2.25 0-3.925 1.325-4.95 1.325-1.05 0-2.6-1.275-4.275-1.275-2.2 0-4.225 1.275-5.35 3.25-2.275 3.95-.575 9.775 1.625 12.975 1.1 1.575 2.375 3.325 4.075 3.25 1.625-.075 2.25-1.05 4.2-1.05 1.95 0 2.525 1.05 4.225 1.025 1.75-.025 2.875-1.6 3.925-3.15.825-1.15 1.15-2.275 1.175-2.325-.025-.025-2.25-.875-2.25-3.5zM15.4 2.45c1.175-1.425 1.975-3.4 1.75-5.4-1.7.075-3.75 1.125-4.975 2.55-1.075 1.225-2.025 3.225-1.775 5.2 1.9.15 3.825-.95 5-2.35z"></path>
+</svg>
+<span class="text-sm font-medium text-primary group-hover:text-primary/80">Apple</span>
+</button>
+</div>
+<div class="text-center pt-2">
+<p class="text-sm text-slate-grey">
+                        Already have an account? 
+                        <a class="font-semibold text-primary hover:text-primary/80 transition-colors hover:underline decoration-2 underline-offset-4" href="#">Log in</a>
+</p>
+</div>
+<div class="text-center md:hidden pb-6">
+<p class="text-xs text-slate-grey/60">© 2023 StackShop Inc.</p>
+</div>
+</div>
+</div>
+<div class="hidden md:block absolute bottom-4 w-full text-center text-slate-grey/60 text-xs">
+            © 2023 StackShop Inc. All rights reserved.
+        </div>
+</div>
+
+</body></html>
