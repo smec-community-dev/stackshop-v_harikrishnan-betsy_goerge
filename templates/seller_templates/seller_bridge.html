@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Become a Seller - StackShop</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "dark": "#30364F",
+                        "muted": "#ACBAC4",
+                        "accent": "#E1D9BC",
+                        "light": "#F0F0DB",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-light text-dark font-display flex flex-col min-h-screen">
+    
+    <header class="max-w-7xl mx-auto w-full pt-6 px-4 z-50">
+        <nav class="bg-dark text-light rounded-xl px-6 py-4 flex items-center justify-between shadow-lg">
+            <div class="flex items-center gap-3 cursor-pointer">
+                <svg class="w-8 h-8 text-accent" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span class="text-xl font-bold tracking-wide">StackShop</span>
+            </div>
+            <a href="{%url 'home'%}" class="text-sm font-bold text-muted hover:text-light transition-colors flex items-center gap-1">
+                <span class="material-icons text-sm">arrow_back</span> Return to Shop
+            </a>
+        </nav>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="bg-white p-8 md:p-10 rounded-2xl shadow-xl w-full max-w-3xl border border-muted/30">
+            
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-accent">
+                    <span class="material-icons text-3xl text-dark">storefront</span>
+                </div>
+                <h1 class="text-3xl font-extrabold text-dark mb-2">Apply for a Seller Account</h1>
+                <p class="text-muted font-medium">Upgrade your StackShop account to start selling globally.</p>
+            </div>
+
+            <div class="bg-accent/20 border border-accent rounded-xl p-5 mb-8 flex gap-4 items-start shadow-sm">
+                <span class="material-icons text-dark mt-0.5">admin_panel_settings</span>
+                <div>
+                    <h4 class="font-bold text-dark text-sm uppercase tracking-wider mb-1">Admin Verification Required</h4>
+                    <p class="text-sm text-dark/80 font-medium">To maintain a secure marketplace, all new seller accounts require approval from the StackShop admin team. Once you submit this form, please allow 24-48 hours for your account to be verified and activated.</p>
+                </div>
+            </div>
+
+            <form action="#" method="POST">
+                {% csrf_token %}
+
+                <div class="mb-8">
+                    <h3 class="text-sm font-bold text-dark uppercase tracking-widest border-b border-muted/30 pb-2 mb-4">Linked User Account</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-muted mb-1 uppercase" for="username">Username</label>
+                            <input class="w-full px-4 py-2.5 border border-muted/30 rounded-lg bg-light/50 text-dark/60 cursor-not-allowed focus:outline-none" type="text" id="username" name="username" value="{{user.username}}" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-muted mb-1 uppercase" for="email">Email Address</label>
+                            <input class="w-full px-4 py-2.5 border border-muted/30 rounded-lg bg-light/50 text-dark/60 cursor-not-allowed focus:outline-none" type="email" id="email" name="email" value="{{user.email}}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-sm font-bold text-dark uppercase tracking-widest border-b border-muted/30 pb-2 mb-4">Business Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-dark mb-1 uppercase" for="store_name">Store Name *</label>
+                            <input class="w-full px-4 py-2.5 border border-muted rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark bg-transparent transition-colors placeholder-muted" type="text" id="store_name" name="store_name" placeholder="E.g. Julian's Tech Haven" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-dark mb-1 uppercase" for="business_phone">Business Phone *</label>
+                            <input class="w-full px-4 py-2.5 border border-muted rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark bg-transparent transition-colors placeholder-muted" type="tel" id="business_phone" name="business_phone" placeholder="+1 (555) 000-0000" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-dark mb-1 uppercase flex items-center gap-1" for="tax_id">
+                                Business / Tax ID <span class="material-icons text-[12px] text-muted" title="GSTIN, EIN, or equivalent">info</span>
+                            </label>
+                            <input class="w-full px-4 py-2.5 border border-muted rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark bg-transparent transition-colors placeholder-muted" type="text" id="tax_id" name="tax_id" placeholder="Optional for individuals">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-dark mb-1 uppercase" for="description">What will you sell? *</label>
+                            <textarea class="w-full px-4 py-3 border border-muted rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark bg-transparent transition-colors placeholder-muted resize-none" id="description" name="description" rows="3" placeholder="Briefly describe the types of products you plan to list on StackShop..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-muted/30">
+                    <label class="flex items-start gap-3 cursor-pointer mb-6">
+                        <input type="checkbox" required class="mt-1 w-4 h-4 rounded border-muted text-dark focus:ring-dark cursor-pointer">
+                        <span class="text-sm font-medium text-dark/80">I agree to the <a href="#" class="text-dark font-bold hover:text-muted transition-colors underline">Seller Terms of Service</a> and acknowledge that my store will only become active upon admin approval.</span>
+                    </label>
+
+                    <button type="submit" class="w-full bg-dark hover:bg-opacity-90 text-light text-base font-bold py-3.5 px-6 rounded-lg transition-all shadow-md flex items-center justify-center gap-2">
+                        Submit Seller Application <span class="material-icons text-sm">send</span>
+                    </button>
+                </div>
+            </form>
+            
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-8 border-t-4 border-accent mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-muted text-xs uppercase font-bold tracking-widest mb-2">© 2026 StackShop E-Commerce.</p>
+            <p class="text-muted/60 text-xs font-medium">Need help with your application? <a href="#" class="text-accent hover:underline">Contact Support</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -6,7 +6,7 @@ class CustomUser(AbstractUser):
     ROLE_CHOICES=(('ADMIN','Admin'),
                 ('SELLER','Seller'),
                 ('CUSTOMER','Customer'))    
-    phone_number=models.CharField(unique=True,max_length=11)
+    phone_number=models.CharField(unique=True,max_length=11,null=True,blank=True)
     role=models.CharField(max_length=20,choices=ROLE_CHOICES,default='CUSTOMER')
     profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     is_verified = models.BooleanField(default=False)

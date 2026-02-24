@@ -12,7 +12,7 @@ def seller_profile_view(request):
 
     return render(request, "seller/sellerprofilepage.html", {"profile": profile})
 @login_required
-def seller_profile_create(request):
+def seller_bridge(request):
 
     if SellerProfile.objects.filter(user=request.user).exists():
         return redirect("seller-profile")
@@ -25,6 +25,7 @@ def seller_profile_create(request):
         ifsc_code = request.POST.get("ifsc_code")
         business_address = request.POST.get("business_address")
         store_image = request.FILES.get("store_image")
+    return render(request, "seller_templates/seller_bridge.html")
 
 
 # Create your views here.

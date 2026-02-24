@@ -1,514 +1,342 @@
 <!DOCTYPE html>
-
 <html class="light" lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>StackShop - Sophisticated E-Commerce</title>
+    <title>StackShop - Home</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <script id="tailwind-config">
+    <script>
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#70768f",
-                        "brand-dark": "#30364F",
-                        "brand-cream": "#E1D9BC",
-                        "brand-nude": "#F0F0DB",
-                        "brand-slate": "#ACBAC4",
-                        "background-light": "#f7f7f7",
-                        "background-dark": "#18181a",
+                        "dark": "#30364F",
+                        "muted": "#ACBAC4",
+                        "accent": "#E1D9BC",
+                        "light": "#F0F0DB",
                     },
                     fontFamily: {
-                        "display": ["Public Sans"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
+                        "display": ["Public Sans", "sans-serif"]
+                    }
                 },
             },
         }
     </script>
     <style>
-        body {
-            font-family: 'Public Sans', sans-serif;
-            background-color: #F0F0DB;
-        }
-
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 
-<body class="bg-brand-nude text-brand-dark selection:bg-primary/30 font-display">
-    <!-- Header / Navigation -->
-    <header class="max-w-7xl mx-auto pt-6 px-4">
-        <nav class="bg-brand-dark text-white rounded-xl px-6 py-3 flex items-center justify-between shadow-lg">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 cursor-pointer">
-                <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
-                    <span class="material-icons text-white text-lg">layers</span>
-                </div>
-                <span class="text-xl font-bold tracking-tight">StackShop</span>
+<body class="bg-light text-dark font-display flex flex-col min-h-screen">
+    
+    <header class="max-w-7xl mx-auto w-full pt-6 px-4 z-50">
+        <nav class="bg-dark text-light rounded-xl px-6 py-4 flex items-center justify-between shadow-lg">
+            <div class="flex items-center gap-3 cursor-pointer">
+                <svg class="w-8 h-8 text-light" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span class="text-xl font-bold tracking-wide">StackShop</span>
             </div>
-            <!-- Search Bar -->
+            
             <div class="flex-1 max-w-xl mx-12 hidden md:block">
                 <div class="relative group">
-                    <input
-                        class="w-full bg-white/10 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary focus:bg-white/20 transition-all placeholder-brand-slate"
-                        placeholder="Search products, brands, and more..." type="text" />
-                    <span
-                        class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-brand-slate text-sm">search</span>
+                    <input class="w-full bg-light/10 border border-muted/30 rounded-lg py-2 pl-10 pr-4 text-sm text-light focus:outline-none focus:border-muted focus:ring-1 focus:ring-muted transition-all placeholder-muted/70" placeholder="Search products, brands..." type="text" />
+                    <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-muted/70 text-sm">search</span>
                 </div>
             </div>
-            <!-- Nav Links -->
+            
             <div class="flex items-center gap-8">
-                <div class="hidden lg:flex items-center gap-6 text-sm font-medium">
-                    <a class="hover:text-primary transition-colors" href="#">Categories</a>
-                    <a class="hover:text-primary transition-colors" href="#">Deals</a>
-                    <a class="hover:text-primary transition-colors" href="#">New Arrival</a>
+                <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-muted">
+                    <a class="hover:text-light transition-colors" href="#">Categories</a>
+                    <a class="hover:text-light transition-colors" href="#">Deals</a>
+                    <a class="hover:text-light transition-colors" href="{%url 'product_list'%}">New Arrival</a>
+                    
+                    <div class="relative group py-2">
+                        <button class="flex items-center gap-1 hover:text-light transition-colors focus:outline-none">
+                            More <span class="material-icons text-sm transition-transform duration-300 group-hover:rotate-180">expand_more</span>
+                        </button>
+                        
+                        <div class="absolute top-full right-0 mt-1 w-56 bg-light text-dark rounded-xl shadow-2xl border border-muted/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                            <div class="absolute -top-4 left-0 w-full h-4"></div>
+                            
+                            <div class="p-2 flex flex-col">
+                                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-muted group-hover/item:text-dark transition-colors">notifications_none</span>
+                                    <span class="font-bold text-sm">Notification</span>
+                                </a>
+                                <a href="{%url 'seller-bridge'%}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-muted group-hover/item:text-dark transition-colors">storefront</span>
+                                    <span class="font-bold text-sm">Become a Seller</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-muted group-hover/item:text-dark transition-colors">support_agent</span>
+                                    <span class="font-bold text-sm">Customer Care 24/7</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {% if user.is_authenticated%}
-                <div class="flex items-center gap-4 border-l border-white/10 pl-8">
-                    <button class="flex items-center gap-1 hover:text-primary transition-colors">
-                        <span class="material-icons text-xl">person_outline</span>
-                        <span class="text-sm hidden sm:inline">Account</span>
-                    </button>
-                    <button class="relative hover:text-primary transition-colors">
+                
+                {% if user.is_authenticated %}
+                <div class="flex items-center gap-4 border-l border-muted/30 pl-8 text-muted">
+                    
+                    <div class="relative group py-2">
+                        <button class="flex items-center gap-1 hover:text-light transition-colors focus:outline-none">
+                            <span class="material-icons text-xl">person_outline</span>
+                            <span class="text-sm hidden sm:inline font-semibold"><a href="{% url 'customer_dashboard' %}">My Account</a></span>
+                        </button>
+
+                        <div class="absolute top-full right-0 mt-1 w-64 bg-light text-dark rounded-xl shadow-2xl border border-muted/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                            <div class="absolute -top-4 right-0 w-full h-4"></div>
+                            
+                            <div class="p-2 flex flex-col max-h-[70vh] overflow-y-auto hide-scrollbar">
+                                
+                                <div class="px-4 py-3 mb-1 border-b border-muted/30">
+                                    <p class="text-xs text-muted uppercase tracking-widest font-bold">Signed in as</p>
+                                    <p class="text-sm font-extrabold truncate">{{ user.username|default:"guest" }}</p>
+                                </div>
+
+                                <a href="{%url 'profile'%}" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-[18px] text-muted group-hover/item:text-dark transition-colors">badge</span>
+                                    <span class="font-bold text-sm">My Profile</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-[18px] text-muted group-hover/item:text-dark transition-colors">inventory_2</span>
+                                    <span class="font-bold text-sm">Orders</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-[18px] text-muted group-hover/item:text-dark transition-colors">favorite_border</span>
+                                    <span class="font-bold text-sm">Wishlist</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-[18px] text-muted group-hover/item:text-dark transition-colors">notifications</span>
+                                    <span class="font-bold text-sm">Notification</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-[18px] text-muted group-hover/item:text-dark transition-colors">location_on</span>
+                                    <span class="font-bold text-sm">Saved Address</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-[18px] text-muted group-hover/item:text-dark transition-colors">credit_card</span>
+                                    <span class="font-bold text-sm">Saved Cards</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-accent/50 transition-colors group/item">
+                                    <span class="material-icons text-[18px] text-muted group-hover/item:text-dark transition-colors">card_giftcard</span>
+                                    <span class="font-bold text-sm">Giftcards</span>
+                                </a>
+
+                                <div class="border-t border-muted/30 my-1"></div>
+                                
+                                <a href="{%url 'logout'%}" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors group/item text-red-500">
+                                    <span class="material-icons text-[18px] text-red-400 group-hover/item:text-red-600 transition-colors">logout</span>
+                                    <span class="font-bold text-sm">Logout</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="relative hover:text-light transition-colors ml-2">
                         <span class="material-icons text-xl">shopping_bag</span>
-                        <span
-                            class="absolute -top-1 -right-1 bg-primary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+                        <span class="absolute -top-1.5 -right-1.5 bg-accent text-dark text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
                     </button>
                 </div>
-                {%else%}
-                <div class="flex items-center gap-4">
-                    <a class="text-sm font-medium hover:text-primary transition-colors"
-                        href="{% url 'login' %}">Login</a>
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="{% url 'signup' %}">Sign
-                        Up</a>
+                {% else %}
+                <div class="flex items-center gap-4 border-l border-muted/30 pl-8">
+                    <a class="text-sm font-bold text-muted hover:text-light transition-colors" href="{% url 'login' %}">Login</a>
+                    <a class="text-sm font-bold bg-accent text-dark px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm" href="{% url 'register' %}">Sign Up</a>
                 </div>
                 {% endif %}
             </div>
         </nav>
     </header>
-    <!-- Category Ribbon -->
-    <section class="max-w-7xl mx-auto px-4 mt-8">
-        <div class="flex items-center gap-4 overflow-x-auto hide-scrollbar pb-2">
-            <!-- Category Item -->
-            <button
-                class="flex-shrink-0 flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-brand-slate/20 rounded-full px-5 py-2 hover:bg-white hover:border-primary transition-all group">
-                <span class="material-icons text-primary text-lg">devices</span>
-                <span class="text-sm font-medium">Electronics</span>
+
+    <section class="max-w-7xl mx-auto w-full px-4 mt-6">
+        <div class="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2">
+            <button class="flex-shrink-0 flex items-center gap-2 bg-accent/30 border border-muted/50 text-dark rounded-full px-5 py-2 hover:bg-accent hover:border-dark transition-all text-sm font-bold">
+                <span class="material-icons text-dark text-lg">devices</span> Electronics
             </button>
-            <button
-                class="flex-shrink-0 flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-brand-slate/20 rounded-full px-5 py-2 hover:bg-white hover:border-primary transition-all group">
-                <span class="material-icons text-primary text-lg">local_grocery_store</span>
-                <span class="text-sm font-medium">Groceries</span>
+            <button class="flex-shrink-0 flex items-center gap-2 bg-transparent border border-muted text-dark rounded-full px-5 py-2 hover:bg-accent hover:border-dark transition-all text-sm font-bold">
+                <span class="material-icons text-dark text-lg">checkroom</span> Fashion
             </button>
-            <button
-                class="flex-shrink-0 flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-brand-slate/20 rounded-full px-5 py-2 hover:bg-white hover:border-primary transition-all group">
-                <span class="material-icons text-primary text-lg">checkroom</span>
-                <span class="text-sm font-medium">Fashion</span>
+            <button class="flex-shrink-0 flex items-center gap-2 bg-transparent border border-muted text-dark rounded-full px-5 py-2 hover:bg-accent hover:border-dark transition-all text-sm font-bold">
+                <span class="material-icons text-dark text-lg">chair</span> Home Decor
             </button>
-            <button
-                class="flex-shrink-0 flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-brand-slate/20 rounded-full px-5 py-2 hover:bg-white hover:border-primary transition-all group">
-                <span class="material-icons text-primary text-lg">chair</span>
-                <span class="text-sm font-medium">Home Decor</span>
+            <button class="flex-shrink-0 flex items-center gap-2 bg-transparent border border-muted text-dark rounded-full px-5 py-2 hover:bg-accent hover:border-dark transition-all text-sm font-bold">
+                <span class="material-icons text-dark text-lg">fitness_center</span> Wellness
             </button>
-            <button
-                class="flex-shrink-0 flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-brand-slate/20 rounded-full px-5 py-2 hover:bg-white hover:border-primary transition-all group">
-                <span class="material-icons text-primary text-lg">fitness_center</span>
-                <span class="text-sm font-medium">Wellness</span>
-            </button>
-            <button
-                class="flex-shrink-0 flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-brand-slate/20 rounded-full px-5 py-2 hover:bg-white hover:border-primary transition-all group">
-                <span class="material-icons text-primary text-lg">toys</span>
-                <span class="text-sm font-medium">Entertainment</span>
-            </button>
-            <button
-                class="flex-shrink-0 flex items-center gap-2 bg-white/50 backdrop-blur-sm border border-brand-slate/20 rounded-full px-5 py-2 hover:bg-white hover:border-primary transition-all group">
-                <span class="material-icons text-primary text-lg">auto_awesome</span>
-                <span class="text-sm font-medium">Luxury</span>
+            <button class="flex-shrink-0 flex items-center gap-2 bg-transparent border border-muted text-dark rounded-full px-5 py-2 hover:bg-accent hover:border-dark transition-all text-sm font-bold">
+                <span class="material-icons text-dark text-lg">auto_awesome</span> Luxury
             </button>
         </div>
     </section>
-    <!-- Hero Section -->
-    <main class="max-w-7xl mx-auto px-4 mt-8">
-        <div
-            class="relative overflow-hidden rounded-xl bg-gradient-to-r from-brand-cream to-brand-nude h-[480px] flex items-center border border-brand-slate/10">
-            <div class="absolute inset-0 opacity-10">
-                <div class="w-full h-full"
-                    style="background-image: radial-gradient(circle at 2px 2px, #70768f 1px, transparent 0); background-size: 32px 32px;">
-                </div>
-            </div>
-            <div class="relative z-10 pl-16 max-w-2xl">
-                <span
-                    class="inline-block bg-brand-dark text-white text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">Season
-                    Picks</span>
-                <h1 class="text-6xl font-extrabold text-brand-dark leading-tight mb-6">Trending <br /><span
-                        class="text-primary italic">Now</span></h1>
-                <p class="text-lg text-brand-dark/70 mb-8 max-w-md">Discover our curated collection of contemporary
-                    essentials, where sophisticated design meets everyday functionality.</p>
+
+    <main class="max-w-7xl mx-auto w-full px-4 mt-6 relative group">
+        <div class="relative overflow-hidden rounded-xl bg-accent h-[480px] flex items-center border border-muted shadow-sm">
+            
+            <button class="absolute left-4 z-20 bg-dark/20 hover:bg-dark text-light w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100">
+                <span class="material-icons">chevron_left</span>
+            </button>
+
+            <div class="relative z-10 pl-16 max-w-2xl w-full">
+                <span class="inline-block bg-dark text-light text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">Season Picks</span>
+                <h1 class="text-6xl font-extrabold text-dark leading-tight mb-6">Trending <br /><span class="italic text-muted/80">Now</span></h1>
+                <p class="text-lg text-dark/80 mb-8 max-w-md font-medium">Discover our curated collection of contemporary essentials, where sophisticated design meets everyday functionality.</p>
                 <div class="flex items-center gap-4">
-                    <button
-                        class="bg-brand-dark text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary transition-colors flex items-center gap-2">
-                        Shop Collection
-                        <span class="material-icons">arrow_forward</span>
-                    </button>
-                    <button
-                        class="bg-white/40 backdrop-blur-md border border-brand-slate/20 text-brand-dark px-8 py-3 rounded-lg font-semibold hover:bg-white transition-all">
-                        View Lookbook
+                    <button class="bg-dark text-light px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
+                        Shop Collection <span class="material-icons">arrow_forward</span>
                     </button>
                 </div>
             </div>
-            <!-- Hero Image Simulation -->
+
             <div class="absolute right-0 top-0 h-full w-1/2 hidden md:block">
-                <img alt="Trending Product" class="w-full h-full object-cover object-center"
-                    data-alt="Modern minimal designer watch on a marble surface"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJAe7Mlw1dvLKAFv5Cnh4s-_tcMo2w9DWhdioejo2j7ZRk3_Xx6KTQ0U-ejJ5HaLjhnJRVzqR3TscZBMlLjcKBu6CflnVXN1RTQMyUa2jCcb2Lxyy23oUpOMQDHhLB_w94K5Nq3rN_4cyAyi5E_V-ZxGi7pZgiruYbvr2I_HtGnlqWYclYsiTBRiKuJRbp7LT2bB3k0zew-YrDFwXlEYASlR4-FYhiiDVKgthBgpri4aJcy8VwnpTJatTcA9lW26FfpXqek6DMGBCH" />
-                <div class="absolute inset-0 bg-gradient-to-r from-brand-nude/80 to-transparent"></div>
+                <img alt="Trending Product" class="w-full h-full object-cover object-center mix-blend-multiply opacity-90" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000" />
+                <div class="absolute inset-0 bg-gradient-to-r from-accent to-transparent"></div>
+            </div>
+
+            <button class="absolute right-4 z-20 bg-dark/20 hover:bg-dark text-light w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100">
+                <span class="material-icons">chevron_right</span>
+            </button>
+
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                <div class="w-8 h-1.5 rounded-full bg-dark"></div>
+                <div class="w-2 h-1.5 rounded-full bg-dark/30 hover:bg-dark/50 cursor-pointer transition-colors"></div>
+                <div class="w-2 h-1.5 rounded-full bg-dark/30 hover:bg-dark/50 cursor-pointer transition-colors"></div>
             </div>
         </div>
     </main>
-    <!-- Top Picks Section -->
-    <section class="max-w-7xl mx-auto px-4 mt-16">
-        <div class="flex items-end justify-between mb-8">
-            <div>
-                <h2 class="text-3xl font-bold text-brand-dark">Top Picks for You</h2>
-                <div class="h-1 w-12 bg-primary mt-2"></div>
+
+    <section class="max-w-7xl mx-auto w-full px-4 mt-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
+                <span class="material-icons text-3xl text-accent">local_shipping</span>
+                <div>
+                    <h4 class="font-bold text-sm uppercase tracking-wide">Free Shipping</h4>
+                    <p class="text-xs text-muted">On orders over $100</p>
+                </div>
             </div>
-            <a class="text-primary font-medium flex items-center gap-1 hover:underline" href="#">
-                See all recommendations
-                <span class="material-icons text-sm">open_in_new</span>
+            <div class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
+                <span class="material-icons text-3xl text-accent">support_agent</span>
+                <div>
+                    <h4 class="font-bold text-sm uppercase tracking-wide">24/7 Support</h4>
+                    <p class="text-xs text-muted">Here to help anytime</p>
+                </div>
+            </div>
+            <div class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
+                <span class="material-icons text-3xl text-accent">security</span>
+                <div>
+                    <h4 class="font-bold text-sm uppercase tracking-wide">Secure Checkout</h4>
+                    <p class="text-xs text-muted">100% protected payments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto w-full px-4 mt-16 mb-20 flex-grow">
+        <div class="flex items-end justify-between mb-8 border-b border-muted/30 pb-4">
+            <h2 class="text-2xl font-extrabold text-dark uppercase tracking-wide">Top Picks for You</h2>
+            <a class="text-dark text-sm font-bold flex items-center gap-1 hover:text-muted transition-colors" href="#">
+                View All <span class="material-icons text-sm">arrow_forward</span>
             </a>
         </div>
+        
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Product Card 1 -->
-            <div class="group">
-                <div
-                    class="relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div class="aspect-square bg-background-light overflow-hidden">
-                        <img alt="Headphones"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            data-alt="Professional studio headphones on a wooden desk"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKIpxRRoobpAg_Iefdms_0OMF8yNfaVcgGHASNF8eXgaep0Rd4TPNHrmA4A74_DbE2BBe9E4wUgUcUb6gWIW6GrxOEI80ASP8wxem_OSfDqkNMEgW_OGWaD2y5cPu4YU-kd6ikpGcDwItwTu0zsNSbGWd--W3aAvQfJEQxUMYWqEsNsulAXnbwt7zu29DK5VJMm8OtaJzkSLT_hnu9zSv3J4UY2LVsRF1qB7nyVENX8gm35AYBilMydoUIrEMJtFQDya-W4I4ZyUGi" />
-                    </div>
-                    <button
-                        class="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-white shadow-md">
-                        <span class="material-icons text-xl">favorite_border</span>
-                    </button>
-                    <div class="p-4">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-1 block">Audio
-                            Tech</span>
-                        <h3 class="font-bold text-brand-dark mb-2 line-clamp-1">Studio Bass Headphones</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-500">
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star_half</span>
-                            </div>
-                            <span class="text-xs text-brand-slate font-medium">(1.2k)</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-brand-dark">$299.00</span>
-                            <button
-                                class="bg-primary/10 text-primary p-2 rounded-lg hover:bg-primary hover:text-white transition-colors">
-                                <span class="material-icons">add_shopping_cart</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card 2 -->
-            <div class="group">
-                <div
-                    class="relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div class="aspect-square bg-background-light overflow-hidden">
-                        <img alt="Shoes"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            data-alt="Red athletic running shoes on white background"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPy8i46R27zuR0tAYOfjplaXmkYLg_bUvb-ZGiwFJ64xKTp9XuQPAAyXKehQ7NOWzWy5pJ_E--Jaw2xl-wUIh9sPH3HoNNKiWngxnoEHQvPmGbVAn0WCjoyInVmoYyQiT9r_YwT8bbg0wfvLZto70R5lxpRiuRvGX7sqnEZ26D8bWUxEVHkpJdbG05v4AgZnaRr-T1dTvgulo8hzzOr6cfi5BmdwW6ywwI2N6DVJ3YREOaPDzBx621QZy7AuVVo3MyNA-QIIuloyK-" />
-                    </div>
-                    <div class="p-4">
-                        <span
-                            class="text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-1 block">Footwear</span>
-                        <h3 class="font-bold text-brand-dark mb-2 line-clamp-1">Swift Run Sneakers</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-500">
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm text-brand-slate/30">star</span>
-                            </div>
-                            <span class="text-xs text-brand-slate font-medium">(842)</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-brand-dark">$120.00</span>
-                            <button
-                                class="bg-primary/10 text-primary p-2 rounded-lg hover:bg-primary hover:text-white transition-colors">
-                                <span class="material-icons">add_shopping_cart</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card 3 -->
-            <div class="group">
-                <div
-                    class="relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div class="aspect-square bg-background-light overflow-hidden">
-                        <img alt="Camera"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            data-alt="Retro vintage polaroid camera on plain background"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUvDCR40Dav3AaVhrhV07iEilMV9kgbJN1OMd_D1Fm77HLTQt5_b7-PqfQlh9524lxZaaXAVrP_XmjpsxuMbM_uybo4fcNY8N-puFFP1JmJyskwu1ZaA8PgXnzOFlIzFBUxdK4LZ9E47ZZEdOAA4Pr-FM2BEWPaF_HSaTleo-LbKAKuJ4hc_8eiM25O-CgvnPB2hXPH4LITttQSNliezvkN5Lo0knAR8tpbYzt9yTlmgGKXUhcVJwj96HPQOkURL2299pVCNAfyLkO" />
-                    </div>
-                    <div class="p-4">
-                        <span
-                            class="text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-1 block">Photography</span>
-                        <h3 class="font-bold text-brand-dark mb-2 line-clamp-1">Classic Instant Camera</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-500">
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                            </div>
-                            <span class="text-xs text-brand-slate font-medium">(2.4k)</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-brand-dark">$89.99</span>
-                            <button
-                                class="bg-primary/10 text-primary p-2 rounded-lg hover:bg-primary hover:text-white transition-colors">
-                                <span class="material-icons">add_shopping_cart</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Product Card 4 -->
-            <div class="group">
-                <div
-                    class="relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-xl transition-all duration-300">
-                    <div class="aspect-square bg-background-light overflow-hidden">
-                        <img alt="Skin Care"
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            data-alt="Organic minimal skincare products in glass bottles"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1QMApb9iFbok74fbDGgbgNB6Zn7kv6fDUOx5Xj_TajxFyWDO_4-NOQSs3LKw2Oe1b17_eB3qbwKg4tQ4TPwDXuznqSZED5omzEv_3C8Z30jkKx8-7aGhtt3lBTB8Mrb3ahhJJI5Dy4Q_AwHqvxHyxAH6UfiWlj3PiO5Be54Ii681paxCMs0q40u2P61FRBJC2EfYdIXN-jKLenhG4E21G648ei89fD0Ew3Camo9FnsgI5X0isHz6SRquwKTEesdQF_iJUC_bqBdr6" />
-                    </div>
-                    <div class="p-4">
-                        <span
-                            class="text-[10px] font-bold uppercase tracking-wider text-brand-slate mb-1 block">Wellness</span>
-                        <h3 class="font-bold text-brand-dark mb-2 line-clamp-1">Pure Glow Serum</h3>
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="flex text-yellow-500">
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star</span>
-                                <span class="material-icons text-sm">star_half</span>
-                            </div>
-                            <span class="text-xs text-brand-slate font-medium">(312)</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-brand-dark">$45.00</span>
-                            <button
-                                class="bg-primary/10 text-primary p-2 rounded-lg hover:bg-primary hover:text-white transition-colors">
-                                <span class="material-icons">add_shopping_cart</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Trending Electronics Section -->
-    <section class="max-w-7xl mx-auto px-4 mt-20 mb-20">
-        <div class="bg-brand-dark rounded-2xl p-8 lg:p-12 overflow-hidden relative">
-            <div class="absolute right-0 top-0 w-1/3 h-full bg-primary/10 -skew-x-12 translate-x-1/2"></div>
-            <div class="flex flex-col lg:flex-row gap-12 relative z-10">
-                <div class="lg:w-1/3 text-white">
-                    <h2 class="text-4xl font-bold mb-6">Trending Electronics</h2>
-                    <p class="text-brand-slate mb-8">The future of technology, curated for your modern lifestyle.
-                        Explore the latest in connectivity and performance.</p>
-                    <button
-                        class="group flex items-center gap-2 text-primary font-bold hover:text-white transition-colors">
-                        Browse Full Category
-                        <span class="material-icons group-hover:translate-x-2 transition-transform">east</span>
+            <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg border border-muted/50 transition-all duration-300 flex flex-col">
+                <div class="aspect-square bg-light relative overflow-hidden border-b border-muted/30">
+                    <img alt="Product" class="w-full h-full object-cover mix-blend-multiply p-4 transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=500" />
+                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-muted hover:text-dark hover:bg-accent border border-muted shadow-sm transition-all">
+                        <span class="material-icons text-sm">favorite_border</span>
                     </button>
                 </div>
-                <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Tech Item 1 -->
-                    <div
-                        class="bg-white/5 backdrop-blur-md rounded-xl p-4 flex gap-4 hover:bg-white/10 transition-all border border-white/10">
-                        <div class="w-24 h-24 rounded-lg bg-white/10 flex-shrink-0 overflow-hidden">
-                            <img alt="Tablet" class="w-full h-full object-cover"
-                                data-alt="Modern high resolution tablet with stylus pen"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo9agTSD2vB26EzGxyrpsxw-KYUkN5-JtvGdSU0TMpYsTm7Z7GuazOe-VDOdaZKs5vTBUMll74NWIBvEvdov00OUTkBByLrMIxtJ-uM6NkUlfENQCCgwyd_D5SMO9LUoupmPZXBpmOaNkia206GJGatvfGpEfdaxr1SszQGdoFCRGxmlaU-DXv0ziqs-JAbdcuHfQgzW6q3W0Bbj-sPtQh7zEHoQ1B58WR5baUgopsfKfmS-bH8i2kzJCeOjbNDM3tuk8xL2Ez2BQD" />
-                        </div>
-                        <div class="flex flex-col justify-center">
-                            <h4 class="text-white font-bold mb-1">Ultra Pad Pro X</h4>
-                            <span class="text-primary font-bold">$799.00</span>
-                            <div class="flex mt-2">
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Tech Item 2 -->
-                    <div
-                        class="bg-white/5 backdrop-blur-md rounded-xl p-4 flex gap-4 hover:bg-white/10 transition-all border border-white/10">
-                        <div class="w-24 h-24 rounded-lg bg-white/10 flex-shrink-0 overflow-hidden">
-                            <img alt="Smart Watch" class="w-full h-full object-cover"
-                                data-alt="Minimalist smartwatch with a black sport band"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxn14z4PJ1d_5IaAMRQnpX6pqUx-xdl6C12oWTU1lcLqmY6SBK1Y4BfiPoX6bDkZPvNGmC9CYEcNj-l7SRWeGy7M1mTPZCfVFKrDBaWH3n6NemcY4eQrwh1OzYNZq_DLDDxyH3AeES1ugoViCRDhYymPxLF_uw4pbEjoAXBpRNAkHr07PQ0dGuqwKahwRfZlnh7gVjMXbdYqbluWGgRQcsBonM7ScTva9qn0pHmS8IZSYVrm_fe7z9LSBlE45ZpZ1-5S9UMDhUT_lv" />
-                        </div>
-                        <div class="flex flex-col justify-center">
-                            <h4 class="text-white font-bold mb-1">Nexus Watch Series</h4>
-                            <span class="text-primary font-bold">$349.00</span>
-                            <div class="flex mt-2">
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-white/20">star</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Tech Item 3 -->
-                    <div
-                        class="bg-white/5 backdrop-blur-md rounded-xl p-4 flex gap-4 hover:bg-white/10 transition-all border border-white/10">
-                        <div class="w-24 h-24 rounded-lg bg-white/10 flex-shrink-0 overflow-hidden">
-                            <img alt="Laptop" class="w-full h-full object-cover"
-                                data-alt="Sleek silver ultra-thin business laptop open"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmtNNX4lKDPpaUIDOyr1I3v-1pbBHi-Cvy2w8WV_HVVkU6g8H4n6Z8BnlXT_kPyqR31_ISricJDQB5WFzsGy0jEGyRZ5clNL4baHIvofUQqxYrLLqC0dIPMdTmJebonFuzBv9ZtiIlxJoK9hcOhVPZ0to1IqURrlA_6-vUQyR0k7XZYkqtmzDJvEGPHs_-ZDRqnkYjywBmd26-I6IS1n9PgA4_GMV0tKDJfnLC5q2BMEO-OqGRVFuuPsHwz1igD6C16NUC7TKZlUa0" />
-                        </div>
-                        <div class="flex flex-col justify-center">
-                            <h4 class="text-white font-bold mb-1">Ether Book 14</h4>
-                            <span class="text-primary font-bold">$1,299.00</span>
-                            <div class="flex mt-2">
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star_half</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Tech Item 4 -->
-                    <div
-                        class="bg-white/5 backdrop-blur-md rounded-xl p-4 flex gap-4 hover:bg-white/10 transition-all border border-white/10">
-                        <div class="w-24 h-24 rounded-lg bg-white/10 flex-shrink-0 overflow-hidden">
-                            <img alt="Speaker" class="w-full h-full object-cover"
-                                data-alt="Modern sculptural bluetooth speaker in matte black"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8GemII-nCyu-bQ9j5-2h7QtIcAouSTI6N1STAzzYgYaNYEyuyd_E8mm6mIk39TDmwaEAXyyJgn_k2a93F2T7ijFrOxYhqmNkfOarXcqwMbSOr9iBhyU6U_YvxYrhnc42pZBqsDGx9fkVX6uwIz3pEfTLWRRn47-FDYOMNO7s6KDhsSXafzzaJWkH8DAJT_Cjiavihg7hyDxg8_kCqNKNroIcEeJ3Ccren391xZEE6orOBxZ6qKRiTTxp2xf6ubeTrJnMag6ddkvVs" />
-                        </div>
-                        <div class="flex flex-col justify-center">
-                            <h4 class="text-white font-bold mb-1">Aura Smart Speaker</h4>
-                            <span class="text-primary font-bold">$189.00</span>
-                            <div class="flex mt-2">
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-yellow-500">star</span>
-                                <span class="material-icons text-xs text-white/20">star</span>
-                            </div>
-                        </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-muted mb-1">Footwear</span>
+                    <h3 class="font-bold text-dark text-lg mb-2">Swift Run Sneakers</h3>
+                    <div class="mt-auto flex items-center justify-between pt-4">
+                        <span class="text-xl font-extrabold text-dark">$120.00</span>
+                        <button class="bg-dark text-light p-2 rounded hover:bg-accent hover:text-dark transition-colors border border-transparent hover:border-dark">
+                            <span class="material-icons text-sm">add_shopping_cart</span>
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg border border-muted/50 transition-all duration-300 flex flex-col">
+                <div class="aspect-square bg-light relative overflow-hidden border-b border-muted/30">
+                    <img alt="Product" class="w-full h-full object-cover mix-blend-multiply p-4 transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
+                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-muted hover:text-dark hover:bg-accent border border-muted shadow-sm transition-all">
+                        <span class="material-icons text-sm">favorite_border</span>
+                    </button>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-muted mb-1">Audio Tech</span>
+                    <h3 class="font-bold text-dark text-lg mb-2">Studio Bass Headphones</h3>
+                    <div class="mt-auto flex items-center justify-between pt-4">
+                        <span class="text-xl font-extrabold text-dark">$299.00</span>
+                        <button class="bg-dark text-light p-2 rounded hover:bg-accent hover:text-dark transition-colors border border-transparent hover:border-dark">
+                            <span class="material-icons text-sm">add_shopping_cart</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </section>
-    <!-- Footer -->
-    <footer class="bg-brand-dark text-white pt-16 pb-8 border-t border-brand-slate/10">
+
+    <footer class="bg-dark text-light pt-16 pb-8 border-t-4 border-accent mt-auto">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                
                 <div>
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
-                            <span class="material-icons text-white text-lg">layers</span>
-                        </div>
-                        <span class="text-xl font-bold">StackShop</span>
+                    <div class="flex items-center gap-3 mb-6">
+                        <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        <span class="text-xl font-bold tracking-wide">StackShop</span>
                     </div>
-                    <p class="text-brand-slate text-sm leading-relaxed mb-6">Elevating your lifestyle through curated
-                        collections and sophisticated design. Quality is our standard, elegance is our soul.</p>
-                    <div class="flex gap-4">
-                        <a class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
-                            href="#"><span class="material-icons text-sm">facebook</span></a>
-                        <a class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
-                            href="#"><span class="material-icons text-sm">camera_alt</span></a>
-                        <a class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
-                            href="#"><span class="material-icons text-sm">alternate_email</span></a>
-                    </div>
+                    <p class="text-muted text-sm leading-relaxed mb-6 font-medium">Elevating your lifestyle through curated collections. Quality is our standard, elegance is our soul.</p>
                 </div>
+                
                 <div>
-                    <h4 class="text-lg font-bold mb-6">Quick Links</h4>
-                    <ul class="space-y-4 text-brand-slate text-sm">
-                        <li><a class="hover:text-primary transition-colors" href="#">About StackShop</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Our Story</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Sustainable Initiatives</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Press Room</a></li>
+                    <h4 class="text-sm uppercase tracking-widest font-extrabold mb-6 text-accent">Quick Links</h4>
+                    <ul class="space-y-3 text-muted text-sm font-bold">
+                        <li><a class="hover:text-light transition-colors" href="#">About Us</a></li>
+                        <li><a class="hover:text-light transition-colors" href="#">Our Story</a></li>
+                        <li><a class="hover:text-light transition-colors" href="#">Careers</a></li>
                     </ul>
                 </div>
+                
                 <div>
-                    <h4 class="text-lg font-bold mb-6">Client Services</h4>
-                    <ul class="space-y-4 text-brand-slate text-sm">
-                        <li><a class="hover:text-primary transition-colors" href="#">Contact Us</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Shipping &amp; Returns</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Gift Cards</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Store Locator</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">FAQ</a></li>
+                    <h4 class="text-sm uppercase tracking-widest font-extrabold mb-6 text-accent">Client Services</h4>
+                    <ul class="space-y-3 text-muted text-sm font-bold">
+                        <li><a class="hover:text-light transition-colors" href="#">Contact Us</a></li>
+                        <li><a class="hover:text-light transition-colors" href="#">Shipping & Returns</a></li>
+                        <li><a class="hover:text-light transition-colors" href="#">FAQ</a></li>
                     </ul>
                 </div>
+                
                 <div>
-                    <h4 class="text-lg font-bold mb-6">Newsletter</h4>
-                    <p class="text-brand-slate text-sm mb-6">Subscribe for early access to new drops and exclusive
-                        offers.</p>
-                    <form class="space-y-3">
-                        <input
-                            class="w-full bg-white/10 border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary focus:bg-white/20 transition-all placeholder-brand-slate"
-                            placeholder="Email Address" type="email" />
-                        <button
-                            class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-primary/80 transition-all">Join
-                            Inner Circle</button>
+                    <h4 class="text-sm uppercase tracking-widest font-extrabold mb-6 text-accent">Newsletter</h4>
+                    <p class="text-muted text-sm mb-4 font-medium">Subscribe for early access to new drops.</p>
+                    <form class="space-y-3" method="POST" action="#">
+                        {% csrf_token %}
+                        <input class="w-full bg-light text-dark border border-muted rounded py-2.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent transition-all placeholder-muted" placeholder="Email Address" type="email" required />
+                        <button type="submit" class="w-full bg-accent text-dark py-2.5 rounded font-bold hover:bg-opacity-80 transition-all border border-dark">Join Inner Circle</button>
                     </form>
                 </div>
+
             </div>
-            <div
-                class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-brand-slate text-xs uppercase tracking-widest">
-                <p>© 2024 StackShop E-Commerce. All rights reserved.</p>
-                <div class="flex gap-8">
-                    <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
-                    <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
-                    <a class="hover:text-white transition-colors" href="#">Accessibility</a>
+            
+            <div class="border-t border-muted/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-muted text-xs uppercase font-bold tracking-widest">
+                <p>© 2026 StackShop. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a class="hover:text-light transition-colors" href="#">Privacy</a>
+                    <a class="hover:text-light transition-colors" href="#">Terms</a>
                 </div>
             </div>
         </div>
     </footer>
-</body>
 
+</body>
 </html>
