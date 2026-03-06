@@ -50,10 +50,10 @@ def seller_bridge(request):
             business_address = request.POST.get("business_address")
             store_image = request.FILES.get("store_image")
     return render(request, "seller_templates/seller_bridge.html")
-@login_required
 def seller_broche_view(request):
-    if SellerProfile.objects.filter(user=request.user).exists():
-        return redirect("dashboard")
+    if request.user.is_authenticated:
+        if SellerProfile.objects.filter(user=request.user).exists():
+            return redirect("dashboard")
     return render(request, "seller_templates/seller_broche.html")
 
 

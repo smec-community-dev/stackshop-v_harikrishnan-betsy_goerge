@@ -4,6 +4,9 @@ from django.utils.text import slugify
 import uuid
 
 class SellerProfile(models.Model):
+    STATUS_CHOICES=(('pending','PENDING'),
+                    ('approved','APPROVED'),
+                    ('rejected','REJECTED'))
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="seller_profile")
     store_name = models.CharField(max_length=255)
     store_slug = models.SlugField(unique=True)
@@ -13,7 +16,7 @@ class SellerProfile(models.Model):
     ifsc_code = models.CharField(max_length=20)
     business_address = models.TextField()
     rating = models.FloatField(default=0)
-    is_verified = models.BooleanField(default=False)
+    verification_status = models.CharField(max_length=10,choices=STATUS_CHOICES,default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     store_image=models.ImageField(upload_to='sellerprofile_image')
     def __str__(self):

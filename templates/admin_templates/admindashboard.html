@@ -7,9 +7,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Admin Dashboard - StackShop</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -28,9 +29,20 @@
         }
     </script>
     <style>
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .tab-active { background-color: #E1D9BC; color: #30364F; font-weight: bold; }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .tab-active {
+            background-color: #E1D9BC;
+            color: #30364F;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -46,51 +58,57 @@
         </div>
 
         <nav class="flex-grow p-4 space-y-2">
-            <button onclick="switchTab('sellers')" id="tab-sellers" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-accent/10 transition-all tab-active">
+            <button onclick="switchTab('sellers')" id="tab-sellers"
+                class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-accent/10 transition-all tab-active">
                 <span class="material-icons text-[20px]">storefront</span> Seller Management
             </button>
-            <button onclick="switchTab('products')" id="tab-products" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-accent/10 transition-all text-muted">
+            <button onclick="switchTab('products')" id="tab-products"
+                class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-accent/10 transition-all text-muted">
                 <span class="material-icons text-[20px]">inventory_2</span> Product Verification
             </button>
-            <button onclick="switchTab('marketing')" id="tab-marketing" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-accent/10 transition-all text-muted">
+            <button onclick="switchTab('marketing')" id="tab-marketing"
+                class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-accent/10 transition-all text-muted">
                 <span class="material-icons text-[20px]">campaign</span> Setup & Marketing
             </button>
         </nav>
 
         <div class="p-4 border-t border-muted/20">
-            <a href="{% url 'home' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-red-400 hover:bg-red-500/10 transition-all">
+            <a href="{% url 'home' %}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-red-400 hover:bg-red-500/10 transition-all">
                 <span class="material-icons text-[20px]">logout</span> Exit Admin
             </a>
         </div>
     </aside>
 
     <main class="flex-grow flex flex-col h-screen overflow-y-auto relative hide-scrollbar">
-        
+
         <header class="bg-white px-8 py-4 border-b border-muted/20 flex justify-between items-center sticky top-0 z-10">
             <h2 id="page-title" class="text-xl font-black text-dark tracking-wide">Seller Management</h2>
             <div class="flex items-center gap-4">
                 <span class="material-icons text-muted cursor-pointer hover:text-dark">notifications</span>
-                <div class="w-10 h-10 rounded-full bg-accent text-dark font-black flex items-center justify-center uppercase shadow-sm">
+                <div
+                    class="w-10 h-10 rounded-full bg-accent text-dark font-black flex items-center justify-center uppercase shadow-sm">
                     A
                 </div>
             </div>
         </header>
-
         <div class="p-8">
             
             <section id="content-sellers" class="page-content block">
-                
+
                 <div class="flex items-center gap-4 mb-6">
-                    <button class="bg-dark text-light px-5 py-2 rounded-lg text-xs font-bold shadow-sm">All Sellers</button>
-                    <button class="bg-yellow-100 text-yellow-700 px-5 py-2 rounded-lg text-xs font-bold">Pending Review</button>
+                    <button class="bg-dark text-light px-5 py-2 rounded-lg text-xs font-bold shadow-sm">All
+                        Sellers</button>
+                    <button class="bg-yellow-100 text-yellow-700 px-5 py-2 rounded-lg text-xs font-bold">Pending
+                        Review</button>
                     <button class="bg-green-100 text-green-700 px-5 py-2 rounded-lg text-xs font-bold">Approved</button>
                     <button class="bg-red-100 text-red-700 px-5 py-2 rounded-lg text-xs font-bold">Rejected</button>
                 </div>
-
                 <div class="bg-white border border-muted/30 rounded-2xl shadow-sm overflow-hidden">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-light/50 text-muted text-[10px] uppercase tracking-widest border-b border-muted/20">
+                            <tr
+                                class="bg-light/50 text-muted text-[10px] uppercase tracking-widest border-b border-muted/20">
                                 <th class="p-4 font-black">Store / User</th>
                                 <th class="p-4 font-black">Contact</th>
                                 <th class="p-4 font-black">Documents</th>
@@ -99,50 +117,101 @@
                             </tr>
                         </thead>
                         <tbody class="text-sm font-medium">
+                            {% for seller in sellers %}
                             <tr class="border-b border-muted/10 hover:bg-light/30 transition-colors">
+
                                 <td class="p-4">
-                                    <p class="font-bold text-dark text-base">TechHaven Electronics</p>
-                                    <p class="text-xs text-muted">Owned by: John Doe</p>
+                                    <p class="font-bold text-dark text-base">{{ seller.store_name|default:"Unnamed Store" }}</p>
+                                    <p class="text-xs text-muted">
+                                        Owned by: {{ seller.user.first_name }} {{ seller.user.last_name }}
+                                    </p>
+                                </td>                                
+                                <td class="p-4 text-dark/80">
+                                    {{ seller.user.email }}<br>
+                                    <span class="text-xs">{{ seller.phone_number|default:"No Phone Provided" }}</span>
                                 </td>
-                                <td class="p-4 text-dark/80">john@techhaven.com<br><span class="text-xs">+1 234 567 890</span></td>
-                                <td class="p-4"><a href="#" class="text-accent text-xs font-bold underline">View License.pdf</a></td>
-                                <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Pending</span></td>
+
+                                <td class="p-4">
+                                    {% if seller.document %}
+                                    <a href="{{ seller.document.url }}" target="_blank"
+                                        class="text-accent text-xs font-bold underline hover:text-dark transition-colors">
+                                        View Document
+                                    </a>
+                                    {% else %}
+                                    <span class="text-xs text-muted font-medium">No Document</span>
+                                    {% endif %}
+                                </td>
+                                <td class="p-4">
+                                    {% if seller.verification_status == 'approved' %}
+                                    <span
+                                        class="bg-green-100 text-green-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                                        Approved
+                                    </span>
+                                    {% elif seller.verification_status == 'rejected' %}
+                                    <span
+                                        class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                                        Rejected
+                                    </span>
+                                    {% elif seller.verification_status == 'pending' %}
+                                    <span
+                                        class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                                        Pending Review
+                                    </span>
+                                    {% endif %}
+                                </td>
+
                                 <td class="p-4 text-right">
-                                    <button onclick="openActionModal('Seller: TechHaven', 'pending')" class="text-xs font-bold bg-dark text-light px-4 py-2 rounded-lg hover:bg-accent hover:text-dark transition-colors">Review</button>
+                                    {% if seller.verification_status == 'pending' %}
+                                    <form action="{% url 'sellerverification' seller.id %}" method="GET" style="display: inline;">
+                                        <button type="submit"
+                                            class="text-xs font-bold bg-dark text-light px-4 py-2 rounded-lg hover:bg-accent hover:text-dark transition-colors shadow-sm">
+                                            Review
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <form action="{% url 'sellerverification' seller.id %}" method="GET" style="display: inline;">
+                                        <button type="submit"
+                                            class="text-xs font-bold border border-muted text-muted px-4 py-2 rounded-lg hover:text-dark hover:border-dark transition-colors">
+                                            Edit Remarks
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="p-12 text-center text-muted">
+                                    <span class="material-icons text-5xl mb-3 opacity-50">store_off</span>
+                                    <p class="font-extrabold text-dark text-lg">No sellers found</p>
+                                    <p class="text-sm font-medium">There are currently no sellers matching your
+                                        criteria.</p>
                                 </td>
                             </tr>
-                            
-                            <tr class="border-b border-muted/10 hover:bg-light/30 transition-colors">
-                                <td class="p-4">
-                                    <p class="font-bold text-dark text-base">SneakerHeadz</p>
-                                    <p class="text-xs text-muted">Owned by: Mike Smith</p>
-                                </td>
-                                <td class="p-4 text-dark/80">mike@sneakers.com<br><span class="text-xs">+1 987 654 321</span></td>
-                                <td class="p-4"><a href="#" class="text-accent text-xs font-bold underline">View License.pdf</a></td>
-                                <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Approved</span></td>
-                                <td class="p-4 text-right">
-                                    <button onclick="openActionModal('Seller: SneakerHeadz', 'approved')" class="text-xs font-bold border border-muted text-muted px-4 py-2 rounded-lg hover:text-dark transition-colors">Edit Remarks</button>
-                                </td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </section>
 
             <section id="content-products" class="page-content hidden">
-                
+
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-4">
-                        <button class="bg-dark text-light px-5 py-2 rounded-lg text-xs font-bold shadow-sm">All Products</button>
-                        <button class="bg-yellow-100 text-yellow-700 px-5 py-2 rounded-lg text-xs font-bold">Needs Verification</button>
+                        <button class="bg-dark text-light px-5 py-2 rounded-lg text-xs font-bold shadow-sm">All
+                            Products</button>
+                        <button class="bg-yellow-100 text-yellow-700 px-5 py-2 rounded-lg text-xs font-bold">Needs
+                            Verification</button>
                     </div>
-                    <input type="text" placeholder="Search products..." class="border border-muted/50 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-dark">
+                    <input type="text" placeholder="Search products..."
+                        class="border border-muted/50 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-dark">
                 </div>
 
                 <div class="bg-white border border-muted/30 rounded-2xl shadow-sm overflow-hidden">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-light/50 text-muted text-[10px] uppercase tracking-widest border-b border-muted/20">
+                            <tr
+                                class="bg-light/50 text-muted text-[10px] uppercase tracking-widest border-b border-muted/20">
                                 <th class="p-4 font-black">Product Details</th>
                                 <th class="p-4 font-black">Seller</th>
                                 <th class="p-4 font-black">Price / Stock</th>
@@ -151,45 +220,123 @@
                             </tr>
                         </thead>
                         <tbody class="text-sm font-medium">
+                            {% for product in products %}
                             <tr class="border-b border-muted/10 hover:bg-light/30 transition-colors">
+
                                 <td class="p-4 flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-light rounded-lg border border-muted/20"></div>
+                                    <div
+                                        class="w-12 h-12 bg-light rounded-lg border border-muted/20 overflow-hidden flex items-center justify-center">
+                                        {% if product.images.first %}
+                                        <img src="{{ product.images.first.image_url.url }}"
+                                            alt="{{ product.product.name }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                        <span class="material-icons text-muted">image</span>
+                                        {% endif %}
+                                    </div>
                                     <div>
-                                        <p class="font-bold text-dark text-sm">Wireless Earbuds Pro</p>
-                                        <p class="text-[10px] font-bold uppercase tracking-widest text-muted mt-0.5">Electronics</p>
+                                        <p class="font-bold text-dark text-sm line-clamp-1">{{ product.product.name }}
+                                        </p>
+                                        <p class="text-[10px] font-bold uppercase tracking-widest text-muted mt-0.5">
+                                            {{ product.product.subcategory.category.name|default:"Uncategorized" }}
+                                        </p>
                                     </div>
                                 </td>
-                                <td class="p-4 text-dark/80">TechHaven</td>
-                                <td class="p-4 text-dark/80">$129.99<br><span class="text-xs text-muted">Stock: 50</span></td>
-                                <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">Pending Verification</span></td>
+
+                                <td class="p-4 text-dark/80 font-bold">
+                                    {% if product.product.seller.store_name %}
+                                    {{ product.product.seller.store_name }}
+                                    {% else %}
+                                    {{ product.product.seller.username }}
+                                    {% endif %}
+                                </td>
+
+                                <td class="p-4 text-dark/80 font-black">
+                                    ${{ product.selling_price|default:"0.00" }}<br>
+                                    <span class="text-xs text-muted font-medium">Stock:
+                                        {{product.stock_quantity|default:"0" }}</span>
+                                </td>
+
+                                <td class="p-4">
+                                    {% if product.product.approval_status == 'approved' %}
+                                    <span
+                                        class="bg-green-100 text-green-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                                        Approved
+                                    </span>
+                                    {% elif product.product.approval_status == 'rejected' %}
+                                    <span
+                                        class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                                        Rejected
+                                    </span>
+                                    {% elif product.product.approval_status == 'PENDING' %}
+                                    <span
+                                        class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
+                                        Pending
+                                    </span>
+                                    {% endif %}
+                                </td>
+
                                 <td class="p-4 text-right">
-                                    <button onclick="openActionModal('Product: Wireless Earbuds Pro', 'pending')" class="text-xs font-bold bg-dark text-light px-4 py-2 rounded-lg hover:bg-accent hover:text-dark transition-colors">Verify</button>
+                                    {% if product.product.approval_status == 'PENDING' %}
+                                    <form action="{% url 'productverification' product.product.id %}" method="GET" style="display: inline;">
+                                        <button type="submit"
+                                            class="text-xs font-bold bg-dark text-light px-4 py-2 rounded-lg hover:bg-accent hover:text-dark transition-colors shadow-sm">
+                                            Verify
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <form action="{% url 'productverification' product.product.id %}" method="GET" style="display: inline;">
+                                        <button type="submit"
+                                            class="text-xs font-bold border border-muted text-muted px-4 py-2 rounded-lg hover:text-dark hover:border-dark transition-colors">
+                                            Edit Remarks
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="p-12 text-center text-muted">
+                                    <span class="material-icons text-5xl mb-3 opacity-50">inventory_2</span>
+                                    <p class="font-extrabold text-dark text-lg">No products found</p>
+                                    <p class="text-sm font-medium">There are currently no products awaiting review.</p>
                                 </td>
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </section>
 
             <section id="content-marketing" class="page-content hidden">
-                
+
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
+
                     <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
                         <div class="flex items-center gap-2 mb-6 border-b border-muted/20 pb-4">
                             <span class="material-icons text-accent">category</span>
                             <h3 class="font-extrabold text-dark text-lg">Product Attributes</h3>
                         </div>
                         <form class="space-y-4">
+                            {% csrf_token%}
                             <div>
-                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Attribute Name</label>
-                                <input type="text" placeholder="e.g., Color, Size, Material" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
+                                <label
+                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Attribute
+                                    Name</label>
+                                <input type="text" placeholder="e.g., Color, Size, Material"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Values (Comma Separated)</label>
-                                <textarea rows="3" placeholder="Red, Blue, Green" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark resize-none"></textarea>
+                                <label
+                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Values
+                                    (Comma Separated)</label>
+                                <textarea rows="3" placeholder="Red, Blue, Green"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark resize-none"></textarea>
                             </div>
-                            <button type="button" class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Save Attribute</button>
+                            <button type="button"
+                                class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Save
+                                Attribute</button>
                         </form>
                     </div>
 
@@ -199,19 +346,32 @@
                             <h3 class="font-extrabold text-dark text-lg">Manage Ads/Banners</h3>
                         </div>
                         <form class="space-y-4">
+                            {% csrf_token%}
+
                             <div>
-                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner Title</label>
-                                <input type="text" placeholder="Summer Sale Hero" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
+                                <label
+                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner
+                                    Title</label>
+                                <input type="text" placeholder="Summer Sale Hero"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner Image</label>
-                                <input type="file" class="w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-light file:text-dark hover:file:bg-accent cursor-pointer">
+                                <label
+                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner
+                                    Image</label>
+                                <input type="file"
+                                    class="w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-light file:text-dark hover:file:bg-accent cursor-pointer">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Target Link / URL</label>
-                                <input type="text" placeholder="/category/summer" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
+                                <label
+                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Target
+                                    Link / URL</label>
+                                <input type="text" placeholder="/category/summer"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
                             </div>
-                            <button type="button" class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Publish Banner</button>
+                            <button type="button"
+                                class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Publish
+                                Banner</button>
                         </form>
                     </div>
 
@@ -221,29 +381,44 @@
                             <h3 class="font-extrabold text-dark text-lg">Offers & Coupons</h3>
                         </div>
                         <form class="space-y-4">
+                            {%csrf_token%}
                             <div>
-                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Coupon Code</label>
-                                <input type="text" placeholder="WELCOME20" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark font-bold uppercase">
+                                <label
+                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Coupon
+                                    Code</label>
+                                <input type="text" placeholder="WELCOME20"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark font-bold uppercase">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Discount %</label>
-                                    <input type="number" placeholder="20" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
+                                    <label
+                                        class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Discount
+                                        %</label>
+                                    <input type="number" placeholder="20"
+                                        class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Expiry Date</label>
-                                    <input type="date" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark text-muted">
+                                    <label
+                                        class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Expiry
+                                        Date</label>
+                                    <input type="date"
+                                        class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark text-muted">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Applicable Category (Optional)</label>
-                                <select class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white">
+                                <label
+                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Applicable
+                                    Category (Optional)</label>
+                                <select
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white">
                                     <option>All Products</option>
                                     <option>Electronics</option>
                                     <option>Fashion</option>
                                 </select>
                             </div>
-                            <button type="button" class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Create Offer</button>
+                            <button type="button"
+                                class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Create
+                                Offer</button>
                         </form>
                     </div>
 
@@ -252,59 +427,6 @@
 
         </div>
     </main>
-
-    <div id="actionModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden">
-        <div class="absolute inset-0 bg-dark/80 backdrop-blur-sm transition-opacity" onclick="closeModal('actionModal')"></div>
-        
-        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg p-8 transform scale-95 opacity-0 transition-all duration-300" id="modalBox_actionModal">
-            <button onclick="closeModal('actionModal')" class="absolute top-4 right-4 text-muted hover:text-dark transition-colors focus:outline-none">
-                <span class="material-icons">close</span>
-            </button>
-            
-            <h2 class="text-2xl font-black text-dark mb-1" id="modal-title">Review Item</h2>
-            <p class="text-xs text-muted font-bold uppercase tracking-widest mb-6 border-b border-muted/20 pb-4">Update Status & Add Remarks</p>
-            
-            <form action="#" method="POST" class="space-y-6">
-                {% csrf_token %}
-                
-                <div>
-                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-3">Update Status</label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="status" value="approved" class="peer sr-only">
-                            <div class="text-center px-2 py-3 rounded-xl border border-muted/30 peer-checked:bg-green-50 peer-checked:border-green-500 peer-checked:text-green-700 transition-all">
-                                <span class="material-icons block text-xl mb-1">check_circle</span>
-                                <span class="text-[10px] font-black uppercase tracking-widest">Approve</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="status" value="pending" class="peer sr-only" checked>
-                            <div class="text-center px-2 py-3 rounded-xl border border-muted/30 peer-checked:bg-yellow-50 peer-checked:border-yellow-500 peer-checked:text-yellow-700 transition-all">
-                                <span class="material-icons block text-xl mb-1">pending_actions</span>
-                                <span class="text-[10px] font-black uppercase tracking-widest">Pending</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="status" value="rejected" class="peer sr-only">
-                            <div class="text-center px-2 py-3 rounded-xl border border-muted/30 peer-checked:bg-red-50 peer-checked:border-red-500 peer-checked:text-red-700 transition-all">
-                                <span class="material-icons block text-xl mb-1">cancel</span>
-                                <span class="text-[10px] font-black uppercase tracking-widest">Reject</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Admin Remarks (Visible to Seller)</label>
-                    <textarea name="remarks" rows="4" placeholder="Explain the reason for approval or rejection..." class="w-full px-4 py-3 border border-muted/50 rounded-xl text-sm font-medium focus:outline-none focus:ring-1 focus:ring-dark focus:border-dark bg-light/30 transition text-dark resize-none"></textarea>
-                </div>
-
-                <div class="flex justify-end pt-2">
-                    <button type="submit" class="w-full py-3 bg-dark text-light rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-accent hover:text-dark shadow-md transition-all">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <script>
         // Tab Switcher Logic
@@ -332,30 +454,7 @@
             };
             document.getElementById('page-title').innerText = titles[tabId];
         }
-
-        // Modal Logic
-        function openActionModal(title, currentStatus) {
-            document.getElementById('modal-title').innerText = title;
-            // You can add JS here to dynamically check the correct radio button based on currentStatus
-            
-            const modal = document.getElementById('actionModal');
-            const modalBox = document.getElementById('modalBox_actionModal');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modalBox.classList.remove('scale-95', 'opacity-0');
-                modalBox.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            const modalBox = document.getElementById('modalBox_' + modalId);
-            modalBox.classList.remove('scale-100', 'opacity-100');
-            modalBox.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
     </script>
 </body>
+
 </html>

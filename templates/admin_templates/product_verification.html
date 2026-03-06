@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Product Verification - StackShop</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "dark": "#30364F",
+                        "muted": "#ACBAC4",
+                        "accent": "#E1D9BC",
+                        "light": "#F0F0DB",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="bg-light text-dark font-display min-h-screen">
+
+    <div class="max-w-6xl mx-auto p-8">
+        <div class="mb-6">
+            <a href="{% url 'admin_dashboard' %}"
+                class="inline-flex items-center gap-2 text-muted hover:text-dark transition-colors mb-4">
+                <span class="material-icons text-sm">arrow_back</span>
+                Back to Dashboard
+            </a>
+            <h1 class="text-3xl font-black text-dark tracking-wide">Product Verification</h1>
+            <p class="text-muted mt-2">Review and update product approval status</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Product Information -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
+                    <div class="flex items-start gap-4 mb-6 border-b border-muted/20 pb-4">
+                        {% if product.variants.first.images.first %}
+                        <div class="w-20 h-20 bg-light rounded-lg border border-muted/20 overflow-hidden flex items-center justify-center">
+                            <img src="{{ product.variants.first.images.first.image_url.url }}"
+                                alt="{{ product.name }}" class="w-full h-full object-cover">
+                        </div>
+                        {% else %}
+                        <div class="w-20 h-20 bg-light rounded-lg border border-muted/20 flex items-center justify-center">
+                            <span class="material-icons text-muted text-2xl">image</span>
+                        </div>
+                        {% endif %}
+                        <div class="flex-1">
+                            <h2 class="text-xl font-black text-dark">{{ product.name }}</h2>
+                            <p class="text-muted text-sm">By {{ product.seller.store_name }} • {{ product.subcategory.category.name }} > {{ product.subcategory.name }}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-sm font-black text-dark uppercase tracking-widest mb-3">Product Details</h3>
+                            <div class="space-y-2 text-sm">
+                                <p><span class="font-bold">Brand:</span> {{ product.brand }}</p>
+                                <p><span class="font-bold">Model:</span> {{ product.model_number }}</p>
+                                <p><span class="font-bold">Category:</span> {{ product.subcategory.category.name }}</p>
+                                <p><span class="font-bold">Subcategory:</span> {{ product.subcategory.name }}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-black text-dark uppercase tracking-widest mb-3">Policies</h3>
+                            <div class="space-y-2 text-sm">
+                                <p><span class="font-bold">Cancellable:</span> {% if product.is_cancellable %}Yes{% else %}No{% endif %}</p>
+                                <p><span class="font-bold">Returnable:</span> {% if product.is_returnable %}Yes{% else %}No{% endif %}</p>
+                                {% if product.is_returnable %}
+                                <p><span class="font-bold">Return Days:</span> {{ product.return_days }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <h3 class="text-sm font-black text-dark uppercase tracking-widest mb-3">Description</h3>
+                            <p class="text-sm">{{ product.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Variants -->
+                <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
+                    <h3 class="text-lg font-black text-dark mb-4">Product Variants</h3>
+                    <div class="space-y-4">
+                        {% for variant in product.variants.all %}
+                        <div class="border border-muted/20 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-dark">{{ variant.sku_code }}</h4>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm">
+                                        <div>
+                                            <span class="font-bold">MRP:</span> ${{ variant.mrp }}
+                                        </div>
+                                        <div>
+                                            <span class="font-bold">Selling:</span> ${{ variant.selling_price }}
+                                        </div>
+                                        <div>
+                                            <span class="font-bold">Cost:</span> ${{ variant.cost_price }}
+                                        </div>
+                                        <div>
+                                            <span class="font-bold">Stock:</span> {{ variant.stock_quantity }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    {% for image in variant.images.all %}
+                                    <div class="w-12 h-12 bg-light rounded border border-muted/20 overflow-hidden">
+                                        <img src="{{ image.image_url.url }}" alt="{{ image.alt_text }}" class="w-full h-full object-cover">
+                                    </div>
+                                    {% empty %}
+                                    <div class="w-12 h-12 bg-light rounded border border-muted/20 flex items-center justify-center">
+                                        <span class="material-icons text-muted text-sm">image</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-8 text-muted">
+                            <span class="material-icons text-4xl mb-2 opacity-50">inventory_2</span>
+                            <p class="font-medium">No variants found</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Current Status -->
+                <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
+                    <h3 class="text-lg font-black text-dark mb-4">Current Status</h3>
+                    {% if product.approval_status == 'approved' %}
+                        <span class="bg-green-100 text-green-700 px-4 py-2 rounded-md text-sm font-black uppercase tracking-widest">
+                            Approved
+                        </span>
+                    {% elif product.approval_status == 'rejected' %}
+                        <span class="bg-red-100 text-red-700 px-4 py-2 rounded-md text-sm font-black uppercase tracking-widest">
+                            Rejected
+                        </span>
+                    {% elif product.approval_status == 'PENDING' %}
+                        <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-md text-sm font-black uppercase tracking-widest">
+                            Pending Review
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Action Form -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6 sticky top-8">
+                    <h3 class="text-lg font-black text-dark mb-6">Update Status</h3>
+
+                    <form action="{% url 'productverification' product.id %}" method="POST" class="space-y-6">
+                        {% csrf_token %}
+
+                        <div>
+                            <label class="block text-sm font-black text-dark uppercase tracking-widest mb-3">Status</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="status" value="approved" class="text-accent focus:ring-accent"
+                                        {% if product.approval_status == 'approved' %}checked{% endif %}>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-icons text-green-600 text-sm">check_circle</span>
+                                        <span class="text-sm font-bold">Approve</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="status" value="PENDING" class="text-accent focus:ring-accent"
+                                        {% if product.approval_status == 'PENDING' %}checked{% endif %}>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-icons text-yellow-600 text-sm">pending_actions</span>
+                                        <span class="text-sm font-bold">Pending</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer">
+                                    <input type="radio" name="status" value="rejected" class="text-accent focus:ring-accent"
+                                        {% if product.approval_status == 'rejected' %}checked{% endif %}>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-icons text-red-600 text-sm">cancel</span>
+                                        <span class="text-sm font-bold">Reject</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-black text-dark uppercase tracking-widest mb-2">Admin Remarks</label>
+                            <textarea name="remarks" rows="4" placeholder="Add remarks for the seller..."
+                                class="w-full px-4 py-3 border border-muted/50 rounded-xl text-sm font-medium focus:outline-none focus:ring-1 focus:ring-dark focus:border-dark bg-light/30 transition text-dark resize-none"></textarea>
+                        </div>
+
+                        <div class="space-y-3">
+                            <button type="submit"
+                                class="w-full py-3 bg-dark text-light rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-accent hover:text-dark shadow-md transition-all">
+                                Update Status
+                            </button>
+                            <a href="{% url 'admin_dashboard' %}"
+                                class="w-full py-3 bg-muted/10 text-muted rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-muted/20 transition-all text-center block">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

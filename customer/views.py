@@ -51,7 +51,7 @@ def remove_wishlist_view(request, id):
     return redirect('wishlist')
 @login_required
 def wishlist_view(request):
-    wishlists = Wishlist.objects.filter(user=request.user).prefetch_related('items__variant__product', 'items__variant__images').order_by('-is_default', '-created_at')
+    wishlists = Wishlist.objects.filter(user=request.user).prefetch_related('items__variant__product__subcategory', 'items__variant__images').order_by('-is_default', '-created_at')
     context = {
         'wishlists': wishlists,'wishlist_collections': wishlists, 
     }
@@ -109,9 +109,8 @@ def add_to_cart_view(request,id):
 @login_required
 def cart_view(request):
     cart=get_object_or_404(Cart, user=request.user)
-    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product','variant__images')
-    for item in cart_items:
-        cart_total = sum(item.get_total())
+    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product__subcategory','variant__images')
+    cart_total = sum(item.get_total() for item in cart_items)        
     tax_amount = cart_total * 0.18
     total_amount = cart_total + tax_amount
     return render(request,'customer_templates/cartpage.html',{'cart_items': cart_items,'cart_total': cart_total,'tax_amount': tax_amount,'total_amount': total_amount})
@@ -137,7 +136,7 @@ def update_cart_view(request,id):
 @login_required
 def checkout_view(request):
     cart=get_object_or_404(Cart, user=request.user)
-    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product','variant__images')
+    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product__subcategory','variant__images')
     context={'cart_items':cart_items}
     return render(request,'customer_templates/checkout.html',context)
 
@@ -252,17 +251,17 @@ def set_default_address_view(request):
 
 #product_view_user-------------------------------------------------------------------
 def product_list_view(request):
-    product_var = ProductVariant.objects.select_related('product').prefetch_related('images').all()
+    product_var = ProductVariant.objects.select_related('product__subcategory__category').prefetch_related('images').all()
     try:
         if request.user.is_authenticated:
             cart = Cart.objects.filter(user=request.user).first()
             if cart:
-                cart_items = CartItem.objects.filter(cart=cart).prefetch_related('variant__product', 'variant__images')  
+                cart_items = CartItem.objects.filter(cart=cart).prefetch_related('variant__product__subcategory', 'variant__images')  
             else:
                 cart_items=CartItem.objects.none()
             wishlist = Wishlist.objects.filter(user=request.user, is_default=True).first()
             if wishlist:
-                wishlist_items = WishlistItem.objects.filter(wishlist=wishlist).prefetch_related('variant__product', 'variant__images') 
+                wishlist_items = WishlistItem.objects.filter(wishlist=wishlist).prefetch_related('variant__product__subcategory', 'variant__images') 
             else:
                 wishlist_items=WishlistItem.objects.none()
             return render(request, 'customer_templates/product_page.html', {"product_var": product_var,"cart_items": cart_items,"wishlist": wishlist_items})
@@ -270,14 +269,15 @@ def product_list_view(request):
         return redirect('login')
     return render(request, 'customer_templates/product_page.html', {"product_var": product_var})
 def product_single_view(request,id):
-    product_var=ProductVariant.objects.get(id=id)
+    product_var=ProductVariant.objects.select_related('product__subcategory__category').prefetch_related('images').get(id=id)
     cart=Cart.objects.filter(user=request.user).first()
-    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product','variant__images')
+    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product__subcategory','variant__images')
     return render(request,'customer_templates/productsinglepage.html',{"variant":product_var,"cart_items":cart_items})
 #----------------------------------------------------------------------------------------------------
 
 #order---------------------------------------------------------------------------
 def orderhistory_view(request):
+    
     return render(request,'customer_templates/order_history_customer.html')
 #--------------------------------------------------------------------------------
 

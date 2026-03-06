@@ -10,7 +10,7 @@ def home_view(request):
     user=request.user
     if user.is_authenticated:
         cart=Cart.objects.filter(user=user).first()
-        cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product','variant__images')
+        cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product__subcategory','variant__images')
         return render(request,'core_templates/homepage.html',{'user':user,'cart_items':cart_items})
     return render(request,'core_templates/homepage.html')
 
@@ -58,6 +58,8 @@ def login_view(request):
         if user is not None:
             login(request,user)
             messages.success(request,'user successgully logined')
+            if user.is_admin:
+                return redirect('admin_dashboard')
             return redirect('home')
         else:
             messages.error(request,'invalid credintials !')
@@ -67,11 +69,11 @@ def logout_view(request):
     return redirect('home')
 def category_view(request):
     cart=Cart.objects.filter(user=request.user).first()
-    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product','variant__images')
+    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product__subcategory','variant__images')
     return render(request,'core_templates/categories.html',{'cart_items':cart_items})
 def deals_view(request):
     cart=Cart.objects.filter(user=request.user).first()
-    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product','variant__images')
+    cart_items=CartItem.objects.filter(cart=cart).prefetch_related('variant__product__subcategory','variant__images')
     return render(request,'core_templates/dealspage.html',{'cart_items':cart_items})
 
 
