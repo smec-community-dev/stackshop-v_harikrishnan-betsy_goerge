@@ -124,7 +124,14 @@
                     </select>
                 </div>
             </div>
-
+            {% if search_query %}
+            <div class="mb-8 border-b border-muted/20 pb-4">
+                <h2 class="text-2xl font-black text-dark">
+                    Search Results for "<span class="text-accent italic">{{ search_query }}</span>"
+                </h2>
+                <p class="text-sm font-bold text-muted mt-1">Found {{ product_var.count }} items</p>
+            </div>
+            {% endif %}
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
                 {% for x in product_var %}
 

@@ -41,46 +41,57 @@
 </head>
 
 <body class="bg-light text-dark font-display flex flex-col min-h-screen overflow-x-hidden">
-    
+
     {% include "customer_templates/Navbar.html" %}
 
     <section class="max-w-7xl mx-auto w-full px-4 mt-6">
-<div class="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 pt-1">
-    
-    {% for category in categories %}
-    <a href="{% url 'catogory_list' %}#cat-{{ category.name|slugify }}" class="group flex-shrink-0 flex items-center gap-2 bg-white border border-muted/50 text-dark rounded-full px-5 py-2.5 hover:bg-accent hover:border-dark hover:-translate-y-1 hover:shadow-md active:scale-95 transition-all duration-300 text-sm font-bold">
-        
-        <span class="material-icons text-dark text-lg group-hover:rotate-12 transition-transform">
-            {{ category.icon|default:"category" }}
-        </span> 
-        
-        {{ category.name }}
-    </a>
-    {% empty %}
-        <p class="group flex-shrink-0 flex items-center gap-2 bg-white border border-muted/50 text-dark rounded-full px-5 py-2.5 hover:bg-accent hover:border-dark hover:-translate-y-1 hover:shadow-md active:scale-95 transition-all duration-300 text-sm font-bold">No categories found.</p>
-    {% endfor %}
+        <div class="flex items-center gap-3 overflow-x-auto hide-scrollbar pb-2 pt-1">
 
-</div>
+            {% for category in categories %}
+            <a href="{% url 'catogory_list' %}#cat-{{ category.name|slugify }}"
+                class="group flex-shrink-0 flex items-center gap-2 bg-white border border-muted/50 text-dark rounded-full px-5 py-2.5 hover:bg-accent hover:border-dark hover:-translate-y-1 hover:shadow-md active:scale-95 transition-all duration-300 text-sm font-bold">
+
+                <span class="material-icons text-dark text-lg group-hover:rotate-12 transition-transform">
+                    {{ category.icon|default:"category" }}
+                </span>
+
+                {{ category.name }}
+            </a>
+            {% empty %}
+            <p
+                class="group flex-shrink-0 flex items-center gap-2 bg-white border border-muted/50 text-dark rounded-full px-5 py-2.5 hover:bg-accent hover:border-dark hover:-translate-y-1 hover:shadow-md active:scale-95 transition-all duration-300 text-sm font-bold">
+                No categories found.</p>
+            {% endfor %}
+
+        </div>
     </section>
 
     <main class="max-w-7xl mx-auto w-full px-4 mt-6 flex flex-col lg:flex-row gap-6">
-        <div class="relative overflow-hidden rounded-xl bg-accent h-[480px] border border-muted shadow-sm w-full lg:w-3/4 group" id="hero-carousel">
+        <div class="relative overflow-hidden rounded-xl bg-accent h-[480px] border border-muted shadow-sm w-full lg:w-3/4 group"
+            id="hero-carousel">
 
             <div id="carousel-track" class="flex w-[300%] h-full transition-transform duration-700 ease-in-out">
-                
+
                 <div class="w-1/3 h-full flex-shrink-0 flex items-center relative">
                     <div class="relative z-10 pl-8 md:pl-16 max-w-xl w-full">
-                        <span class="inline-block bg-dark text-light text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">Season Picks</span>
-                        <h1 class="text-5xl md:text-6xl font-extrabold text-dark leading-tight mb-4">Trending <br /><span class="italic text-muted/80">Now</span></h1>
-                        <p class="text-base md:text-lg text-dark/80 mb-8 max-w-sm font-medium">Discover our curated collection of contemporary essentials, where sophisticated design meets everyday functionality.</p>
+                        <span
+                            class="inline-block bg-dark text-light text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">Season
+                            Picks</span>
+                        <h1 class="text-5xl md:text-6xl font-extrabold text-dark leading-tight mb-4">Trending
+                            <br /><span class="italic text-muted/80">Now</span></h1>
+                        <p class="text-base md:text-lg text-dark/80 mb-8 max-w-sm font-medium">Discover our curated
+                            collection of contemporary essentials, where sophisticated design meets everyday
+                            functionality.</p>
                         <div class="flex items-center gap-4">
-                            <button class="bg-dark text-light px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
+                            <button
+                                class="bg-dark text-light px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
                                 Shop Collection <span class="material-icons text-sm">arrow_forward</span>
                             </button>
                         </div>
                     </div>
                     <div class="absolute right-0 top-0 h-full w-1/2 hidden sm:block">
-                        <img alt="Trending Product" class="w-full h-full object-cover object-center mix-blend-multiply opacity-90 pointer-events-none"
+                        <img alt="Trending Product"
+                            class="w-full h-full object-cover object-center mix-blend-multiply opacity-90 pointer-events-none"
                             src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=1000" />
                         <div class="absolute inset-0 bg-gradient-to-r from-accent to-transparent"></div>
                     </div>
@@ -88,17 +99,23 @@
 
                 <div class="w-1/3 h-full flex-shrink-0 flex items-center relative">
                     <div class="relative z-10 pl-8 md:pl-16 max-w-xl w-full">
-                        <span class="inline-block bg-dark text-light text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">New Arrivals</span>
-                        <h1 class="text-5xl md:text-6xl font-extrabold text-dark leading-tight mb-4">Smart <br /><span class="italic text-muted/80">Living</span></h1>
-                        <p class="text-base md:text-lg text-dark/80 mb-8 max-w-sm font-medium">Upgrade your home with the latest intelligent devices. Seamless integration for a better life.</p>
+                        <span
+                            class="inline-block bg-dark text-light text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">New
+                            Arrivals</span>
+                        <h1 class="text-5xl md:text-6xl font-extrabold text-dark leading-tight mb-4">Smart <br /><span
+                                class="italic text-muted/80">Living</span></h1>
+                        <p class="text-base md:text-lg text-dark/80 mb-8 max-w-sm font-medium">Upgrade your home with
+                            the latest intelligent devices. Seamless integration for a better life.</p>
                         <div class="flex items-center gap-4">
-                            <button class="bg-dark text-light px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
+                            <button
+                                class="bg-dark text-light px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
                                 Explore Tech <span class="material-icons text-sm">arrow_forward</span>
                             </button>
                         </div>
                     </div>
                     <div class="absolute right-0 top-0 h-full w-1/2 hidden sm:block">
-                        <img alt="Smart Tech" class="w-full h-full object-cover object-center mix-blend-multiply opacity-90 pointer-events-none"
+                        <img alt="Smart Tech"
+                            class="w-full h-full object-cover object-center mix-blend-multiply opacity-90 pointer-events-none"
                             src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=1000" />
                         <div class="absolute inset-0 bg-gradient-to-r from-accent to-transparent"></div>
                     </div>
@@ -106,57 +123,79 @@
 
                 <div class="w-1/3 h-full flex-shrink-0 flex items-center relative">
                     <div class="relative z-10 pl-8 md:pl-16 max-w-xl w-full">
-                        <span class="inline-block bg-dark text-light text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">Exclusive Deal</span>
-                        <h1 class="text-5xl md:text-6xl font-extrabold text-dark leading-tight mb-4">Sneaker <br /><span class="italic text-muted/80">Drop</span></h1>
-                        <p class="text-base md:text-lg text-dark/80 mb-8 max-w-sm font-medium">Step up your footwear game with our exclusive limited-edition releases. Grab them before they're gone.</p>
+                        <span
+                            class="inline-block bg-dark text-light text-xs font-bold px-3 py-1 rounded mb-4 tracking-widest uppercase">Exclusive
+                            Deal</span>
+                        <h1 class="text-5xl md:text-6xl font-extrabold text-dark leading-tight mb-4">Sneaker <br /><span
+                                class="italic text-muted/80">Drop</span></h1>
+                        <p class="text-base md:text-lg text-dark/80 mb-8 max-w-sm font-medium">Step up your footwear
+                            game with our exclusive limited-edition releases. Grab them before they're gone.</p>
                         <div class="flex items-center gap-4">
-                            <button class="bg-dark text-light px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
+                            <button
+                                class="bg-dark text-light px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
                                 View Footwear <span class="material-icons text-sm">arrow_forward</span>
                             </button>
                         </div>
                     </div>
                     <div class="absolute right-0 top-0 h-full w-1/2 hidden sm:block">
-                        <img alt="Sneakers" class="w-full h-full object-cover object-center mix-blend-multiply opacity-90 pointer-events-none"
+                        <img alt="Sneakers"
+                            class="w-full h-full object-cover object-center mix-blend-multiply opacity-90 pointer-events-none"
                             src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1000" />
                         <div class="absolute inset-0 bg-gradient-to-r from-accent to-transparent"></div>
                     </div>
                 </div>
 
-            </div> 
-            
-            <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-dark/20 hover:bg-dark text-light w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
+            </div>
+
+            <button id="prev-btn"
+                class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-dark/20 hover:bg-dark text-light w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
                 <span class="material-icons">chevron_left</span>
             </button>
-            <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-dark/20 hover:bg-dark text-light w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
+            <button id="next-btn"
+                class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-dark/20 hover:bg-dark text-light w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 focus:outline-none">
                 <span class="material-icons">chevron_right</span>
             </button>
 
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20" id="indicator-container">
-                <button class="indicator-dot w-8 h-1.5 rounded-full bg-dark transition-all duration-300 focus:outline-none" data-index="0"></button>
-                <button class="indicator-dot w-2 h-1.5 rounded-full bg-dark/30 hover:bg-dark/50 transition-all duration-300 focus:outline-none" data-index="1"></button>
-                <button class="indicator-dot w-2 h-1.5 rounded-full bg-dark/30 hover:bg-dark/50 transition-all duration-300 focus:outline-none" data-index="2"></button>
+                <button
+                    class="indicator-dot w-8 h-1.5 rounded-full bg-dark transition-all duration-300 focus:outline-none"
+                    data-index="0"></button>
+                <button
+                    class="indicator-dot w-2 h-1.5 rounded-full bg-dark/30 hover:bg-dark/50 transition-all duration-300 focus:outline-none"
+                    data-index="1"></button>
+                <button
+                    class="indicator-dot w-2 h-1.5 rounded-full bg-dark/30 hover:bg-dark/50 transition-all duration-300 focus:outline-none"
+                    data-index="2"></button>
             </div>
         </div>
 
         <div class="w-full lg:w-1/4 flex flex-col gap-6">
-            <div class="bg-dark rounded-xl h-[228px] p-6 relative overflow-hidden flex flex-col justify-center shadow-sm border border-muted/30 group">
+            <div
+                class="bg-dark rounded-xl h-[228px] p-6 relative overflow-hidden flex flex-col justify-center shadow-sm border border-muted/30 group">
                 <div class="relative z-10">
                     <span class="text-accent text-xs font-bold uppercase tracking-widest mb-1 block">Limited Time</span>
                     <h3 class="text-light text-2xl font-extrabold mb-2 leading-tight">Flash<br>Sale</h3>
                     <p class="text-muted text-sm mb-4">Up to 40% off on select items.</p>
-                    <a href="#" class="text-dark bg-accent text-xs font-bold py-2 px-4 rounded-lg inline-block hover:bg-opacity-90 transition-colors">Grab Deal</a>
+                    <a href="#"
+                        class="text-dark bg-accent text-xs font-bold py-2 px-4 rounded-lg inline-block hover:bg-opacity-90 transition-colors">Grab
+                        Deal</a>
                 </div>
-                <div class="absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-light/10 transform group-hover:scale-110 transition-transform duration-500"></div>
+                <div
+                    class="absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-light/10 transform group-hover:scale-110 transition-transform duration-500">
+                </div>
             </div>
 
-            <div class="bg-white rounded-xl h-[228px] p-6 relative overflow-hidden flex flex-col justify-center shadow-sm border border-muted/30 group">
+            <div
+                class="bg-white rounded-xl h-[228px] p-6 relative overflow-hidden flex flex-col justify-center shadow-sm border border-muted/30 group">
                 <div class="relative z-10">
                     <span class="text-dark text-xs font-bold uppercase tracking-widest mb-1 block">New Arrivals</span>
                     <h3 class="text-dark text-2xl font-extrabold mb-2 leading-tight">Summer<br>Collection</h3>
-                    <a href="#" class="text-light bg-dark text-xs font-bold py-2 px-4 rounded-lg inline-block mt-2 hover:bg-opacity-90 transition-colors">Explore</a>
+                    <a href="#"
+                        class="text-light bg-dark text-xs font-bold py-2 px-4 rounded-lg inline-block mt-2 hover:bg-opacity-90 transition-colors">Explore</a>
                 </div>
                 <div class="absolute right-0 top-0 h-full w-1/2">
-                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=500" class="w-full h-full object-cover opacity-30 mix-blend-multiply" alt="Summer Promo">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=500"
+                        class="w-full h-full object-cover opacity-30 mix-blend-multiply" alt="Summer Promo">
                     <div class="absolute inset-0 bg-gradient-to-r from-white to-transparent"></div>
                 </div>
             </div>
@@ -165,21 +204,24 @@
 
     <section class="max-w-7xl mx-auto w-full px-4 mt-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
+            <div
+                class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
                 <span class="material-icons text-3xl text-accent">local_shipping</span>
                 <div>
                     <h4 class="font-bold text-sm uppercase tracking-wide">Free Shipping</h4>
                     <p class="text-xs text-muted">On orders over $100</p>
                 </div>
             </div>
-            <div class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
+            <div
+                class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
                 <span class="material-icons text-3xl text-accent">support_agent</span>
                 <div>
                     <h4 class="font-bold text-sm uppercase tracking-wide">24/7 Support</h4>
                     <p class="text-xs text-muted">Here to help anytime</p>
                 </div>
             </div>
-            <div class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
+            <div
+                class="bg-dark text-light rounded-xl p-5 flex items-center justify-center gap-4 shadow-sm hover:-translate-y-1 transition-transform">
                 <span class="material-icons text-3xl text-accent">security</span>
                 <div>
                     <h4 class="font-bold text-sm uppercase tracking-wide">Secure Checkout</h4>
@@ -197,67 +239,82 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg border border-muted/50 transition-all duration-300 flex flex-col">
-                <div class="aspect-square bg-light relative overflow-hidden border-b border-muted/30">
-                    <img alt="Product" class="w-full h-full object-cover mix-blend-multiply p-4 transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=500" />
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-muted hover:text-dark hover:bg-accent border border-muted shadow-sm transition-all">
-                        <span class="material-icons text-sm">favorite_border</span>
-                    </button>
-                </div>
-                <div class="p-5 flex flex-col flex-grow">
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-muted mb-1">Footwear</span>
-                    <h3 class="font-bold text-dark text-lg mb-2">Swift Run Sneakers</h3>
-                    <div class="mt-auto flex items-center justify-between pt-4">
-                        <span class="text-xl font-extrabold text-dark">$120.00</span>
-                        <button class="bg-dark text-light p-2 rounded hover:bg-accent hover:text-dark transition-colors border border-transparent hover:border-dark">
-                            <span class="material-icons text-sm">add_shopping_cart</span>
-                        </button>
-                    </div>
-                </div>
+       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+    
+    {% for x in product_var %}
+    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md border border-muted/30 transition-all duration-300 flex flex-col group">
+        
+        <div class="aspect-square bg-light/30 relative overflow-hidden flex items-center justify-center">
+            {% if x.images.first %}
+            <img alt="{{ x.product.name }}"
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                 src="{{ x.images.first.image_url.url }}" />
+            {% else %}
+            <img alt="Placeholder"
+                 class="w-full h-full object-contain opacity-50 p-4"
+                 src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
+            {% endif %}
+        </div>
+
+        <div class="p-3 flex flex-col flex-grow">
+            <span class="text-[9px] font-extrabold uppercase tracking-widest text-muted mb-1 truncate">
+                {{ x.product.subcategory.category.name|default:"General" }}
+            </span>
+
+            <h3 class="font-bold text-dark text-sm leading-snug line-clamp-2 mb-2">
+                <a href="{% url 'productsingle' x.product.id %}" class="hover:text-accent transition-colors">
+                    {{ x.product.name }}
+                </a>
+            </h3>
+
+            <div class="mt-auto flex flex-col justify-end">
+                {% if x.mrp > x.selling_price %}
+                <span class="text-[10px] font-bold text-muted line-through mb-0.5">${{ x.mrp }}</span>
+                {% endif %}
+                <span class="text-lg font-black text-dark leading-none">${{ x.selling_price }}</span>
             </div>
 
-            <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg border border-muted/50 transition-all duration-300 flex flex-col">
-                <div class="aspect-square bg-light relative overflow-hidden border-b border-muted/30">
-                    <img alt="Product" class="w-full h-full object-cover mix-blend-multiply p-4 transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
-                    <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-muted hover:text-dark hover:bg-accent border border-muted shadow-sm transition-all">
-                        <span class="material-icons text-sm">favorite_border</span>
-                    </button>
-                </div>
-                <div class="p-5 flex flex-col flex-grow">
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-muted mb-1">Audio Tech</span>
-                    <h3 class="font-bold text-dark text-lg mb-2">Studio Bass Headphones</h3>
-                    <div class="mt-auto flex items-center justify-between pt-4">
-                        <span class="text-xl font-extrabold text-dark">$299.00</span>
-                        <button class="bg-dark text-light p-2 rounded hover:bg-accent hover:text-dark transition-colors border border-transparent hover:border-dark">
-                            <span class="material-icons text-sm">add_shopping_cart</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <a href="{% url 'productsingle' x.product.id %}"
+               class="mt-3 w-full inline-flex items-center justify-center text-[10px] font-bold uppercase tracking-widest bg-dark text-light px-2 py-1.5 rounded hover:bg-accent hover:text-dark transition-all">
+                View
+            </a>
         </div>
+    </div>
+    {% empty %}
+    
+    <div class="col-span-full flex flex-col items-center justify-center py-16 bg-white rounded-xl border border-dashed border-muted/50">
+        <span class="material-icons text-5xl mb-3 text-muted/30">inventory_2</span>
+        <h3 class="text-base font-bold text-dark mb-1">No Products Found</h3>
+        <p class="text-muted text-xs text-center max-w-sm mb-4">We couldn't find any products matching your current filters or category selection.</p>
+        <button class="bg-dark text-light px-4 py-2 rounded-lg text-xs font-bold hover:opacity-90 transition-opacity shadow">
+            Clear All Filters
+        </button>
+    </div>
+    
+    {% endfor %}
+</div>
     </section>
-        {% include "customer_templates/Footer.html" %}
+    {% include "customer_templates/Footer.html" %}
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
+
             // --- HERO CAROUSEL LOGIC ---
             const mainTrack = document.getElementById('carousel-track');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             const indicators = document.querySelectorAll('.indicator-dot');
-            
-            if(mainTrack && prevBtn && nextBtn) {
+
+            if (mainTrack && prevBtn && nextBtn) {
                 let currentIndex = 0;
                 const totalSlides = 3;
 
                 function updateCarousel() {
                     const slidePercentage = 100 / totalSlides;
                     mainTrack.style.transform = `translateX(-${currentIndex * slidePercentage}%)`;
-                    
+
                     indicators.forEach((dot, index) => {
-                        if(index === currentIndex) {
+                        if (index === currentIndex) {
                             dot.classList.remove('w-2', 'bg-dark/30');
                             dot.classList.add('w-8', 'bg-dark');
                         } else {
@@ -292,7 +349,7 @@
 
             // --- CATEGORY BAR MOUSE WHEEL SCROLL LOGIC ---
             const categoryContainer = document.querySelector('.overflow-x-auto');
-            if(categoryContainer) {
+            if (categoryContainer) {
                 categoryContainer.addEventListener('wheel', (evt) => {
                     if (evt.deltaY !== 0) {
                         evt.preventDefault();
@@ -306,4 +363,5 @@
         });
     </script>
 </body>
+
 </html>
