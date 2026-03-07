@@ -86,7 +86,6 @@ def search_and_filter_view(request):
         except (ValueError, TypeError):
             pass    
     
-    # Apply sorting
     if sort_by == "price-low-high":
         product_var = product_var.order_by("selling_price")
     elif sort_by == "price-high-low":

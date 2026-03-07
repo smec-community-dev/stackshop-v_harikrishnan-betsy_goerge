@@ -141,13 +141,22 @@ def add_to_cart_view(request, id):
     user = request.user
     product_variant = get_object_or_404(ProductVariant, id=id)
     cart, _ = Cart.objects.get_or_create(user=user)
+    
+    # Get quantity from form submission (default to 1)
+    try:
+        quantity = int(request.POST.get("quantity", 1))
+        if quantity < 1:
+            quantity = 1
+    except (ValueError, TypeError):
+        quantity = 1
+    
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
         variant=product_variant,
-        defaults={"quantity": 1, "price_at_time": product_variant.selling_price},
+        defaults={"quantity": quantity, "price_at_time": product_variant.selling_price},
     )
     if not created:
-        cart_item.quantity += 1
+        cart_item.quantity += quantity
         cart_item.price_at_time = product_variant.selling_price
         cart_item.save()
     messages.success(request, f"{product_variant.product.name} added to cart.")
