@@ -46,13 +46,19 @@ def search_and_filter_view(request):
     min_price = request.GET.get("min_price", "")
     max_price = request.GET.get("max_price", "")
     selected_categories = request.GET.getlist("category")
+    selected_subcategory = request.GET.get("subcategory", "")
     sort_by = request.GET.get("sort", "featured")
     user = request.user    
+    
     if query:
         product_var = ProductVariant.objects.filter(
             Q(product__name__icontains=query)
             | Q(product__description__icontains=query)
             | Q(product__subcategory__category__name__icontains=query)
+        ).distinct()
+    elif selected_subcategory:
+        product_var = ProductVariant.objects.filter(
+            product__subcategory__slug=selected_subcategory
         ).distinct()
     elif selected_categories:
         product_var = ProductVariant.objects.all()
@@ -60,6 +66,7 @@ def search_and_filter_view(request):
         product_var = ProductVariant.objects.all()
     else:
         product_var = ProductVariant.objects.none()    
+    
     if selected_categories and "all" not in selected_categories:
         product_var = product_var.filter(
             product__subcategory__category__slug__in=selected_categories
@@ -79,6 +86,7 @@ def search_and_filter_view(request):
         except (ValueError, TypeError):
             pass    
     
+    # Apply sorting
     if sort_by == "price-low-high":
         product_var = product_var.order_by("selling_price")
     elif sort_by == "price-high-low":
@@ -113,6 +121,7 @@ def search_and_filter_view(request):
         "min_price": min_price,
         "max_price": max_price,
         "selected_categories": selected_categories,
+        "selected_subcategory": selected_subcategory,
         "sort_by": sort_by,
         "categories": categories,
         "wishlist_variant_ids": wishlist_variant_ids,

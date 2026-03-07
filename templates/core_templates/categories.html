@@ -112,7 +112,7 @@
                                     <span class="material-icons text-3xl md:text-5xl text-accent">{{ category.icon|default:"category" }}</span> {{ category.name }}
                                 </h2>
                             </div>
-                            <a href="{% url 'product_list' %}?category={{ category.slug }}" class="hidden sm:flex bg-accent text-dark px-6 py-2.5 rounded-lg font-bold text-sm items-center gap-2 hover:bg-white transition-colors shadow-lg">
+                            <a href="{% url 'search' %}?category={{ category.slug }}" class="hidden sm:flex bg-accent text-dark px-6 py-2.5 rounded-lg font-bold text-sm items-center gap-2 hover:bg-white transition-colors shadow-lg">
                                 View All Products <span class="material-icons text-sm">arrow_forward</span>
                             </a>
                         </div>
@@ -122,7 +122,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
                     {% for sub in category.subcategories.all|slice:":4" %}
-                    <a href="{% url 'product_list' %}?subcategory={{ sub.slug }}" class="group bg-white rounded-xl overflow-hidden shadow-sm border border-muted/40 hover:border-dark hover:shadow-xl transition-all duration-300 flex flex-col">
+                    <a href="{% url 'search' %}?subcategory={{ sub.slug }}" class="group bg-white rounded-xl overflow-hidden shadow-sm border border-muted/40 hover:border-dark hover:shadow-xl transition-all duration-300 flex flex-col">
                         <div class="aspect-[4/3] bg-dark relative overflow-hidden flex items-center justify-center">
                             <div class="absolute inset-0 bg-gradient-to-br from-dark to-muted opacity-80 group-hover:scale-110 transition-transform duration-700"></div>
                             <span class="material-icons text-5xl text-light/50 relative z-10 group-hover:text-accent transition-colors">layers</span>
