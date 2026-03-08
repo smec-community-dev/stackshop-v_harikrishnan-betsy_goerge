@@ -49,8 +49,9 @@
                         <tr>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b border-[#ACBAC4]/30">Item Details</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b border-[#ACBAC4]/30">Date / Order ID</th>
-                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b border-[#ACBAC4]/30">Status</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b border-[#ACBAC4]/30">Order Status</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b border-[#ACBAC4]/30">Price</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b border-[#ACBAC4]/30">Payment Status</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b border-[#ACBAC4]/30 text-center">Action</th>
                         </tr>
                     </thead>
@@ -106,6 +107,21 @@
                                     </span>
                                 </td>
                                 
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    {% if order.payment_status == 'SUCCESS' %}
+                                        <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
+                                            <span class="material-icons text-[12px]">check_circle</span> Paid
+                                        </span>
+                                    {% elif order.payment_status == 'PENDING' %}
+                                        <span class="inline-flex items-center gap-1.5 bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></span> Pending
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
+                                            <span class="material-icons text-[12px]">info</span> {{ order.payment_status }}
+                                        </span>
+                                    {% endif %}
+                                </td>
                                 <td class="px-6 py-5 whitespace-nowrap text-center">
                                     {% if order.order_status == 'Delivered' %}
                                         <button onclick="openModal('reviewModal', {{ item.id }})" class="bg-white border border-[#30364F] text-[#30364F] hover:bg-[#30364F] hover:text-[#F0F0DB] px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm inline-flex items-center gap-1.5">

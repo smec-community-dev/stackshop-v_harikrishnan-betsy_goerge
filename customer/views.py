@@ -4,7 +4,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from seller.models import Product, ProductVariant
-from customer.models import Wishlist, WishlistItem, Cart, CartItem, Order, PaymentOrder, OrderItem
+from customer.models import (
+    Wishlist,
+    WishlistItem,
+    Cart,
+    CartItem,
+    Order,
+    PaymentOrder,
+    OrderItem,
+)
 from core.models import Address, Category
 import razorpay
 from django.conf import settings
@@ -21,72 +29,77 @@ def payment_success(request):
 
     data = json.loads(request.body)
 
-    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    client = razorpay.Client(
+        auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+    )
 
     params_dict = {
-        'razorpay_order_id': data['razorpay_order_id'],
-        'razorpay_payment_id': data['razorpay_payment_id'],
-        'razorpay_signature': data['razorpay_signature']
+        "razorpay_order_id": data["razorpay_order_id"],
+        "razorpay_payment_id": data["razorpay_payment_id"],
+        "razorpay_signature": data["razorpay_signature"],
     }
 
     try:
         client.utility.verify_payment_signature(params_dict)
 
         payment_order = PaymentOrder.objects.get(
-            razorpay_order_id=data['razorpay_order_id']
+            razorpay_order_id=data["razorpay_order_id"]
         )
 
-        payment_order.razorpay_payment_id = data['razorpay_payment_id']
-        payment_order.razorpay_signature = data['razorpay_signature']
+        payment_order.razorpay_payment_id = data["razorpay_payment_id"]
+        payment_order.razorpay_signature = data["razorpay_signature"]
         payment_order.status = "SUCCESS"
         payment_order.save()
-        
+
         # Update the linked Order object
         order = payment_order.order
         order.payment_status = "SUCCESS"
         order.order_status = "CONFIRMED"
         order.save()
-        
+
         # Create OrderItems from cart items
         cart = Cart.objects.get(user=payment_order.user)
         cart_items = CartItem.objects.filter(cart=cart)
-        
+
         for cart_item in cart_items:
             OrderItem.objects.create(
                 order=order,
                 variant=cart_item.variant,
                 seller=cart_item.variant.product.seller,  # Get seller from product
                 quantity=cart_item.quantity,
-                price_at_purchase=cart_item.price_at_time
+                price_at_purchase=cart_item.price_at_time,
             )
-        
+
         # Clear the cart
         cart_items.delete()
 
-        return JsonResponse({"status":"payment verified"})
+        return JsonResponse({"status": "payment verified"})
 
     except Exception as e:
-        return JsonResponse({"status":"payment failed", "error": str(e)})
+        return JsonResponse({"status": "payment failed", "error": str(e)})
+
 
 @login_required
 def order_success(request):
     """Display order success page after payment completion"""
     try:
         # Get the most recent successful payment order for the user
-        payment_order = PaymentOrder.objects.filter(
-            user=request.user,
-            status="SUCCESS"
-        ).order_by('-created_at').first()
-        
+        payment_order = (
+            PaymentOrder.objects.filter(user=request.user, status="SUCCESS")
+            .order_by("-created_at")
+            .first()
+        )
+
         if payment_order:
             # Clear the user's cart after successful payment
             cart = Cart.objects.get(user=request.user)
             cart.items.all().delete()
-            
+
             context = {
                 "order": payment_order.order,
                 "payment_order": payment_order,
-                "order_amount": payment_order.amount / 100,  # Convert from paise to rupees
+                "order_amount": payment_order.amount
+                / 100,  # Convert from paise to rupees
             }
             return render(request, "customer_templates/order_success.html", context)
         else:
@@ -98,6 +111,7 @@ def order_success(request):
     except Exception as e:
         messages.error(request, f"An error occurred: {str(e)}")
         return redirect("cart_view")
+
 
 # userlogin-----------------------------------------------------------------------------
 
@@ -232,14 +246,14 @@ def add_to_cart_view(request, id):
     user = request.user
     product_variant = get_object_or_404(ProductVariant, id=id)
     cart, _ = Cart.objects.get_or_create(user=user)
-    
+
     try:
         quantity = int(request.POST.get("quantity", 1))
         if quantity < 1:
             quantity = 1
     except (ValueError, TypeError):
         quantity = 1
-    
+
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
         variant=product_variant,
@@ -299,49 +313,53 @@ def checkout_view(request):
     cart_items = CartItem.objects.filter(cart=cart).prefetch_related(
         "variant__product__subcategory", "variant__images"
     )
-    
+
     cart_total = sum(item.get_total() for item in cart_items)
-    tax_amount = cart_total * 0.18 
+    tax_amount = cart_total * 0.18
     total_amount = cart_total + tax_amount
-    
+
     # Convert to paise (Razorpay expects amount in paise)
     amount_in_paise = int(total_amount * 100)
-    
+
     try:
-        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-        
-        payment = client.order.create({
-            "amount": amount_in_paise,
-            "currency": "INR",
-            "payment_capture": "1",
-            "receipt": f"order_{request.user.id}_{int(time.time())}"
-        })
-        
+        client = razorpay.Client(
+            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+        )
+
+        payment = client.order.create(
+            {
+                "amount": amount_in_paise,
+                "currency": "INR",
+                "payment_capture": "1",
+                "receipt": f"order_{request.user.id}_{int(time.time())}",
+            }
+        )
+
         # Create Order object first
         order_obj = Order.objects.create(
             user=request.user,
             order_number=f"ORD-{request.user.id}-{int(time.time())}",
             total_amount=total_amount,
             payment_status="PENDING",
-            order_status="PENDING"
+            order_status="PENDING",
         )
-        
+
         # Create PaymentOrder linked to Order
         payment_order = PaymentOrder.objects.create(
             order=order_obj,
             amount=amount_in_paise,
             razorpay_order_id=payment["id"],
             user=request.user,
-            status="PENDING"
+            status="PENDING",
         )
-        
+
         context = {
             "cart_items": cart_items,
             "cart_total": cart_total,
             "tax_amount": tax_amount,
             "total_amount": total_amount,
             "payment": payment,
-            "razorpay_key": settings.RAZORPAY_KEY_ID
+            "razorpay_key": settings.RAZORPAY_KEY_ID,
         }
     except Exception as e:
         messages.error(request, f"Payment initialization failed: {str(e)}")
@@ -350,9 +368,9 @@ def checkout_view(request):
             "cart_total": cart_total,
             "tax_amount": tax_amount,
             "total_amount": total_amount,
-            "error": str(e)
+            "error": str(e),
         }
-    
+
     return render(request, "customer_templates/checkout.html", context)
 
 
@@ -498,8 +516,8 @@ def product_list_view(request):
 
     # Pagination setup (12 products per page)
     paginator = Paginator(product_var_all, 12)
-    page_number = request.GET.get('page', 1)
-    
+    page_number = request.GET.get("page", 1)
+
     try:
         product_var = paginator.page(page_number)
     except PageNotAnInteger:
@@ -515,9 +533,7 @@ def product_list_view(request):
             )
             cart_variant_ids = list(cart_items.values_list("variant_id", flat=True))
 
-        wishlist = Wishlist.objects.filter(
-            user=request.user, is_default=True
-        ).first()
+        wishlist = Wishlist.objects.filter(user=request.user, is_default=True).first()
         if wishlist:
             wishlist_items = WishlistItem.objects.filter(
                 wishlist=wishlist
@@ -547,25 +563,27 @@ def product_single_view(request, id):
         .prefetch_related("images")
         .get(id=id)
     )
-    category=Category.objects.filter()
+    category = Category.objects.filter()
     cart = Cart.objects.filter(user=request.user).first()
     cart_items = CartItem.objects.filter(cart=cart).prefetch_related(
         "variant__product__subcategory", "variant__images"
     )
-    
+
     wishlist_variant_ids = []
     cart_variant_ids = []
-    
+
     if request.user.is_authenticated:
         wishlist_variant_ids = list(
-            WishlistItem.objects.filter(wishlist__user=request.user).values_list("variant_id", flat=True)
+            WishlistItem.objects.filter(wishlist__user=request.user).values_list(
+                "variant_id", flat=True
+            )
         )
-        
+
         if cart:
             cart_variant_ids = list(
                 CartItem.objects.filter(cart=cart).values_list("variant_id", flat=True)
             )
-    
+
     return render(
         request,
         "customer_templates/productsinglepage.html",
@@ -574,8 +592,8 @@ def product_single_view(request, id):
             "cart_items": cart_items,
             "wishlist_variant_ids": wishlist_variant_ids,
             "cart_variant_ids": cart_variant_ids,
-            'category':category
-        }
+            "category": category,
+        },
     )
 
 
@@ -584,15 +602,17 @@ def product_single_view(request, id):
 # order---------------------------------------------------------------------------
 @login_required
 def order_history_view(request):
-    orders = Order.objects.filter(user=request.user).prefetch_related(
-        'items__variant__product',
-        'items__variant__images'
-    ).order_by('-ordered_at')
+    orders = (
+        Order.objects.filter(user=request.user)
+        .prefetch_related("items__variant__product", "items__variant__images")
+        .order_by("-ordered_at")
+    )
 
     context = {
-        'orders': orders,
+        "orders": orders,
     }
-    return render(request, 'customer_templates/order_history_customer.html', context)
+    return render(request, "customer_templates/order_history_customer.html", context)
+
 
 # --------------------------------------------------------------------------------
 

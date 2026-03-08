@@ -37,7 +37,7 @@
 
     <main class="max-w-7xl mx-auto w-full px-4 py-8 md:py-12 flex-grow">
         {% include "core_templates/messages.html" %}
-        
+
         <div class="mb-8">
             <h1 class="text-3xl md:text-4xl font-extrabold text-dark tracking-tight">Checkout</h1>
             <p class="text-muted font-medium mt-2">Complete your purchase securely</p>
@@ -50,21 +50,23 @@
         {% endif %}
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
+
             <!-- Order Summary -->
             <div class="lg:col-span-2">
                 <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-muted/30">
                     <h2 class="text-xl font-extrabold text-dark mb-6 border-b border-muted/30 pb-4">Order Summary</h2>
-                    
+
                     <div class="space-y-4 mb-6">
                         {% for item in cart_items %}
                         <div class="flex items-center justify-between py-3 border-b border-muted/20">
                             <div class="flex items-center gap-4 flex-1">
                                 <div class="w-16 h-16 bg-light rounded-lg overflow-hidden flex-shrink-0">
                                     {% if item.variant.images.first.image_url %}
-                                        <img src="{{ item.variant.images.first.image_url.url }}" alt="{{ item.variant.product.name }}" class="w-full h-full object-cover">
+                                    <img src="{{ item.variant.images.first.image_url.url }}"
+                                        alt="{{ item.variant.product.name }}" class="w-full h-full object-cover">
                                     {% else %}
-                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=100" alt="Placeholder" class="w-full h-full object-cover">
+                                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=100"
+                                        alt="Placeholder" class="w-full h-full object-cover">
                                     {% endif %}
                                 </div>
                                 <div class="flex-1">
@@ -85,7 +87,7 @@
             <div class="lg:col-span-1">
                 <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-muted/30 sticky top-28">
                     <h2 class="text-xl font-extrabold text-dark mb-6 border-b border-muted/30 pb-4">Price Details</h2>
-                    
+
                     <div class="space-y-4 mb-6">
                         <div class="flex justify-between text-sm">
                             <span class="text-muted font-bold">Subtotal</span>
@@ -107,29 +109,32 @@
                             <span class="text-2xl font-black text-dark">₹{{ total_amount|floatformat:2 }}</span>
                         </div>
                     </div>
-
                     {% if payment %}
-                    <button id="rzp-button-id" class="w-full bg-dark hover:bg-opacity-90 text-light text-center py-4 rounded-xl font-bold text-sm uppercase tracking-widest transition-all shadow-lg shadow-dark/20 flex items-center justify-center gap-2">
-                        Pay Now <span class="material-icons text-[18px]">lock</span>
+                    <button id="rzp-button-id" data-key="{{ razorpay_key }}" data-amount="{{ payment.amount }}"
+                        data-orderid="{{ payment.id }}" data-name="{{ user.first_name }} {{ user.last_name }}"
+                        data-email="{{ user.email }}" data-contact="{{ user.phone_number }}"
+                        class="bg-dark text-light px-6 py-2 rounded-lg">
+                        Pay Now
                     </button>
                     {% else %}
-                    <button disabled class="w-full bg-muted text-light text-center py-4 rounded-xl font-bold text-sm uppercase tracking-widest cursor-not-allowed">
+                    <button disabled
+                        class="w-full bg-muted text-light text-center py-4 rounded-xl font-bold text-sm uppercase tracking-widest cursor-not-allowed">
                         Loading Payment...
                     </button>
                     {% endif %}
-                    
+
                     <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                         <p class="text-xs text-blue-700 font-bold mb-3">🧪 TEST MODE - Multiple Payment Options:</p>
-                        
+
                         <div class="space-y-2">
                             <div class="text-xs text-blue-700">
                                 <span class="font-bold">💳 Card:</span>
                                 <code class="bg-white px-2 py-1 rounded">4111 1111 1111 1111</code>
-                                <br/><span class="text-[10px]">Expiry: Any future date | CVV: Any 3 digits</span>
+                                <br /><span class="text-[10px]">Expiry: Any future date | CVV: Any 3 digits</span>
                             </div>
                             <div class="text-xs text-blue-700">
                                 <span class="font-bold">📱 UPI:</span> Use any test UPI ID
-                                <br/><span class="text-[10px]">Example: success@razorpay</span>
+                                <br /><span class="text-[10px]">Example: success@razorpay</span>
                             </div>
                             <div class="text-xs text-blue-700">
                                 <span class="font-bold">🏦 Net Banking:</span> Select any test bank
@@ -150,65 +155,71 @@
     {% include "customer_templates/Footer.html" %}
 
     <script>
-        {% if payment %}
-        var options = {
-            "key": "{{ razorpay_key }}",
-            "amount": "{{ payment.amount }}",
-            "currency": "INR",
-            "name": "StackShop",
-            "description": "Purchase from StackShop",
-            "order_id": "{{ payment.id }}",
-            
-            // Explicitly enable payment methods
-            "method": {
-                "upi": true,
-                "card": true,
-                "netbanking": true,
-                "wallet": true
-            },
-            
-            "handler": function (response) {
-                fetch("/payment-success/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": "{{ csrf_token }}"
-                    },
-                    body: JSON.stringify({
-                        razorpay_order_id: response.razorpay_order_id,
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_signature: response.razorpay_signature
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "payment verified") {
-                        window.location.href = "/order-success/";
-                    } else {
-                        alert("Payment verification failed. Please try again.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("An error occurred. Please try again.");
-                });
-            },
-            "prefill": {
-                "name": "{{ user.first_name }} {{ user.last_name }}",
-                "email": "{{ user.email }}",
-                "contact": "{{ user.phone_number }}"
-            },
-            "theme": {
-                "color": "#30364F"
-            }
-        };
+        // 1. Find the button
+        var payButton = document.getElementById("rzp-button-id");
 
-        var rzp = new Razorpay(options);
-        document.getElementById("rzp-button-id").onclick = function (e) {
-            e.preventDefault();
-            rzp.open();
+        // 2. Only run the Razorpay logic if the button actually exists on the page
+        if (payButton) {
+
+            // 3. Read the data directly from the button's dataset
+            var options = {
+                "key": payButton.dataset.key,
+                "amount": payButton.dataset.amount,
+                "currency": "INR",
+                "name": "StackShop",
+                "description": "Purchase from StackShop",
+                "order_id": payButton.dataset.orderid,
+                "method": {
+                    "upi": true,
+                    "card": true,
+                    "netbanking": true,
+                    "wallet": true
+                },
+                "handler": function (response) {
+                    // (Your exact fetch code goes here)
+                    fetch("/payment-success/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            // Note: You can also pass CSRF token via a meta tag or standard cookie reading to remove this last Django tag
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "payment verified") {
+                                window.location.href = "/order-success/";
+                            } else {
+                                alert("Payment verification failed. Please try again.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred. Please try again.");
+                        });
+                },
+                "prefill": {
+                    "name": payButton.dataset.name,
+                    "email": payButton.dataset.email,
+                    "contact": payButton.dataset.contact
+                },
+                "theme": {
+                    "color": "#30364F"
+                }
+            };
+
+            var rzp = new Razorpay(options);
+
+            payButton.onclick = function (e) {
+                e.preventDefault();
+                rzp.open();
+            }
         }
-        {% endif %}
     </script>
 
 </body>

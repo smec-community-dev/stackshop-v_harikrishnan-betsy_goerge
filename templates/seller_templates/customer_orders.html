@@ -85,38 +85,38 @@
                         <tr class="border-b border-muted/10 hover:bg-light/30 transition-colors group">
                             
                             <td class="px-6 py-4">
-                                <div class="font-extrabold text-dark">#ORD-{{ order.id }}</div>
+                                <div class="font-extrabold text-dark">#{{ order.order.order_number }}</div>
                             </td>
                             
                             <td class="px-6 py-4 flex items-center gap-3">
                                 <div class="w-12 h-12 rounded-xl bg-light border border-muted/20 flex items-center justify-center overflow-hidden">
-                                    {% if order.product_variant.images.first %}
-                                        <img src="{{ order.product_variant.images.first.image_url.url }}" class="w-full h-full object-cover mix-blend-multiply">
+                                    {% if order.variant.images.first %}
+                                        <img src="{{ order.variant.images.first.image_url.url }}" class="w-full h-full object-cover mix-blend-multiply">
                                     {% else %}
                                         <span class="material-icons text-muted">inventory_2</span>
                                     {% endif %}
                                 </div>
                                 <div>
-                                    <div class="font-bold text-dark text-sm line-clamp-1 max-w-[200px]">{{ order.product_variant.product.name }}</div>
+                                    <div class="font-bold text-dark text-sm line-clamp-1 max-w-[200px]">{{ order.variant.product.name }}</div>
                                     <div class="text-[10px] uppercase tracking-widest font-black text-muted mt-0.5">Qty: {{ order.quantity }}</div>
                                 </div>
                             </td>
                             
                             <td class="px-6 py-4">
-                                <div class="font-bold text-dark text-sm">{{ order.user.first_name|default:order.user.username }}</div>
-                                <div class="text-[11px] text-dark/70 font-medium">{{ order.user.email }}</div>
+                                <div class="font-bold text-dark text-sm">{{ order.order.user.first_name|default:order.order.user.username }}</div>
+                                <div class="text-[11px] text-dark/70 font-medium">{{ order.order.user.email }}</div>
                             </td>
                             
                             <td class="px-6 py-4 text-sm font-bold text-dark/80">
-                                {{ order.created_at|date:"M d, Y" }}
+                                {{ order.order.ordered_at|date:"M d, Y" }}
                             </td>
                             
                             <td class="px-6 py-4 text-base font-black text-dark">
-                                ${{ order.total_price }}
+                                ₹{{ order.price_at_purchase }}
                             </td>
                             
                             <td class="px-6 py-4">
-                                {% if order.payment_status == 'Paid' or order.payment_status == 'Completed' %}
+                                {% if order.order.payment_status == 'Paid' or order.order.payment_status == 'SUCCESS' or order.order.payment_status == 'Completed' %}
                                     <span class="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest">
                                         <span class="material-icons text-[12px]">check_circle</span> Paid
                                     </span>
@@ -128,15 +128,15 @@
                             </td>
                             
                             <td class="px-6 py-4">
-                                <form action="#" method="POST" class="m-0">
+                                <form action="{% url 'update_order_status' %}" method="POST" class="m-0">
                                     {% csrf_token %}
-                                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                                    <input type="hidden" name="order_id" value="{{ order.order.id }}">
                                     <select name="status" onchange="this.form.submit()" class="text-xs font-bold rounded-lg border border-muted/50 bg-white text-dark py-2 pl-3 pr-8 focus:outline-none focus:ring-1 focus:ring-dark focus:border-dark cursor-pointer transition-all shadow-sm">
-                                        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
-                                        <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
-                                        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
-                                        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
-                                        <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                        <option value="Pending" {% if order.order.order_status == 'Pending' %}selected{% endif %}>Pending</option>
+                                        <option value="Processing" {% if order.order.order_status == 'Processing' %}selected{% endif %}>Processing</option>
+                                        <option value="Shipped" {% if order.order.order_status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                                        <option value="Delivered" {% if order.order.order_status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                                        <option value="Cancelled" {% if order.order.order_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
                                     </select>
                                 </form>
                             </td>
