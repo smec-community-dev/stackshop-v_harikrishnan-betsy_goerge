@@ -48,8 +48,14 @@
                 </div>
             </div>
             <div class="flex items-center gap-4 border-l border-muted/30 pl-6 text-muted">
-                <a href="#" class="text-sm font-bold text-light flex items-center gap-2 hover:text-accent transition-colors">
-                    <span class="material-icons text-[18px]">arrow_back</span> Back to Inventory
+                  <a href="{%url 'dashboard'%}"
+                    class="text-sm font-bold text-[#ACBAC4] hover:text-[#F0F0DB] transition-colors flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Return to Dashboard
                 </a>
             </div>
         </nav>
@@ -94,22 +100,36 @@
     </select>
 </div>
 
-                  <div>
+                 <div>
     <label class="block text-xs font-bold text-dark uppercase tracking-widest mb-2">
         Subcategory <span class="text-red-500">*</span>
     </label>
 
-    <select name="subcategory" id="subcategory-select" required
-        class="w-full px-4 py-3 bg-light/30 border border-muted/50 rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark transition-all text-dark">
+    <div class="relative">
+        <!-- Search Input -->
+        <input type="text" id="subcategory-search"
+            placeholder="Search Subcategory..."
+            class="w-full px-4 py-3 bg-light/30 border border-muted/50 rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark transition-all text-dark">
 
-        <option value="">Select Subcategory</option>
+        <!-- Dropdown List -->
+         <div id="no-results" class="px-4 py-2 text-sm text-muted hidden">
+    No results found
+</div>
+        <div id="subcategory-list"
+            class="absolute z-50 w-full bg-white border border-muted/50 rounded-lg mt-1 max-h-48 overflow-y-auto hidden shadow-md">
+            
+            {% for subcategory in subcategories %}
+                <div class="subcategory-item px-4 py-2 hover:bg-light cursor-pointer"
+                     data-id="{{ subcategory.id }}"
+                     data-category="{{ subcategory.category.id }}">
+                    {{ subcategory.name }}
+                </div>
+            {% endfor %}
+        </div>
 
-        {% for subcategory in subcategories %}
-            <option value="{{ subcategory.id }}">
-                {{ subcategory.name }}
-            </option>
-        {% endfor %}
-    </select>
+        <!-- Hidden field to store selected value -->
+        <input type="hidden" name="subcategory" id="selected-subcategory">
+    </div>
 </div>
 
                     <div>
@@ -296,6 +316,95 @@
 
         </form>
     </main>
+<script>
+const searchInput = document.getElementById("subcategory-search");
+const subcategoryList = document.getElementById("subcategory-list");
+const selectedInput = document.getElementById("selected-subcategory");
+const categorySelect = document.getElementById("category-select");
+const noResults = document.getElementById("no-results");
+
+let currentIndex = -1;
+
+searchInput.addEventListener("focus", () => {
+    subcategoryList.classList.remove("hidden");
+});
+
+searchInput.addEventListener("input", function () {
+    const filter = this.value.toLowerCase();
+    const selectedCategory = categorySelect.value;
+    const items = document.querySelectorAll(".subcategory-item");
+
+    let visibleCount = 0;
+    currentIndex = -1;
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const categoryMatch = item.getAttribute("data-category") === selectedCategory;
+
+        if (text.includes(filter) && categoryMatch) {
+            item.style.display = "block";
+            visibleCount++;
+        } else {
+            item.style.display = "none";
+        }
+        item.classList.remove("bg-light");
+    });
+
+    noResults.classList.toggle("hidden", visibleCount !== 0);
+});
+
+// Keyboard Navigation
+searchInput.addEventListener("keydown", function (e) {
+    const visibleItems = Array.from(document.querySelectorAll(".subcategory-item"))
+        .filter(item => item.style.display !== "none");
+
+    if (e.key === "ArrowDown") {
+        e.preventDefault();
+        currentIndex = (currentIndex + 1) % visibleItems.length;
+        highlightItem(visibleItems);
+    }
+
+    if (e.key === "ArrowUp") {
+        e.preventDefault();
+        currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+        highlightItem(visibleItems);
+    }
+
+    if (e.key === "Enter") {
+        e.preventDefault();
+        if (visibleItems[currentIndex]) {
+            selectItem(visibleItems[currentIndex]);
+        }
+    }
+});
+
+function highlightItem(items) {
+    items.forEach(item => item.classList.remove("bg-light"));
+    if (items[currentIndex]) {
+        items[currentIndex].classList.add("bg-light");
+    }
+}
+
+function selectItem(item) {
+    searchInput.value = item.textContent;
+    selectedInput.value = item.getAttribute("data-id");
+    subcategoryList.classList.add("hidden");
+}
+
+// Mouse click selection
+document.querySelectorAll(".subcategory-item").forEach(item => {
+    item.addEventListener("click", function () {
+        selectItem(this);
+    });
+});
+
+// Close when clicking outside
+document.addEventListener("click", function (e) {
+    if (!e.target.closest("#subcategory-search")) {
+        subcategoryList.classList.add("hidden");
+    }
+});
+</script>
 
     <script>
         // Logic to hide/disable Return Days if "Returnable" is toggled off
@@ -314,5 +423,6 @@
             }
         }
     </script>
+    
 </body>
 </html>

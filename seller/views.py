@@ -3,7 +3,8 @@ from core.decorators import seller_required
 from django.contrib.auth.decorators import login_required
 from .models import SellerProfile,Product,SubCategory,Attribute,VariantAttributeBridge,ProductVariant,ProductImage
 from core.models import Category
-
+from django.db.models import Count, Sum, Max
+from customer.models import Order, OrderItem
 @login_required
 @seller_required
 def seller_profile_view(request):
@@ -29,7 +30,7 @@ def seller_profile_view(request):
     return render(request, "seller_templates/sellerprofilepage.html", {"profile": profile})
 
 @login_required
-
+@seller_required
 def dashboard_view(request):
     seller = request.user.seller_profile
     products = Product.objects.filter(seller=seller).order_by('-id')  
@@ -60,7 +61,7 @@ def seller_broche_view(request):
 
 
 @login_required
-
+@seller_required
 def add_product(request):
     seller = request.user.seller_profile
     categories = Category.objects.all()
@@ -117,9 +118,6 @@ def add_product(request):
             )
 
         return redirect("dashboard")
-         
-
-    
     context = {"categories": categories,"subcategories": subcategories, "attributes": attributes }
     return render(request, "seller_templates/add_product.html", context)
 
@@ -135,8 +133,7 @@ def update_product(request, product_id):
 
         return redirect("dashboard")
 
-    return render(request, "seller_templates/update_product.html", {"product": product
-    })
+    return render(request, "seller_templates/update_product.html", {"product": product })
 
 @login_required
 def delete_product(request, product_id):
@@ -147,4 +144,16 @@ def delete_product(request, product_id):
 
     return redirect("dashboard")
 
+
+def seller_customers(request):
+
+    seller = request.user.seller_profile
+
+    customers = OrderItem.objects.filter(seller=seller)
+
+    context = {
+        "customers": customers
+    }
+
+    return render(request, "seller_templates/customerdetailforseller.html", context)
 
