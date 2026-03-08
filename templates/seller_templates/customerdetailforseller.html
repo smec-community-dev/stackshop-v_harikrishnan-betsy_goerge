@@ -120,102 +120,78 @@
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="bg-primary/5 border-b border-primary/5">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Customer ID</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Customer Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Adress</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Total Orders</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Total Spent</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Last Order Date</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Order Status</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70">Payment Status</th>
+
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-primary/70 text-right">Actions</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-primary/5">
+
+{% for customer in customers %}
+
 <tr class="hover:bg-primary/[0.02] transition-colors group">
+
 <td class="px-6 py-4">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/5">
-<img alt="Sarah Jenkins" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE7btbiTU9b5B1hylHbPNtuNe_4Qv-yUFgLcFbIB8y5dFy_e65KWujYgFcwblfajdPudUpfPI4TRP3gv3Kvb9hPpllasfiNKGs2Gu2pyTPkh-lR0OQvMoXQTRFYeSShxNJL8QmtoYp2hKxvLgHe0-KvYtQkiIE1Akrgock7kg-utkuvLPZTP6f3SrBNkGdsVwBrtsG_ghscFvvzDNlgo6xzGB1eA5ir2hYghC3OV-398-lP_anTn1LiMuoIfbDe8LDHuZiuWy9W7Qg"/>
-</div>
 <div>
-<div class="font-bold text-primary">Sarah Jenkins</div>
-<div class="text-xs text-primary/40">sarah.j@example.com</div>
-</div>
+<div class="font-bold text-primary">
+#{{ customer.order.user.id }}
 </div>
 </td>
-<td class="px-6 py-4 text-sm font-medium text-primary/80">14 Orders</td>
-<td class="px-6 py-4 text-sm font-bold text-primary">$2,450.00</td>
-<td class="px-6 py-4 text-sm text-primary/60">Oct 24, 2023</td>
-<td class="px-6 py-4 text-right">
-<button class="bg-primary/5 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 ml-auto">
-<span class="material-icons text-sm">mail</span>
-                                Contact
-                            </button>
-</td>
-</tr>
-<tr class="hover:bg-primary/[0.02] transition-colors group">
+
 <td class="px-6 py-4">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/5">
-<img alt="Marcus Chen" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg2DxkiMOLKZZWxcJLvjddopnDv_7sJ7uYEFB4tg4onajZV508rLetwUObScWDQDAIPct5uCWEfV4BKo2XrI8rslpEZiWzqYRb9Y2qSZxFt8mb1CgzaZIM5FIJLkligj9maa79MQli0lupkx_Eh33WIXIc0sr2Q9x0-YbQp7fZS_ch2rJZfxjR3tsiikZoo5qQIuIxlMtSMxaVHJdodQkfWBdnNXZ37Filkh0DpY-pzxUeNpFBpgqy5WwEktVXy3EXm_zJqleaiS57"/>
-</div>
 <div>
-<div class="font-bold text-primary">Marcus Chen</div>
-<div class="text-xs text-primary/40">m.chen@techmail.com</div>
+<div class="font-bold text-primary">
+{{ customer.order.user.username }}
+</div>
+
+<div class="text-xs text-primary/40">
+{{ customer.order.user.email }}
 </div>
 </div>
 </td>
-<td class="px-6 py-4 text-sm font-medium text-primary/80">8 Orders</td>
-<td class="px-6 py-4 text-sm font-bold text-primary">$1,120.50</td>
-<td class="px-6 py-4 text-sm text-primary/60">Oct 21, 2023</td>
+<td class="px-6 py-4 text-sm font-medium text-primary/80">
+{% for address in customer.order.user.addresses.all %}
+    {% if address.is_default %}
+        {{ address.city }}, {{ address.state }}, {{ address.pincode }}
+    {% endif %}
+{% empty %}
+    No address
+{% endfor %}
+</td>
+
+<td class="px-6 py-4 text-sm font-medium text-primary/80">
+{{ customer.quantity }} items purchased</td>
+
+<td class="px-6 py-4 text-sm font-bold text-primary">
+₹{{ customer.price_at_purchase }}
+</td>
+
+<td class="px-6 py-4 text-sm text-primary/60">
+{{ customer.order.ordered_at|date:"M d, Y" }}
+</td>
+<td class="px-6 py-4 text-sm font-semibold text-primary">
+{{ customer.order.order_status }}
+</td>
+<td class="px-6 py-4 text-sm font-semibold text-primary">
+{{ customer.order.payment_status }}
+</td>
 <td class="px-6 py-4 text-right">
-<button class="bg-primary/5 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 ml-auto">
-<span class="material-icons text-sm">mail</span>
-                                Contact
-                            </button>
+<button class="bg-primary/5 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg font-bold text-xs">
+Contact
+</button>
 </td>
+
 </tr>
-<tr class="hover:bg-primary/[0.02] transition-colors group">
-<td class="px-6 py-4">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/5">
-<img alt="Elena Rodriguez" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzneCViXx5csWZG3RwGGGJVQ1vwuXCpE0S1f7i4yHbNOhwdQ3D3dft1Vj6t0Xr1NF6o9BEeuyEMsKZn6Sf4cZVerOeVXKmU63Pz1Wll9tSu9etuP4RlhxdroDQCKQwwDzNIKsKxiKuHuzyMh41SSBOcmUaXK0A8CCtjyptIlMvIBHZ8JF8qyUAUuXBOI20aAP0NpTahwHvR93Ib5EkCWMCAorr6_NeYy8WIZCJRoVXKsVmZFy0WKA9YHPNL52Ltk4i3yO_qRG69tid"/>
-</div>
-<div>
-<div class="font-bold text-primary">Elena Rodriguez</div>
-<div class="text-xs text-primary/40">elena.rod@webmail.com</div>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-sm font-medium text-primary/80">3 Orders</td>
-<td class="px-6 py-4 text-sm font-bold text-primary">$435.00</td>
-<td class="px-6 py-4 text-sm text-primary/60">Oct 15, 2023</td>
-<td class="px-6 py-4 text-right">
-<button class="bg-primary/5 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 ml-auto">
-<span class="material-icons text-sm">mail</span>
-                                Contact
-                            </button>
-</td>
-</tr>
-<tr class="hover:bg-primary/[0.02] transition-colors group">
-<td class="px-6 py-4">
-<div class="flex items-center gap-4">
-<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary font-bold overflow-hidden border border-primary/5">
-<img alt="James Wilson" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpPUNU8EiD7w1wng7lJVx9fUwygh7PZhY0JbyXmSKAKOeCXmDy0l_dtKAWUnWciD6dMt1A4HLpR9vJXM9uA50urIfsU5nAa0CNXAZgEiCv-L_gLXGyoeNXBT2PSILc3u5K4CuG7oF9iOGJyhUCtTrx4bLt99wmsZZJaqwfLY6tDbJ1_gDx9TfjFQC9Q_0ofPdL-hpkJz0xmD1KSqCi5ZARxyFDfsOI14f0a8rNRyIrjiPgRd1FSB4T1WdvxPaDJLu5aa77wDthNK33"/>
-</div>
-<div>
-<div class="font-bold text-primary">James Wilson</div>
-<div class="text-xs text-primary/40">wilson.james@provider.com</div>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-sm font-medium text-primary/80">22 Orders</td>
-<td class="px-6 py-4 text-sm font-bold text-primary">$4,890.25</td>
-<td class="px-6 py-4 text-sm text-primary/60">Oct 12, 2023</td>
-<td class="px-6 py-4 text-right">
-<button class="bg-primary/5 hover:bg-primary text-primary hover:text-white px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 ml-auto">
-<span class="material-icons text-sm">mail</span>
-                                Contact
-                            </button>
-</td>
-</tr>
+
+{% endfor %}
+
 </tbody>
 </table>
 <div class="px-6 py-4 bg-primary/[0.02] border-t border-primary/5 flex items-center justify-between">
