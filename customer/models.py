@@ -52,9 +52,20 @@ class Order(models.Model):
     ordered_at = models.DateTimeField(auto_now_add=True)
 
 class OrderItem(models.Model):
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("processing", "Processing"),
+        ("cancelled", "Cancelled"),
+        ("delivered", "Delivered"),
+    ]
+
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     variant = models.ForeignKey("seller.ProductVariant", on_delete=models.CASCADE)
     seller = models.ForeignKey("seller.SellerProfile", on_delete=models.CASCADE)
     quantity = models.IntegerField()
     price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+
+    def __str__(self):
+        return f"{self.variant} - {self.status}"
 # Create your models here.
