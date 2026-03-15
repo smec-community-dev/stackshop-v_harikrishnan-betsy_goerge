@@ -57,7 +57,7 @@
         <nav class="flex items-center gap-2 text-xs font-bold text-muted mb-8 uppercase tracking-widest border-b border-muted/20 pb-4">
             <a href="{% url 'home' %}" class="hover:text-dark transition-colors">Home</a>
             <span class="material-icons text-[14px]">chevron_right</span>
-            <a href="{% url 'catogory_list' %}#cat- {{ category.name|slugify }}" class="hover:text-dark transition-colors">{{ product.subcategory.category.name }}</a>
+            <a href="{% url 'catogory_list' %}#cat-{{ product.subcategory.category.slug }}" class="hover:text-dark transition-colors">{{ product.subcategory.category.name }}</a>
             <span class="material-icons text-[14px]">chevron_right</span>
             <span class="text-dark truncate max-w-[200px]">{{ product.name }}</span>
         </nav>
