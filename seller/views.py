@@ -193,9 +193,9 @@ def add_product(request):
 
 
 @verified_seller_required
-def update_product(request, product_id):
+def update_product(request, product_slug):
     seller = request.user.seller_profile
-    product = get_object_or_404(Product, id=product_id, seller=seller)
+    product = get_object_or_404(Product, slug=product_slug, seller=seller)
 
     if request.method == "POST":
         product.name = request.POST.get("name")
@@ -208,9 +208,9 @@ def update_product(request, product_id):
 
 
 @verified_seller_required
-def manage_variants(request, product_id):
+def manage_variants(request, product_slug):
     seller = request.user.seller_profile
-    product = get_object_or_404(Product, id=product_id, seller=seller)
+    product = get_object_or_404(Product, slug=product_slug, seller=seller)
     attributes = Attribute.objects.filter(subcategory=product.subcategory).prefetch_related("options")
     variants = product.variants.prefetch_related("images", "attributes__option__attribute")
 
@@ -248,7 +248,7 @@ def manage_variants(request, product_id):
                 ProductImage.objects.create(variant=variant, image_url=image, is_primary=False)
 
             messages.success(request, "Variant updated successfully.")
-            return redirect("manage_variants", product_id=product.id)
+            return redirect("manage_variants", product_slug=product.slug)
 
         # new variant create
         variant = ProductVariant.objects.create(
@@ -278,7 +278,7 @@ def manage_variants(request, product_id):
             ProductImage.objects.create(variant=variant, image_url=image, is_primary=False)
 
         messages.success(request, "Variant added successfully.")
-        return redirect("manage_variants", product_id=product.id)
+        return redirect("manage_variants", product_slug=product.slug)
 
     # GET section: check whether user requested editing
     edit_variant_id = request.GET.get("edit_variant_id")
@@ -298,9 +298,9 @@ def manage_variants(request, product_id):
 
 
 @verified_seller_required
-def delete_product(request, product_id):
+def delete_product(request, product_slug):
     seller = request.user.seller_profile
-    product = get_object_or_404(Product, id=product_id, seller=seller)
+    product = get_object_or_404(Product, slug=product_slug, seller=seller)
 
     if request.method == "POST":
         product.delete()

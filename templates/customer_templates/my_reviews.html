@@ -57,7 +57,7 @@
                     {% endif %}
 
                     <div class="flex items-center justify-between gap-3">
-                        <a href="{% url 'productsingle' review.product.id %}" class="text-xs font-bold text-[#30364F] hover:text-[#1f2937] transition">View Product</a>
+                        <a href="{% url 'productsingle' review.product.slug %}" class="text-xs font-bold text-[#30364F] hover:text-[#1f2937] transition">View Product</a>
                         <div class="text-xs text-[#6B7280]">ID: {{ review.id }}</div>
                     </div>
                 </div>

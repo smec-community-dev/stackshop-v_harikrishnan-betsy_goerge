@@ -34,6 +34,8 @@ def seller_verification(request, id):
         seller.verification_status = status
         seller.admin_remarks = remarks
         seller.save()
+        request.user.is_verified_seller=True
+        request.user.save()
         return redirect("admin_dashboard")
     context = {"seller": seller}
     return render(request, "admin_templates/seller_verification.html", context)

@@ -335,7 +335,7 @@
                     </span>
 
                     <h3 class="font-bold text-dark text-xs md:text-sm leading-snug line-clamp-2 mb-2">
-                        <a href="{% url 'productsingle' product.id %}" class="hover:text-accent transition-colors">
+                        <a href="{% url 'productsingle' product.slug %}" class="hover:text-accent transition-colors">
                             {{ product.name }}
                         </a>
                     </h3>
@@ -347,7 +347,7 @@
                         {% endif %}
                     </div>
 
-                    <a href="{% url 'productsingle' product.id %}" class="w-full inline-flex items-center justify-center text-[10px] md:text-[11px] font-bold uppercase tracking-widest bg-dark text-light px-2 py-2 rounded hover:bg-accent hover:text-dark transition-all active:scale-95 group-hover:shadow-md">
+                    <a href="{% url 'productsingle' product.slug %}" class="w-full inline-flex items-center justify-center text-[10px] md:text-[11px] font-bold uppercase tracking-widest bg-dark text-light px-2 py-2 rounded hover:bg-accent hover:text-dark transition-all active:scale-95 group-hover:shadow-md">
                         View Details
                     </a>
                 </div>

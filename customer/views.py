@@ -599,16 +599,24 @@ def product_list_view(request):
     )
 
 
-def product_single_view(request, product_id):
+def product_single_view(request, product_slug=None, product_id=None):
+    lookup = {}
+    if product_slug:
+        lookup["slug"] = product_slug
+    elif product_id:
+        lookup["id"] = product_id
+    else:
+        return redirect("product_list")
+
     product = get_object_or_404(
         Product.objects.select_related("subcategory__category", "seller")
         .prefetch_related("variants__images", "variants__attributes__option__attribute"),
-        id=product_id,
         approval_status="approved",
         is_active=True,
+        **lookup,
     )
 
-    variants = product.variants.all().order_by('id')
+    variants = product.variants.all().order_by("id")
     selected_variant = None
 
     variant_id = request.GET.get("variant")
@@ -628,7 +636,7 @@ def product_single_view(request, product_id):
             option_descs.append(f"{brid.option.attribute.name}: {brid.option.value}")
         v.variant_label = ", ".join(sorted(option_descs)) if option_descs else "Default"
 
-    reviews = (Review.objects.filter(product=product).select_related("user").order_by("-created_at"))
+    reviews = Review.objects.filter(product=product).select_related("user").order_by("-created_at")
     average_rating = reviews.aggregate(avg=Avg("rating"))["avg"] or 0
     total_reviews = reviews.count()
 
@@ -675,6 +683,10 @@ def product_single_view(request, product_id):
     )
 
 
+def product_single_view_by_id(request, product_id):
+    return product_single_view(request, product_id=product_id)
+
+
 @login_required
 def submit_review(request, variant_id):
     variant = get_object_or_404(ProductVariant, id=variant_id)
@@ -682,7 +694,7 @@ def submit_review(request, variant_id):
 
     if not OrderItem.objects.filter(order__user=request.user, variant__product=product, order__payment_status__in=["SUCCESS", "CONFIRMED", "DELIVERED"]).exists():
         messages.error(request, "Only verified buyers can add reviews.")
-        return redirect("productsingle", product_id=product.id)
+        return redirect("productsingle", product_slug=product.slug)
 
     if request.method == "POST":
         rating = request.POST.get("rating")
@@ -690,7 +702,7 @@ def submit_review(request, variant_id):
 
         if not rating or not comment:
             messages.error(request, "Rating and comment are required.")
-            return redirect("productsingle", product_id=product.id)
+            return redirect("productsingle", product_slug=product.slug)
 
         try:
             rating_value = int(rating)
@@ -698,7 +710,7 @@ def submit_review(request, variant_id):
                 raise ValueError
         except ValueError:
             messages.error(request, "Invalid rating value.")
-            return redirect("productsingle", product_id=product.id)
+            return redirect("productsingle", product_slug=product.slug)
 
         Review.objects.update_or_create(
             user=request.user,
@@ -708,7 +720,7 @@ def submit_review(request, variant_id):
 
         messages.success(request, "Thank you! Your review has been submitted.")
 
-    return redirect("productsingle", product_id=product.id)
+    return redirect("productsingle", product_slug=product.slug)
 
 
 # ----------------------------------------------------------------------------------------------------

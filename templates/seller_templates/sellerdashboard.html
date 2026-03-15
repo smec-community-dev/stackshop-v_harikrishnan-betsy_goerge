@@ -147,11 +147,11 @@
                             </div>
 
                             <div class="col-span-3 flex justify-end items-center gap-2 w-full mt-2 lg:mt-0">
-<a href="{% url 'update_product' product.id %}" onclick="event.stopPropagation();" class="bg-accent/20 text-dark border border-accent/50 hover:bg-accent px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors active:scale-95 shadow-sm">
+<a href="{% url 'update_product' product.slug %}" onclick="event.stopPropagation();" class="bg-accent/20 text-dark border border-accent/50 hover:bg-accent px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors active:scale-95 shadow-sm">
                                     Edit
                                 </a>
                                 
-                                <form action="{% url 'delete_product' product.id %}" method="POST" class="m-0" onsubmit="return confirm('Delete {{ product.name|escapejs }}? This cannot be undone.');" onclick="event.stopPropagation();">
+                                <form action="{% url 'delete_product' product.slug %}" method="POST" class="m-0" onsubmit="return confirm('Delete {{ product.name|escapejs }}? This cannot be undone.');" onclick="event.stopPropagation();">
                                     {% csrf_token %}
                                     <button type="submit" class="bg-white text-red-500 border border-red-200 hover:bg-red-50 hover:border-red-300 px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors active:scale-95 shadow-sm">
                                         Delete
@@ -170,7 +170,7 @@
                                 <h4 class="text-xs font-black uppercase tracking-widest text-dark flex items-center gap-2">
                                     <span class="material-icons text-[16px]">style</span> Variants Overview
                                 </h4>
-                                <a href="{% url 'manage_variants' product.id %}" class="text-[10px] font-black uppercase tracking-widest text-dark bg-white border border-muted/30 px-3 py-1.5 rounded hover:bg-dark hover:text-light transition-colors shadow-sm">
+                                <a href="{% url 'manage_variants' product.slug %}" class="text-[10px] font-black uppercase tracking-widest text-dark bg-white border border-muted/30 px-3 py-1.5 rounded hover:bg-dark hover:text-light transition-colors shadow-sm">
                                     Manage Variants
                                 </a>
                             </div>

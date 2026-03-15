@@ -174,7 +174,7 @@
                                 {% endif %}
                             </button>
                             {% if edit_variant %}
-                            <a href="{% url 'manage_variants' product.id %}" class="inline-flex items-center justify-center gap-1 px-4 py-3 rounded-xl border border-muted text-muted hover:text-dark hover:border-dark transition-all font-bold text-xs">Cancel</a>
+                            <a href="{% url 'manage_variants' product.slug %}" class="inline-flex items-center justify-center gap-1 px-4 py-3 rounded-xl border border-muted text-muted hover:text-dark hover:border-dark transition-all font-bold text-xs">Cancel</a>
                             {% endif %}
                         </div>
                     </form>
@@ -211,7 +211,7 @@
                                     <button type="button" class="variant-view-btn w-8 h-8 rounded-full bg-white border border-muted/30 flex items-center justify-center text-muted hover:text-dark hover:border-dark transition-colors shadow-sm" title="View full variant info">
                                         <span class="material-icons text-[16px]">visibility</span>
                                     </button>
-                                    <a href="{% url 'manage_variants' product.id %}?edit_variant_id={{ variant.id }}" class="w-8 h-8 rounded-full bg-white border border-muted/30 flex items-center justify-center text-muted hover:text-dark hover:border-dark transition-colors shadow-sm" title="Edit variant">
+                                    <a href="{% url 'manage_variants' product.slug %}?edit_variant_id={{ variant.id }}" class="w-8 h-8 rounded-full bg-white border border-muted/30 flex items-center justify-center text-muted hover:text-dark hover:border-dark transition-colors shadow-sm" title="Edit variant">
                                         <span class="material-icons text-[16px]">edit</span>
                                     </a>
                                 </div>
