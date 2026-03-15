@@ -255,15 +255,24 @@ def add_to_cart_view(request, variant_id):
     except (ValueError, TypeError):
         quantity = 1
 
+    max_allowed = min(3, product_variant.stock_quantity)
+    if quantity > max_allowed:
+        quantity = max_allowed
+        messages.warning(request, "Quantity per product is limited to 3 units.")
+
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
         variant=product_variant,
         defaults={"quantity": quantity, "price_at_time": product_variant.selling_price},
     )
     if not created:
-        cart_item.quantity += quantity
-        cart_item.price_at_time = product_variant.selling_price
-        cart_item.save()
+        new_quantity = min(cart_item.quantity + quantity, max_allowed)
+        if new_quantity == cart_item.quantity:
+            messages.warning(request, "Each product can have a maximum of 3 units in the cart.")
+        else:
+            cart_item.quantity = new_quantity
+            cart_item.price_at_time = product_variant.selling_price
+            cart_item.save()
     messages.success(request, f"{product_variant.product.name} added to cart.")
     return redirect(request.META.get("HTTP_REFERER", "product_list"))
 
@@ -282,15 +291,24 @@ def buy_now_view(request, variant_id):
     except (ValueError, TypeError):
         quantity = 1
 
+    max_allowed = min(3, product_variant.stock_quantity)
+    if quantity > max_allowed:
+        quantity = max_allowed
+        messages.warning(request, "Quantity per product is limited to 3 units.")
+
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
         variant=product_variant,
         defaults={"quantity": quantity, "price_at_time": product_variant.selling_price},
     )
     if not created:
-        cart_item.quantity += quantity
-        cart_item.price_at_time = product_variant.selling_price
-        cart_item.save()
+        new_quantity = min(cart_item.quantity + quantity, max_allowed)
+        if new_quantity == cart_item.quantity:
+            messages.warning(request, "Each product can have a maximum of 3 units in the cart.")
+        else:
+            cart_item.quantity = new_quantity
+            cart_item.price_at_time = product_variant.selling_price
+            cart_item.save()
     
     messages.success(request, f"{product_variant.product.name} added to cart. Proceeding to checkout...")
     return redirect("checkout")
@@ -323,9 +341,13 @@ def update_cart_view(request, cart_item_id):
         cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
         action = request.POST.get("action")
         if action == "increase":
-            cart_item.quantity += 1
-            cart_item.price_at_time = cart_item.variant.selling_price
-            cart_item.save()
+            max_allowed = min(3, cart_item.variant.stock_quantity)
+            if cart_item.quantity < max_allowed:
+                cart_item.quantity += 1
+                cart_item.price_at_time = cart_item.variant.selling_price
+                cart_item.save()
+            else:
+                messages.warning(request, "Each product can have a maximum of 3 units in the cart.")
         elif action == "decrease":
             if cart_item.quantity > 1:
                 cart_item.quantity -= 1

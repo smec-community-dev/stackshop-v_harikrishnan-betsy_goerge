@@ -138,7 +138,7 @@
                                 <button type="button" onclick="updateQty(-1)" class="w-10 h-full flex items-center justify-center text-dark hover:bg-white rounded-lg transition-colors focus:outline-none shadow-sm">
                                     <span class="material-icons text-[18px]">remove</span>
                                 </button>
-                                <input type="number" id="qty-input" name="quantity" value="1" min="1" max="{{ variant.stock_quantity }}" class="w-full text-center font-extrabold text-dark bg-transparent border-none focus:ring-0 p-0 text-base">
+                                <input type="number" id="qty-input" name="quantity" value="1" min="1" max="{% if variant.stock_quantity > 3 %}3{% else %}{{ variant.stock_quantity }}{% endif %}" class="w-full text-center font-extrabold text-dark bg-transparent border-none focus:ring-0 p-0 text-base">
                                 <button type="button" onclick="updateQty(1)" class="w-10 h-full flex items-center justify-center text-dark hover:bg-white rounded-lg transition-colors focus:outline-none shadow-sm">
                                     <span class="material-icons text-[18px]">add</span>
                                 </button>
@@ -416,10 +416,15 @@
         function updateQty(change) {
             const input = document.getElementById('qty-input');
             const buynowQty = document.getElementById('buynow-qty');
+            const maxAllowed = Math.min(3, parseInt(input.max));
             let newVal = parseInt(input.value) + change;
-            if (newVal >= parseInt(input.min) && newVal <= parseInt(input.max)) {
+            if (newVal >= parseInt(input.min) && newVal <= maxAllowed) {
                 input.value = newVal;
                 buynowQty.value = newVal;
+            }
+            if (newVal > maxAllowed) {
+                input.value = maxAllowed;
+                buynowQty.value = maxAllowed;
             }
         }
     </script>
