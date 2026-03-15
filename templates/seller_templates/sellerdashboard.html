@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Seller Central - StackShop</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script>
         tailwind.config = {
@@ -28,25 +28,47 @@
     <style>
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes marquee {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+        .marquee {
+            white-space: nowrap;
+            display: inline-flex;
+            gap: 2.5rem;
+            animation: marquee 22s linear infinite;
+        }
+        .marquee-item { display: inline-flex; align-items: center; gap: 0.35rem; }
     </style>
 </head>
 
-<body class="bg-light text-dark font-display flex flex-col min-h-screen">
+<body class="bg-light text-dark font-display flex flex-col min-h-screen overflow-x-hidden">
     
     {% include "seller_templates/seller_navbar.html" %}
-
     {% include "core_templates/messages.html" %}
 
     <main class="max-w-7xl mx-auto w-full px-4 mt-8 relative group">
-        <div class="relative overflow-hidden rounded-2xl bg-dark h-[350px] flex items-center shadow-lg border border-muted/30">
-            
-            <div class="relative z-10 pl-8 md:pl-16 max-w-2xl w-full">
-                <span class="inline-block bg-accent text-dark text-[10px] font-black px-3 py-1 rounded mb-4 tracking-widest uppercase">Seller Central</span>
-                <h1 class="text-4xl md:text-5xl font-extrabold text-light leading-tight mb-4">Manage Your <br /><span class="text-accent italic">Global Store</span></h1>
-                <p class="text-sm md:text-base text-muted mb-8 max-w-md font-medium">Keep track of your inventory, update pricing, and scale your business faster than ever.</p>
-                <div class="flex items-center gap-4">
-                    <a href="{% url 'add-product' %}" class="bg-accent text-dark px-8 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-colors flex items-center gap-2 shadow-md">
-                        Add New Product <span class="material-icons text-[18px]">add_circle_outline</span>
+        <div class="overflow-hidden bg-white border border-muted/30 rounded-xl py-2 mb-4 shadow-sm">
+            <div class="marquee text-xs sm:text-sm font-semibold text-dark px-2">
+                <span class="marquee-item"><span class="material-icons text-[18px]">inventory_2</span>{{ total_products|default:"0" }} Listings</span>
+                <span class="marquee-item"><span class="material-icons text-[18px]">local_shipping</span>{{ active_orders|default:"0" }} Active Orders</span>
+                <span class="marquee-item">Needs shipping ({{ needs_shipping|default:"0" }})</span>
+                <span class="marquee-item"><span class="material-icons text-[18px]">star_rate</span>{{ average_rating|default:"0.0" }} ({{ total_reviews|default:"0" }} Reviews)</span>
+                <span class="marquee-item"><span class="material-icons text-[18px]">shopping_bag</span>{{ total_orders|default:"0" }} Total Orders</span>
+                <span class="marquee-item"><span class="material-icons text-[18px]">pending_actions</span>{{ pending_actions|default:"0" }} Pending Action</span>
+                <span class="marquee-item"><span class="material-icons text-[18px]">account_balance_wallet</span>₹{{ total_revenue|floatformat:2 }} Total Revenue</span>
+            </div>
+        </div>
+
+        <div class="relative overflow-hidden rounded-3xl bg-dark h-[240px] flex items-center shadow-lg border border-muted/30 mb-16">
+            <div class="relative z-10 pl-6 md:pl-10 lg:pl-12 max-w-2xl w-full">
+                <span class="inline-block bg-accent text-dark text-[10px] md:text-[11px] font-black px-3 py-1 rounded-md mb-3 tracking-widest uppercase">Seller Central</span>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-light leading-snug mb-2 sm:mb-3">Manage Your <br /><span class="text-accent italic">Global Store</span></h1>
+                <p class="text-xs md:text-sm text-muted mb-6 max-w-md font-medium">Keep track of your inventory, update pricing, and scale your business faster than ever.</p>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="{% url 'add-product' %}" class="bg-accent text-dark px-6 py-3 rounded-xl font-extrabold hover:bg-white transition-all duration-200 active:scale-95 flex items-center gap-2 text-sm shadow-md">
+                        <span class="material-icons text-[18px]">add_circle</span>
+                        Add New Product
                     </a>
                 </div>
             </div>
@@ -56,259 +78,147 @@
                 <div class="absolute inset-0 bg-gradient-to-r from-dark to-transparent"></div>
             </div>
         </div>
-    </main>
 
-    <section class="max-w-7xl mx-auto w-full px-4 mt-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Total Products</span>
-                    <span class="material-icons text-lg">inventory_2</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ total_products|default:"0" }}</h4>
-                    <span class="text-xs font-bold text-dark/50 mb-1">Listings</span>
-                </div>
+        <div class="flex items-end justify-between mb-6 border-b border-muted/30 pb-4">
+            <div>
+                <h2 class="text-2xl font-black text-dark tracking-wide">Your Active Listings</h2>
+                <p class="text-xs font-bold text-muted uppercase tracking-widest mt-1">Click any product to view its variants</p>
             </div>
-            
-            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Active Orders</span>
-                    <span class="material-icons text-lg">local_shipping</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ active_orders|default:"0" }}</h4>
-                    <span class="text-xs font-bold text-dark/50 mb-1.5">Needs shipping ({{ needs_shipping|default:"0" }})</span>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Store Rating</span>
-                    <span class="material-icons text-lg">star_rate</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ average_rating|default:"0.0" }}</h4>
-                    <div class="flex mb-1.5">
-                        {% if average_rating >= 1 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 2 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 1.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 3 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 2.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 4 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 3.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 4.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                    </div>
-                    <p class="text-xs font-bold text-dark/50">{{ total_reviews|default:'0' }} Reviews</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
-            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Total Orders</span>
-                    <span class="material-icons text-lg">shopping_bag</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ total_orders|default:"0" }}</h4>
-                    <span class="text-xs font-bold text-dark/50">Lifetime order count</span>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Pending Action</span>
-                    <span class="material-icons text-lg">pending_actions</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ pending_actions|default:"0" }}</h4>
-                    <span class="text-xs font-bold text-dark/50">Needs attention</span>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Total Revenue</span>
-                    <span class="material-icons text-lg">account_balance_wallet</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">₹{{ total_revenue|floatformat:2 }}</h4>
-                    <span class="text-xs font-bold text-dark/50">From completed orders</span>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Store Rating</span>
-                    <span class="material-icons text-lg">star_rate</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ average_rating|default:"0.0" }}</h4>
-                    <span class="text-xs font-bold text-dark/50">{{ total_reviews|default:'0' }} Reviews</span>
-                </div>
-            </div>
-        </div>
-                <div class="flex justify-between items-center text-muted">
-                    <span class="font-bold text-[10px] uppercase tracking-widest">Store Rating</span>
-                    <span class="material-icons text-lg">star_rate</span>
-                </div>
-                <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ average_rating|default:"0.0" }}</h4>
-                    <div class="flex mb-1.5">
-                        {% if average_rating >= 1 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 2 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 1.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 3 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 2.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 4 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 3.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                        {% if average_rating >= 5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star</span>
-                        {% elif average_rating >= 4.5 %}
-                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
-                        {% else %}
-                            <span class="material-icons text-[14px] text-muted">star</span>
-                        {% endif %}
-                    </div>
-                    <p class="text-xs font-bold text-dark/50">{{ total_reviews|default:'0' }} Reviews</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="max-w-7xl mx-auto w-full px-4 mt-16 mb-20 flex-grow">
-        <div class="flex items-end justify-between mb-8 border-b border-muted/30 pb-4">
-            <h2 class="text-2xl font-black text-dark tracking-wide">Your Active Listings</h2>
             <div class="flex gap-4">
-                <a href="{% url 'add-product' %}" class="bg-dark text-light text-sm font-bold flex items-center gap-1 hover:bg-accent hover:text-dark transition-all px-5 py-2.5 rounded-lg shadow-sm">
-                    <span class="material-icons text-[18px]">add</span> New Product
+                <a href="{% url 'add-product' %}" class="bg-dark text-light text-xs uppercase tracking-widest font-bold flex items-center gap-1 hover:bg-accent hover:text-dark transition-all duration-200 active:scale-95 px-5 py-2.5 rounded-lg shadow-sm">
+                    <span class="material-icons text-[16px]">add</span> Create
                 </a>
             </div>
         </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-3xl shadow-sm border border-muted/30 overflow-hidden mb-20">
             
-            {% for product in products %}
-                {% with variant=product.variants.first %}
-                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg border border-muted/30 transition-all duration-300 flex flex-col relative">
-                    
-                    <div class="aspect-square bg-light/30 relative overflow-hidden border-b border-muted/20">
-                        {% if variant and variant.images.first %}
-                            <img alt="{{ product.name }}" class="w-full h-full object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-105 p-4" src="{{ variant.images.first.image_url.url }}" />
-                        {% else %}
-                            <img alt="Placeholder" class="w-full h-full object-contain mix-blend-multiply opacity-30 p-8 transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
-                        {% endif %}
+            <div class="hidden lg:grid grid-cols-12 gap-4 p-5 bg-light/50 border-b border-muted/20 text-[10px] font-black uppercase tracking-widest text-muted">
+                <div class="col-span-5 pl-2">Product Info</div>
+                <div class="col-span-2">Base Price</div>
+                <div class="col-span-2">Status</div>
+                <div class="col-span-3 text-right pr-2">Quick Actions</div>
+            </div>
 
-                        {% if variant and variant.stock_quantity > 0 %}
-                            <div class="absolute top-3 left-3 bg-green-50 text-green-700 border border-green-200 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded shadow-sm">
-                                Stock: {{ variant.stock_quantity }}
+            <div class="divide-y divide-muted/10">
+                {% for product in products %}
+                    <div class="group transition-colors">
+                        
+                        <div class="cursor-pointer hover:bg-light/30 p-4 lg:p-5 flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:items-center transition-all" onclick="toggleVariants('{{ product.id }}')">
+                            
+                            <div class="col-span-5 flex items-center gap-4 w-full">
+                                <div class="w-14 h-14 rounded-xl bg-light/50 border border-muted/30 overflow-hidden flex-shrink-0 flex items-center justify-center p-1">
+                                    {% if product.variants.first.images.first %}
+                                        <img src="{{ product.variants.first.images.first.image_url.url }}" alt="{{ product.name }}" class="w-full h-full object-contain mix-blend-multiply">
+                                    {% else %}
+                                        <span class="material-icons text-muted opacity-50">inventory_2</span>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-[9px] font-black uppercase tracking-widest text-muted bg-light px-2 py-0.5 rounded">{{ product.category.name|default:"General" }}</span>
+                                        <span class="text-[9px] font-bold text-muted">ID: {{ product.id }}</span>
+                                    </div>
+                                    <h3 class="font-extrabold text-dark text-sm truncate" title="{{ product.name }}">{{ product.name }}</h3>
+                                    <p class="text-xs font-bold text-accent mt-0.5">{{ product.variants.count }} Variant(s)</p>
+                                </div>
                             </div>
-                        {% else %}
-                            <div class="absolute top-3 left-3 bg-red-50 text-red-600 border border-red-200 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded shadow-sm">
-                                Out of Stock
-                            </div>
-                        {% endif %}
-                    </div>
 
-                    <div class="p-5 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="text-[10px] font-black uppercase tracking-widest text-muted truncate">
-                                {{ product.category.name|default:"General" }}
-                            </span>
-                            <span class="text-[10px] font-bold text-muted whitespace-nowrap">ID: {{ product.id }}</span>
+                            <div class="flex items-center justify-between lg:hidden w-full pl-18">
+                                <span class="font-black text-dark">₹{{ product.variants.first.selling_price|default:"--" }}</span>
+                                <span class="bg-green-50 text-green-600 border border-green-100 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest">Active</span>
+                            </div>
+
+                            <div class="hidden lg:block col-span-2 font-black text-dark text-base">
+                                ₹{{ product.variants.first.selling_price|default:"--" }}
+                            </div>
+
+                            <div class="hidden lg:block col-span-2">
+                                <span class="bg-green-50 text-green-600 border border-green-200 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
+                                    Active
+                                </span>
+                            </div>
+
+                            <div class="col-span-3 flex justify-end items-center gap-2 w-full mt-2 lg:mt-0">
+                                <a href="{% url 'update_product' product.id %}" onclick="event.stopPropagation();" class="bg-accent/20 text-dark border border-accent/50 hover:bg-accent px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors active:scale-95 shadow-sm">
+                                    Edit
+                                </a>
+                                
+                                <form action="{% url 'delete_product' product.id %}" method="POST" class="m-0" onsubmit="return confirm('Delete {{ product.name|escapejs }}? This cannot be undone.');" onclick="event.stopPropagation();">
+                                    {% csrf_token %}
+                                    <button type="submit" class="bg-white text-red-500 border border-red-200 hover:bg-red-50 hover:border-red-300 px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors active:scale-95 shadow-sm">
+                                        Delete
+                                    </button>
+                                </form>
+
+                                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-light/50 ml-2 group-hover:bg-dark group-hover:text-light transition-colors">
+                                    <span class="material-icons text-muted transition-transform duration-300 group-hover:text-light" id="icon-{{ product.id }}">expand_more</span>
+                                </div>
+                            </div>
+
                         </div>
-                        
-                        <h3 class="font-extrabold text-dark text-lg mb-2 line-clamp-1" title="{{ product.name }}">{{ product.name }}</h3>
-                        
-                        <span class="text-xl font-black text-dark mb-5">
-                            {% if variant %}
-                                ₹{{ variant.selling_price }}
-                            {% else %}
-                                Not Set
-                            {% endif %}
-                        </span>
-                        
-                        <div class="mt-auto grid grid-cols-2 gap-3">
-                            <a href="{% url 'update_product' product.id %}" class="bg-accent text-dark py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-dark hover:text-light transition-colors text-center shadow-sm">
-                                Edit
-                            </a>
-                            <a href="{% url 'manage_variants' product.id %}" class="bg-light text-dark py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-dark hover:text-light transition-colors text-center shadow-sm">
-                                Manage Variants
-                            </a>
-                            <form action="{% url 'delete_product' product.id %}" method="POST" class="m-0 h-full" onsubmit="return confirm('Are you sure you want to completely delete {{ product.name|escapejs }}? This cannot be undone.');">
-                                {% csrf_token %}
-                                <button type="submit" class="w-full h-full bg-white text-muted py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest hover:text-white hover:bg-red-500 hover:border-red-500 transition-colors border border-muted/50 shadow-sm">
-                                    Delete
-                                </button>
-                            </form>
+
+                        <div id="variants-{{ product.id }}" class="hidden border-t border-muted/10 bg-light/30 px-4 lg:px-8 py-6 shadow-inner">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-xs font-black uppercase tracking-widest text-dark flex items-center gap-2">
+                                    <span class="material-icons text-[16px]">style</span> Variants Overview
+                                </h4>
+                                <a href="{% url 'manage_variants' product.id %}" class="text-[10px] font-black uppercase tracking-widest text-dark bg-white border border-muted/30 px-3 py-1.5 rounded hover:bg-dark hover:text-light transition-colors shadow-sm">
+                                    Manage Variants
+                                </a>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                                {% for variant in product.variants.all %}
+                                <div class="bg-white p-3 rounded-xl border border-muted/30 flex gap-3 items-center shadow-sm hover:border-dark/30 transition-colors">
+                                    
+                                    <div class="w-12 h-12 rounded-lg bg-light border border-muted/20 overflow-hidden p-0.5 flex-shrink-0">
+                                        {% if variant.images.first %}
+                                            <img src="{{ variant.images.first.image_url.url }}" class="w-full h-full object-contain mix-blend-multiply">
+                                        {% else %}
+                                            <div class="w-full h-full flex items-center justify-center"><span class="material-icons text-muted text-sm">image</span></div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-[10px] font-black text-muted uppercase tracking-widest mb-0.5 truncate">SKU: {{ variant.sku_code }}</div>
+                                        <div class="text-sm font-extrabold text-dark truncate">₹{{ variant.selling_price }}</div>
+                                    </div>
+                                    
+                                    <div class="text-right">
+                                        {% if variant.stock_quantity > 0 %}
+                                            <div class="bg-green-50 text-green-700 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest mb-1 border border-green-100">Stock: {{ variant.stock_quantity }}</div>
+                                        {% else %}
+                                            <div class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest mb-1 border border-red-100">Out of Stock</div>
+                                        {% endif %}
+                                        <div class="text-[9px] font-bold text-muted line-through">MRP: ₹{{ variant.mrp }}</div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
+
                     </div>
-                </div>
-                {% endwith %}
-                
-            {% empty %}
-                <div class="col-span-full flex flex-col items-center justify-center py-24 bg-white rounded-3xl border-2 border-dashed border-muted/50 shadow-sm">
-                    <span class="material-icons text-7xl mb-4 text-muted/30">inventory_2</span>
-                    <h3 class="text-xl font-black text-dark mb-2">No Products Found</h3>
-                    <p class="text-muted font-bold text-sm max-w-sm text-center mb-6">You haven't listed any products yet. Start building your inventory to reach millions of buyers.</p>
-                    <a href="{% url 'add-product' %}" class="bg-dark text-light px-8 py-3 rounded-xl font-bold hover:bg-accent hover:text-dark transition-all shadow-md flex items-center gap-2">
-                        <span class="material-icons text-[18px]">add_circle</span> Add Your First Product
-                    </a>
-                </div>
-            {% endfor %}
+                {% empty %}
+                    <div class="flex flex-col items-center justify-center py-24 text-center">
+                        <div class="w-20 h-20 bg-light rounded-full flex items-center justify-center mb-4 border border-muted/30 shadow-sm">
+                            <span class="material-icons text-muted text-4xl">inventory_2</span>
+                        </div>
+                        <h3 class="text-xl font-black text-dark mb-2">No Products Found</h3>
+                        <p class="text-sm font-bold text-muted max-w-sm mb-6">You haven't listed any products yet. Start building your inventory!</p>
+                        <a href="{% url 'add-product' %}" class="bg-dark text-light px-6 py-3 rounded-xl font-bold hover:bg-accent hover:text-dark transition-all duration-200 active:scale-95 shadow-md flex items-center gap-2 text-sm uppercase tracking-widest">
+                            <span class="material-icons text-[18px]">add_circle</span> Add First Product
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
             
         </div>
-    </section>
+    </main>
 
     <footer class="bg-dark text-light pt-16 pb-8 border-t-4 border-accent mt-auto">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                
                 <div>
                     <div class="flex items-center gap-3 mb-6">
                         <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -318,7 +228,6 @@
                     </div>
                     <p class="text-muted text-sm leading-relaxed mb-6 font-medium">Elevating your lifestyle through curated collections. Quality is our standard, elegance is our soul.</p>
                 </div>
-                
                 <div>
                     <h4 class="text-xs uppercase tracking-widest font-black mb-6 text-accent">Quick Links</h4>
                     <ul class="space-y-3 text-muted text-sm font-bold">
@@ -327,7 +236,6 @@
                         <li><a class="hover:text-light transition-colors" href="#">Careers</a></li>
                     </ul>
                 </div>
-                
                 <div>
                     <h4 class="text-xs uppercase tracking-widest font-black mb-6 text-accent">Seller Support</h4>
                     <ul class="space-y-3 text-muted text-sm font-bold">
@@ -336,19 +244,16 @@
                         <li><a class="hover:text-light transition-colors" href="#">API Documentation</a></li>
                     </ul>
                 </div>
-                
                 <div>
                     <h4 class="text-xs uppercase tracking-widest font-black mb-6 text-accent">Seller Updates</h4>
                     <p class="text-muted text-sm mb-4 font-medium">Get the latest platform updates and tips.</p>
                     <form class="space-y-3" method="POST" action="#">
                         {% csrf_token %}
                         <input class="w-full bg-white/10 text-light border border-muted/30 rounded-lg py-2.5 px-4 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-accent transition-all placeholder-muted/50" placeholder="Email Address" type="email" required />
-                        <button type="submit" class="w-full bg-accent text-dark py-2.5 rounded-lg font-black uppercase tracking-widest hover:bg-light transition-all shadow-md">Subscribe</button>
+                        <button type="submit" class="w-full bg-accent text-dark py-2.5 rounded-lg font-black uppercase tracking-widest hover:bg-light transition-all shadow-md active:scale-95 duration-200">Subscribe</button>
                     </form>
                 </div>
-
             </div>
-            
             <div class="border-t border-muted/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-muted text-[10px] uppercase font-black tracking-widest">
                 <p>© 2026 StackShop. All rights reserved.</p>
                 <div class="flex gap-6">
@@ -358,6 +263,23 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function toggleVariants(productId) {
+            const variantsDiv = document.getElementById(`variants-${productId}`);
+            const icon = document.getElementById(`icon-${productId}`);
+            
+            if (variantsDiv.classList.contains('hidden')) {
+                // Open accordion
+                variantsDiv.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                // Close accordion
+                variantsDiv.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+    </script>
 
 </body>
 </html>

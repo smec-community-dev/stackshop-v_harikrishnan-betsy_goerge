@@ -7,7 +7,7 @@ from core.decorators import admin_required, seller_required
 from customer.models import Cart, CartItem
 from .models import *
 from seller.models import *
-from django.db.models import Q
+from django.db.models import Q, Count
 
 
 def home_view(request):
@@ -18,6 +18,13 @@ def home_view(request):
         .prefetch_related("images")
         .filter(product__approval_status="approved")
     )
+
+    top_picks = (
+        Product.objects.filter(approval_status="approved", is_active=True)
+        .annotate(review_count=Count("review"))
+        .order_by("-review_count", "-created_at")[:12]
+    )
+
     if user.is_authenticated:
         cart = Cart.objects.filter(user=user).first()
         cart_items = CartItem.objects.filter(cart=cart).prefetch_related(
