@@ -67,11 +67,9 @@ def dashboard_view(request):
     )
     avg_rating = round(avg_rating, 1)
 
-    total_orders = OrderItem.objects.filter(seller=seller).count()
-    pending_actions = OrderItem.objects.filter(seller=seller, status__in=["pending", "processing"]).count()
-    revenue_from_completed = OrderItem.objects.filter(seller=seller, status="delivered").aggregate(total=Sum("price_at_purchase"))[
-        "total"
-    ] or 0
+    total_orders = OrderItem.objects.filter(seller=seller).values("order_id").distinct().count()
+    pending_actions = OrderItem.objects.filter(seller=seller, status__in=["pending", "processing"]).values("order_id").distinct().count()
+    revenue_from_completed = OrderItem.objects.filter(seller=seller, status="delivered").aggregate(total=Sum("price_at_purchase"))["total"] or 0
 
     context = {
         "products": products,
