@@ -57,9 +57,9 @@
         <nav class="flex items-center gap-2 text-xs font-bold text-muted mb-8 uppercase tracking-widest border-b border-muted/20 pb-4">
             <a href="{% url 'home' %}" class="hover:text-dark transition-colors">Home</a>
             <span class="material-icons text-[14px]">chevron_right</span>
-            <a href="{% url 'catogory_list' %}#cat- {{ category.name|slugify }}" class="hover:text-dark transition-colors">{{ variant.product.subcategory.category.name }}</a>
+            <a href="{% url 'catogory_list' %}#cat- {{ category.name|slugify }}" class="hover:text-dark transition-colors">{{ product.subcategory.category.name }}</a>
             <span class="material-icons text-[14px]">chevron_right</span>
-            <span class="text-dark truncate max-w-[200px]">{{ variant.product.name }}</span>
+            <span class="text-dark truncate max-w-[200px]">{{ product.name }}</span>
         </nav>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-20">
@@ -82,7 +82,7 @@
                     {% endif %}
                     
                     {% if variant.images.first %}
-                        <img id="main-product-image" src="{{ variant.images.first.image_url.url }}" alt="{{ variant.product.name }}" class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105">
+                        <img id="main-product-image" src="{{ variant.images.first.image_url.url }}" alt="{{ product.name }}" class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105">
                     {% else %}
                         <img id="main-product-image" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" alt="Placeholder" class="w-full h-full object-contain mix-blend-multiply transition-opacity duration-300">
                     {% endif %}
@@ -92,9 +92,9 @@
             <div class="lg:col-span-5 flex flex-col">
                 
                 <div class="mb-6">
-                    <p class="text-dark font-black tracking-widest uppercase text-xs mb-2">{{ variant.product.brand|default:"StackShop" }}</p>
+                    <p class="text-dark font-black tracking-widest uppercase text-xs mb-2">{{ product.brand|default:"StackShop" }}</p>
                     <h1 class="text-3xl lg:text-4xl font-extrabold text-dark leading-tight mb-4">
-                        {{ variant.product.name }}
+                        {{ product.name }}
                     </h1>
                     
                     <div class="flex items-center gap-4">
@@ -113,13 +113,24 @@
                 <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6 lg:p-8 mb-8">
                     
                     <div class="flex items-end gap-3 mb-6 pb-6 border-b border-muted/20">
-                        <span class="text-4xl font-black text-dark">${{ variant.selling_price }}</span>
+                        <span class="text-4xl font-black text-dark">₹{{ variant.selling_price }}</span>
                         {% if variant.mrp > variant.selling_price %}
-                            <span class="text-lg font-bold text-muted line-through mb-1">${{ variant.mrp }}</span>
+                            <span class="text-lg font-bold text-muted line-through mb-1">₹{{ variant.mrp }}</span>
                         {% endif %}
                     </div>
 
                     <div class="flex flex-col gap-4">
+                        <div class="mb-4">
+                            <label for="variant-selector" class="text-xs font-black uppercase tracking-wide text-muted">Choose Variant</label>
+                            <select id="variant-selector" class="w-full mt-2 border border-muted/50 rounded-xl px-3 py-2 focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark" onchange="onVariantChange(this)">
+                                {% for v in variants %}
+                                    <option value="{{ v.id }}" {% if v.id == variant.id %}selected{% endif %}>
+                                        {{ v.variant_label }} ({{ v.stock_quantity }} in stock, ₹{{ v.selling_price }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
                         <form action="{% url 'add_to_cart' variant.id %}" method="POST" class="flex gap-3">
                             {% csrf_token %}
                             
@@ -181,11 +192,11 @@
                             <p class="text-[10px] font-bold text-dark/70">100% Protected</p>
                         </div>
                     </div>
-                    {% if variant.product.is_returnable %}
+                    {% if product.is_returnable %}
                     <div class="col-span-2 flex items-center gap-3 text-dark bg-accent/20 p-3 rounded-xl border border-accent/50">
                         <span class="material-icons text-dark">assignment_return</span>
                         <div>
-                            <p class="text-xs font-extrabold uppercase tracking-wide">{{ variant.product.return_days }}-Day Returns</p>
+                            <p class="text-xs font-extrabold uppercase tracking-wide">{{ product.return_days }}-Day Returns</p>
                             <p class="text-[10px] font-bold text-dark/70">Hassle-free return policy</p>
                         </div>
                     </div>
@@ -201,7 +212,7 @@
                 <div>
                     <h2 class="text-2xl font-black text-dark mb-6 border-b border-muted/20 pb-4">Product Overview</h2>
                     <div class="prose prose-sm sm:prose-base text-dark/80 max-w-none font-medium leading-relaxed">
-                        {{ variant.product.description|linebreaksbr }}
+                        {{ product.description|linebreaksbr }}
                     </div>
                 </div>
 
@@ -211,11 +222,11 @@
                         <dl class="divide-y divide-muted/20 text-sm">
                             <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-white transition-colors rounded-xl">
                                 <dt class="text-xs font-extrabold uppercase tracking-widest text-muted">Brand</dt>
-                                <dd class="mt-1 font-bold text-dark sm:col-span-2 sm:mt-0">{{ variant.product.brand }}</dd>
-                            </div>
-                            <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-white transition-colors rounded-xl">
-                                <dt class="text-xs font-extrabold uppercase tracking-widest text-muted">Model</dt>
-                                <dd class="mt-1 font-bold text-dark sm:col-span-2 sm:mt-0">{{ variant.product.model_number }}</dd>
+                            <dd class="mt-1 font-bold text-dark sm:col-span-2 sm:mt-0">{{ product.brand }}</dd>
+                        </div>
+                        <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-white transition-colors rounded-xl">
+                            <dt class="text-xs font-extrabold uppercase tracking-widest text-muted">Model</dt>
+                            <dd class="mt-1 font-bold text-dark sm:col-span-2 sm:mt-0">{{ product.model_number }}</dd>
                             </div>
                             <div class="px-4 py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-white transition-colors rounded-xl">
                                 <dt class="text-xs font-extrabold uppercase tracking-widest text-muted">SKU Code</dt>
@@ -393,6 +404,13 @@
             });
             button.classList.remove('border-muted/40', 'border');
             button.classList.add('border-dark', 'border-2');
+        }
+
+        function onVariantChange(select) {
+            const variantId = select.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('variant', variantId);
+            window.location.href = url.toString();
         }
 
         function updateQty(change) {

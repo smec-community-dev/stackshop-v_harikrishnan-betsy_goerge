@@ -281,7 +281,7 @@
                 </div>
                 <div>
                     <h4 class="font-bold text-sm uppercase tracking-wide">Free Shipping</h4>
-                    <p class="text-xs text-muted">On orders over $100</p>
+                    <p class="text-xs text-muted">On orders over ₹100</p>
                 </div>
             </div>
             <div class="bg-dark text-light rounded-xl p-6 flex items-center gap-4 shadow-lg border border-muted/10 hover:shadow-xl transition-shadow transform hover:scale-105 duration-300">
@@ -343,9 +343,9 @@
 
                     <div class="mt-auto flex flex-col justify-end mb-3">
                         {% if x.mrp > x.selling_price %}
-                        <span class="text-[10px] font-bold text-muted line-through mb-0.5">${{ x.mrp }}</span>
+                        <span class="text-[10px] font-bold text-muted line-through mb-0.5">₹{{ x.mrp }}</span>
                         {% endif %}
-                        <span class="text-base md:text-lg font-black text-dark">${{ x.selling_price }}</span>
+                        <span class="text-base md:text-lg font-black text-dark">₹{{ x.selling_price }}</span>
                     </div>
 
                     <a href="{% url 'productsingle' x.product.id %}" class="w-full inline-flex items-center justify-center text-[10px] md:text-[11px] font-bold uppercase tracking-widest bg-dark text-light px-2 py-2 rounded hover:bg-accent hover:text-dark transition-all active:scale-95 group-hover:shadow-md">
@@ -383,7 +383,7 @@
 
                 function updateCarousel() {
                     const slidePercentage = 100 / totalSlides;
-                    mainTrack.style.transform = `translateX(-${currentIndex * slidePercentage}%)`;
+                    mainTrack.style.transform = `translateX(-₹{currentIndex * slidePercentage}%)`;
 
                     indicators.forEach((dot, index) => {
                         if (index === currentIndex) {

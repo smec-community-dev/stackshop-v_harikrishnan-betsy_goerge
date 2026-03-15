@@ -66,7 +66,7 @@
                     <span class="material-icons text-lg">inventory_2</span>
                 </div>
                 <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">{{ products.count|default:"0" }}</h4>
+                    <h4 class="text-3xl font-extrabold text-dark">{{ total_products|default:"0" }}</h4>
                     <span class="text-xs font-bold text-dark/50 mb-1">Listings</span>
                 </div>
             </div>
@@ -77,8 +77,8 @@
                     <span class="material-icons text-lg">local_shipping</span>
                 </div>
                 <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">42</h4>
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-muted mb-1.5">Needs shipping (5)</span>
+                    <h4 class="text-3xl font-extrabold text-dark">{{ active_orders|default:"0" }}</h4>
+                    <span class="text-xs font-bold text-dark/50 mb-1.5">Needs shipping ({{ needs_shipping|default:"0" }})</span>
                 </div>
             </div>
 
@@ -88,14 +88,134 @@
                     <span class="material-icons text-lg">star_rate</span>
                 </div>
                 <div class="flex items-end gap-3 mt-1">
-                    <h4 class="text-3xl font-extrabold text-dark">4.9</h4>
-                    <div class="flex text-yellow-400 mb-1.5">
-                        <span class="material-icons text-[14px]">star</span>
-                        <span class="material-icons text-[14px]">star</span>
-                        <span class="material-icons text-[14px]">star</span>
-                        <span class="material-icons text-[14px]">star</span>
-                        <span class="material-icons text-[14px]">star_half</span>
+                    <h4 class="text-3xl font-extrabold text-dark">{{ average_rating|default:"0.0" }}</h4>
+                    <div class="flex mb-1.5">
+                        {% if average_rating >= 1 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 2 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 1.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 3 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 2.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 4 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 3.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 4.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
                     </div>
+                    <p class="text-xs font-bold text-dark/50">{{ total_reviews|default:'0' }} Reviews</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
+                <div class="flex justify-between items-center text-muted">
+                    <span class="font-bold text-[10px] uppercase tracking-widest">Total Orders</span>
+                    <span class="material-icons text-lg">shopping_bag</span>
+                </div>
+                <div class="flex items-end gap-3 mt-1">
+                    <h4 class="text-3xl font-extrabold text-dark">{{ total_orders|default:"0" }}</h4>
+                    <span class="text-xs font-bold text-dark/50">Lifetime order count</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
+                <div class="flex justify-between items-center text-muted">
+                    <span class="font-bold text-[10px] uppercase tracking-widest">Pending Action</span>
+                    <span class="material-icons text-lg">pending_actions</span>
+                </div>
+                <div class="flex items-end gap-3 mt-1">
+                    <h4 class="text-3xl font-extrabold text-dark">{{ pending_actions|default:"0" }}</h4>
+                    <span class="text-xs font-bold text-dark/50">Needs attention</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
+                <div class="flex justify-between items-center text-muted">
+                    <span class="font-bold text-[10px] uppercase tracking-widest">Total Revenue</span>
+                    <span class="material-icons text-lg">account_balance_wallet</span>
+                </div>
+                <div class="flex items-end gap-3 mt-1">
+                    <h4 class="text-3xl font-extrabold text-dark">₹{{ total_revenue|floatformat:2 }}</h4>
+                    <span class="text-xs font-bold text-dark/50">From completed orders</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 flex flex-col gap-2 shadow-sm border border-muted/30">
+                <div class="flex justify-between items-center text-muted">
+                    <span class="font-bold text-[10px] uppercase tracking-widest">Store Rating</span>
+                    <span class="material-icons text-lg">star_rate</span>
+                </div>
+                <div class="flex items-end gap-3 mt-1">
+                    <h4 class="text-3xl font-extrabold text-dark">{{ average_rating|default:"0.0" }}</h4>
+                    <span class="text-xs font-bold text-dark/50">{{ total_reviews|default:'0' }} Reviews</span>
+                </div>
+            </div>
+        </div>
+                <div class="flex justify-between items-center text-muted">
+                    <span class="font-bold text-[10px] uppercase tracking-widest">Store Rating</span>
+                    <span class="material-icons text-lg">star_rate</span>
+                </div>
+                <div class="flex items-end gap-3 mt-1">
+                    <h4 class="text-3xl font-extrabold text-dark">{{ average_rating|default:"0.0" }}</h4>
+                    <div class="flex mb-1.5">
+                        {% if average_rating >= 1 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 2 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 1.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 3 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 2.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 4 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 3.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                        {% if average_rating >= 5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star</span>
+                        {% elif average_rating >= 4.5 %}
+                            <span class="material-icons text-[14px] text-yellow-400">star_half</span>
+                        {% else %}
+                            <span class="material-icons text-[14px] text-muted">star</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-xs font-bold text-dark/50">{{ total_reviews|default:'0' }} Reviews</p>
                 </div>
             </div>
         </div>
@@ -147,7 +267,7 @@
                         
                         <span class="text-xl font-black text-dark mb-5">
                             {% if variant %}
-                                ${{ variant.selling_price }}
+                                ₹{{ variant.selling_price }}
                             {% else %}
                                 Not Set
                             {% endif %}
@@ -157,7 +277,9 @@
                             <a href="{% url 'update_product' product.id %}" class="bg-accent text-dark py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-dark hover:text-light transition-colors text-center shadow-sm">
                                 Edit
                             </a>
-                            
+                            <a href="{% url 'manage_variants' product.id %}" class="bg-light text-dark py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-dark hover:text-light transition-colors text-center shadow-sm">
+                                Manage Variants
+                            </a>
                             <form action="{% url 'delete_product' product.id %}" method="POST" class="m-0 h-full" onsubmit="return confirm('Are you sure you want to completely delete {{ product.name|escapejs }}? This cannot be undone.');">
                                 {% csrf_token %}
                                 <button type="submit" class="w-full h-full bg-white text-muted py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest hover:text-white hover:bg-red-500 hover:border-red-500 transition-colors border border-muted/50 shadow-sm">

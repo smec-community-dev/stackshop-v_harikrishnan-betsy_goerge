@@ -12,7 +12,7 @@ from .models import (
     ProductImage,
 )
 from core.models import Category
-from django.db.models import Count, Avg, Max, Q
+from django.db.models import Count, Avg, Max, Sum, Q
 from customer.models import Order, OrderItem, Review
 from django.contrib import messages
 
@@ -47,9 +47,46 @@ def seller_profile_view(request):
 def dashboard_view(request):
     seller = request.user.seller_profile
     products = Product.objects.filter(seller=seller).order_by("-id")
-    return render(
-        request, "seller_templates/sellerdashboard.html", {"products": products}
+
+    total_products = products.count()
+
+    active_orders = OrderItem.objects.filter(seller=seller).exclude(
+        status__in=["delivered", "cancelled"]
+    ).count()
+
+    needs_shipping = OrderItem.objects.filter(
+        seller=seller, status__in=["pending", "processing"]
+    ).count()
+
+    total_reviews = Review.objects.filter(product__seller=seller).count()
+    avg_rating = (
+        Review.objects.filter(product__seller=seller)
+        .aggregate(avg=Avg("rating"))
+        .get("avg")
+        or 0
     )
+    avg_rating = round(avg_rating, 1)
+
+    total_orders = OrderItem.objects.filter(seller=seller).count()
+    pending_actions = OrderItem.objects.filter(seller=seller, status__in=["pending", "processing"]).count()
+    revenue_from_completed = OrderItem.objects.filter(seller=seller, status="delivered").aggregate(total=Sum("price_at_purchase"))[
+        "total"
+    ] or 0
+
+    context = {
+        "products": products,
+        "total_products": total_products,
+        "active_orders": active_orders,
+        "needs_shipping": needs_shipping,
+        "average_rating": avg_rating,
+        "total_reviews": total_reviews,
+        "total_orders": total_orders,
+        "pending_actions": pending_actions,
+        "total_revenue": revenue_from_completed,
+    }
+
+    return render(request, "seller_templates/sellerdashboard.html", context)
+
 
 
 def seller_bridge(request):
@@ -173,6 +210,50 @@ def update_product(request, product_id):
 
 
 @verified_seller_required
+def manage_variants(request, product_id):
+    seller = request.user.seller_profile
+    product = get_object_or_404(Product, id=product_id, seller=seller)
+    attributes = Attribute.objects.filter(subcategory=product.subcategory).prefetch_related("options")
+    variants = product.variants.prefetch_related("images", "attributes__option__attribute")
+
+    if request.method == "POST":
+        variant = ProductVariant.objects.create(
+            product=product,
+            mrp=request.POST.get("mrp") or 0,
+            selling_price=request.POST.get("selling_price") or 0,
+            cost_price=request.POST.get("cost_price") or 0,
+            stock_quantity=request.POST.get("stock_quantity") or 0,
+            weight=request.POST.get("weight") or 0,
+            length=request.POST.get("length") or 0,
+            width=request.POST.get("width") or 0,
+            height=request.POST.get("height") or 0,
+            tax_percentage=request.POST.get("tax_percentage") or 0,
+        )
+
+        for attribute in attributes:
+            option_id = request.POST.get(f"attribute_{attribute.id}")
+            if option_id:
+                VariantAttributeBridge.objects.create(variant=variant, option_id=option_id)
+
+        primary_image = request.FILES.get("primary_image")
+        if primary_image:
+            ProductImage.objects.create(variant=variant, image_url=primary_image, is_primary=True)
+
+        additional_images = request.FILES.getlist("additional_images")
+        for image in additional_images:
+            ProductImage.objects.create(variant=variant, image_url=image, is_primary=False)
+
+        messages.success(request, "Variant added successfully.")
+        return redirect("manage_variants", product_id=product.id)
+
+    return render(request, "seller_templates/manage_variants.html", {
+        "product": product,
+        "attributes": attributes,
+        "variants": variants,
+    })
+
+
+@verified_seller_required
 def delete_product(request, product_id):
     seller = request.user.seller_profile
     product = get_object_or_404(Product, id=product_id, seller=seller)
@@ -235,13 +316,41 @@ def customer_reviews(request):
 @verified_seller_required
 def seller_customers_orders(request):
     seller = request.user.seller_profile
+    query = request.GET.get("q", "").strip()
+    status = request.GET.get("status", "all").lower()
+
     orders = (
         OrderItem.objects.filter(seller=seller)
         .select_related("order__user", "variant", "variant__product")
         .prefetch_related("variant__images")
+        .order_by("-order__ordered_at")
     )
 
-    context = {"orders": orders}
+    if status and status != "all":
+        orders = orders.filter(order__order_status__iexact=status)
+
+    if query:
+        orders = orders.filter(
+            Q(order__order_number__icontains=query)
+            | Q(order__user__first_name__icontains=query)
+            | Q(order__user__last_name__icontains=query)
+            | Q(order__user__username__icontains=query)
+            | Q(variant__product__name__icontains=query)
+        )
+
+    from django.core.paginator import Paginator
+    paginator = Paginator(orders, settings.PAGINATE_BY)
+    page_number = request.GET.get("page")
+    orders_page = paginator.get_page(page_number)
+
+    context = {
+        "orders": orders_page,
+        "page_obj": orders_page,
+        "paginator": paginator,
+        "request": request,
+        "current_status": status,
+        "query": query,
+    }
     return render(request, "seller_templates/customer_orders.html", context)
 
 @verified_seller_required

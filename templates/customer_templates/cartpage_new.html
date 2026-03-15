@@ -85,8 +85,8 @@
                                     <!-- Price and Remove -->
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <p class="text-sm text-muted mb-1">Unit Price: <span class="font-bold text-dark">${{ item.product_variant.selling_price }}</span></p>
-                                            <p class="text-lg font-bold text-dark">${{ total_price|default:"0.00" }}</p>
+                                            <p class="text-sm text-muted mb-1">Unit Price: <span class="font-bold text-dark">₹{{ item.product_variant.selling_price }}</span></p>
+                                            <p class="text-lg font-bold text-dark">₹{{ total_price|default:"0.00" }}</p>
                                         </div>
                                         <form method="POST" action="{% url 'remove_cart_item' item.id %}" class="inline">
                                             {% csrf_token %}
@@ -120,7 +120,7 @@
                     <div class="space-y-4 mb-6">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-muted">Subtotal</span>
-                            <span class="font-semibold text-dark">${{ subtotal|default:"0.00" }}</span>
+                            <span class="font-semibold text-dark">₹{{ subtotal|default:"0.00" }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-muted">Shipping</span>
@@ -128,14 +128,14 @@
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-muted">Tax</span>
-                            <span class="font-semibold text-dark">${{ tax|default:"0.00" }}</span>
+                            <span class="font-semibold text-dark">₹{{ tax|default:"0.00" }}</span>
                         </div>
                     </div>
 
                     <div class="border-t border-muted/20 pt-4 mb-6">
                         <div class="flex justify-between items-center">
                             <span class="font-bold text-lg text-dark">Total</span>
-                            <span class="font-black text-2xl text-dark">${{ total|default:"0.00" }}</span>
+                            <span class="font-black text-2xl text-dark">₹{{ total|default:"0.00" }}</span>
                         </div>
                     </div>
 
@@ -153,7 +153,7 @@
                     <div class="mt-6 space-y-3 pt-6 border-t border-muted/20">
                         <div class="flex items-center gap-3 text-sm">
                             <span class="material-icons text-base text-accent">check_circle</span>
-                            <span class="text-dark font-medium">Free shipping on orders over $100</span>
+                            <span class="text-dark font-medium">Free shipping on orders over ₹100</span>
                         </div>
                         <div class="flex items-center gap-3 text-sm">
                             <span class="material-icons text-base text-accent">check_circle</span>

@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Manage Variants - {{ product.name }} | StackShop Seller Central</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+<body class="bg-light text-dark font-display flex flex-col min-h-screen">
+    {% include "seller_templates/seller_navbar.html" %}
+    {% include "core_templates/messages.html" %}
+    <main class="max-w-7xl mx-auto w-full px-4 mt-8 mb-20 flex-grow">
+        <section class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6 mb-8">
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold">Manage Variants for {{ product.name }}</h1>
+                    <p class="text-muted text-sm mt-1">Create and update product variants with attributes and inventory data.</p>
+                </div>
+                <a href="{% url 'dashboard' %}" class="bg-dark text-light px-5 py-2.5 rounded-lg font-bold hover:bg-accent hover:text-dark transition">Back to Dashboard</a>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl shadow-sm border border-muted/30 p-6">
+                <h2 class="text-xl font-bold mb-4">Add New Variant</h2>
+                <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input name="mrp" required placeholder="MRP" type="number" step="0.01" class="border rounded-lg px-3 py-2" />
+                        <input name="selling_price" required placeholder="Selling Price" type="number" step="0.01" class="border rounded-lg px-3 py-2" />
+                        <input name="cost_price" required placeholder="Cost Price" type="number" step="0.01" class="border rounded-lg px-3 py-2" />
+                        <input name="stock_quantity" required placeholder="Stock Quantity" type="number" class="border rounded-lg px-3 py-2" />
+                        <input name="weight" required placeholder="Weight (kg)" type="number" step="0.01" class="border rounded-lg px-3 py-2" />
+                        <input name="length" required placeholder="Length (cm)" type="number" step="0.1" class="border rounded-lg px-3 py-2" />
+                        <input name="width" required placeholder="Width (cm)" type="number" step="0.1" class="border rounded-lg px-3 py-2" />
+                        <input name="height" required placeholder="Height (cm)" type="number" step="0.1" class="border rounded-lg px-3 py-2" />
+                        <input name="tax_percentage" required placeholder="Tax %" type="number" step="0.1" class="border rounded-lg px-3 py-2" />
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold mb-2">Attribute Options</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {% for attribute in attributes %}
+                            <div>
+                                <label class="block text-xs font-bold uppercase mb-1">{{ attribute.name }}</label>
+                                <select name="attribute_{{ attribute.id }}" class="w-full border rounded-lg px-3 py-2">
+                                    <option value="">-- Choose {{ attribute.name }} --</option>
+                                    {% for option in attribute.options.all %}
+                                        <option value="{{ option.id }}">{{ option.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Primary Image</label>
+                        <input type="file" name="primary_image" class="w-full border rounded-lg p-2" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1">Additional Images</label>
+                        <input type="file" name="additional_images" multiple class="w-full border rounded-lg p-2" />
+                    </div>
+
+                    <button type="submit" class="bg-dark text-light px-4 py-2 rounded-lg font-bold hover:bg-accent hover:text-dark transition">Add Variant</button>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-muted/30 p-6">
+                <h2 class="text-xl font-bold mb-4">Existing Variants</h2>
+                <div class="space-y-3">
+                    {% for variant in variants %}
+                    <div class="border border-muted/30 rounded-lg p-3">
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <p class="font-bold">{{ variant.sku_code }} | ₹{{ variant.selling_price }}</p>
+                                <p class="text-xs text-muted">Stock: {{ variant.stock_quantity }} | Tax: {{ variant.tax_percentage }}%</p>
+                            </div>
+                            <a href="#" class="text-sm font-bold text-accent hover:text-dark">Edit</a>
+                        </div>
+                        <p class="text-xs text-muted mt-1">Attributes: {% if variant.attributes.exists %}
+                            {% for va in variant.attributes.all %}
+                                {{ va.option.attribute.name }}: {{ va.option.value }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                            {% else %}None{% endif %}</p>
+                    </div>
+                    {% empty %}
+                    <p class="text-sm text-muted">No variants for this product yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

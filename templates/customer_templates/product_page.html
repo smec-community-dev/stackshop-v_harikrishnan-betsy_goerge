@@ -56,10 +56,10 @@
                     {% if search_query %}
                     <input type="hidden" name="q" value="{{ search_query }}">
                     {% endif %}
-                    
+
                     <!-- Hidden sort input -->
                     <input type="hidden" name="sort" id="sort-input" value="{{ sort_by }}">
-                    
+
                     <!-- Hidden subcategory input -->
                     {% if selected_subcategory %}
                     <input type="hidden" name="subcategory" value="{{ selected_subcategory }}">
@@ -98,7 +98,8 @@
                             </li>
                             {% empty %}
                             <li>
-                                <span class="text-sm font-semibold text-muted italic">No other categories available</span>
+                                <span class="text-sm font-semibold text-muted italic">No other categories
+                                    available</span>
                             </li>
                             {% endfor %}
 
@@ -109,24 +110,18 @@
                         <h3
                             class="font-bold text-sm text-dark uppercase tracking-widest mb-3 border-b border-muted/30 pb-2">
                             Price Range</h3>
-                        
+
                         <div class="space-y-3">
                             <div>
-                                <label class="text-xs font-bold text-muted uppercase tracking-widest mb-1 block">Minimum Price</label>
-                                <input type="number" 
-                                    name="min_price" 
-                                    placeholder="Min" 
-                                    value="{{ min_price }}"
-                                    min="0"
+                                <label class="text-xs font-bold text-muted uppercase tracking-widest mb-1 block">Minimum
+                                    Price</label>
+                                <input type="number" name="min_price" placeholder="Min" value="{{ min_price }}" min="0"
                                     class="w-full px-3 py-2 text-sm font-semibold border border-muted/50 rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark bg-light/50">
                             </div>
                             <div>
-                                <label class="text-xs font-bold text-muted uppercase tracking-widest mb-1 block">Maximum Price</label>
-                                <input type="number" 
-                                    name="max_price" 
-                                    placeholder="Max" 
-                                    value="{{ max_price }}"
-                                    min="0"
+                                <label class="text-xs font-bold text-muted uppercase tracking-widest mb-1 block">Maximum
+                                    Price</label>
+                                <input type="number" name="max_price" placeholder="Max" value="{{ max_price }}" min="0"
                                     class="w-full px-3 py-2 text-sm font-semibold border border-muted/50 rounded-lg focus:outline-none focus:border-dark focus:ring-1 focus:ring-dark bg-light/50">
                             </div>
                         </div>
@@ -145,15 +140,20 @@
 
             <div
                 class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 bg-white p-4 rounded-2xl shadow-sm border border-muted/30">
-                <p class="text-sm font-bold text-muted mb-4 sm:mb-0">Showing <span class="text-dark">{{ page_obj.object_list|length }}</span> of <span class="text-dark">{{ paginator.count }}</span> Products {% if page_obj.has_other_pages %}<span class="text-muted font-semibold">(Page {{ page_obj.number }} of {{ paginator.num_pages }}){% endif %}</span>
+                <p class="text-sm font-bold text-muted mb-4 sm:mb-0">Showing <span class="text-dark">{{page_obj.object_list|length }}</span> of <span class="text-dark">{{ paginator.count }}</span>
+                    Products {% if page_obj.has_other_pages %}<span class="text-muted font-semibold">(Page {{
+                        page_obj.number }} of {{ paginator.num_pages }}){% endif %}</span>
                 </p>
                 <div class="flex items-center gap-3">
                     <span class="text-xs font-extrabold text-dark uppercase tracking-widest">Sort By:</span>
-                    <select name="sort" id="sort-select" onchange="document.getElementById('sort-input').value = this.value; document.getElementById('filter-form').submit();"
+                    <select name="sort" id="sort-select"
+                        onchange="document.getElementById('sort-input').value = this.value; document.getElementById('filter-form').submit();"
                         class="text-sm font-bold border border-muted/50 rounded-xl py-2 px-4 bg-light/50 text-dark focus:outline-none focus:border-dark cursor-pointer">
                         <option value="featured" {% if sort_by == "featured" %}selected{% endif %}>Featured</option>
-                        <option value="price-low-high" {% if sort_by == "price-low-high" %}selected{% endif %}>Price: Low to High</option>
-                        <option value="price-high-low" {% if sort_by == "price-high-low" %}selected{% endif %}>Price: High to Low</option>
+                        <option value="price-low-high" {% if sort_by == "price-low-high" %}selected{% endif %}>Price: Low
+                            to High</option>
+                        <option value="price-high-low" {% if sort_by == "price-high-low" %}selected{% endif %}>Price: High
+                            to Low</option>
                         <option value="newest" {% if sort_by == "newest" %}selected{% endif %}>Newest Arrivals</option>
                     </select>
                 </div>
@@ -163,42 +163,27 @@
                 <h2 class="text-2xl font-black text-dark">
                     Search Results for "<span class="text-accent italic">{{ search_query }}</span>"
                 </h2>
-                <p class="text-sm font-bold text-muted mt-1">Found {{ product_var.count }} items</p>
+                <p class="text-sm font-bold text-muted mt-1">Found {{ products.count }} items</p>
             </div>
             {% endif %}
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
-                {% for x in product_var %}
-                
+                {% for x in products %}
+
                 <div
                     class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-muted/30 hover:border-dark/30 transition-all duration-300 flex flex-col relative">
 
-                    <form action="{% url 'addwishlist' x.id %}" method="POST" class="absolute top-3 right-3 z-10">
-                        {% csrf_token %}
-                        <button type="submit" class="w-10 h-10 backdrop-blur-md rounded-full flex items-center justify-center border shadow-sm transition-all duration-300 hover:scale-110 active:scale-95
-                            {% if x.id in wishlist_variant_ids %}
-                                bg-accent text-red-500 border-accent hover:bg-accent/90 hover:border-dark
-                            {% else %}
-                                bg-white/90 text-muted border-muted/30 hover:text-dark hover:bg-accent/20 hover:border-accent/50
-                            {% endif %}"
-                            title="{% if x.id in wishlist_variant_ids %}Remove from Wishlist{% else %}Add to Wishlist{% endif %}">
-                            <span class="material-icons text-[20px]">
-                                {% if x.id in wishlist_variant_ids %}favorite{% else %}favorite_border{% endif %}
-                            </span>
-                        </button>
-                    </form>
-
                     <div
                         class="aspect-[4/3] bg-light/30 relative overflow-hidden border-b border-muted/20 flex items-center justify-center p-6 group-hover:bg-light/60 transition-colors">
-                        {% if x.images.first %}
-                        <img alt="{{ x.product.name }}"
+                        {% if x.display_image %}
+                        <img alt="{{ x.name }}"
                             class="w-full h-full object-fit-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
-                            src="{{ x.images.first.image_url.url }}" />
+                            src="{{ x.display_image }}" />
                         {% else %}
                         <img alt="Placeholder" class="w-full h-full object-contain mix-blend-multiply opacity-50"
                             src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
                         {% endif %}
 
-                        {% if x.stock_quantity <= 0 %} <div
+                        {% if x.total_stock <= 0 %} <div
                             class="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center">
                             <span
                                 class="bg-dark text-light px-4 py-1.5 rounded-lg text-sm font-black uppercase tracking-widest shadow-lg">Out
@@ -210,74 +195,46 @@
                 <div class="p-5 flex flex-col flex-grow bg-white">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-[10px] font-extrabold uppercase tracking-widest text-muted">
-                            {{ x.product.subcategory.category.name|default:"General" }}
+                            {{ x.subcategory.category.name|default:"General" }}
                         </span>
                     </div>
                     <div class="flex items-start justify-between gap-3 mb-2">
                         <h3 class="font-extrabold text-dark text-lg leading-tight line-clamp-2 group-hover:text-accent transition-colors flex-1"
-                            title="{{ x.product.name }}">
-                            <a href="{% url 'productsingle' x.product.id %}">{{ x.product.name }}</a>
+                            title="{{ x.name }}">
+                            <a href="{% url 'productsingle' x.id %}">{{ x.name }}</a>
                         </h3>
 
-                        <a href="{% url 'productsingle' x.product.id  %}"
+                        <a href="{% url 'productsingle' x.id  %}"
                             class="flex-shrink-0 flex items-center gap-1 text-[10px] uppercase tracking-widest font-bold bg-light/50 text-dark px-2.5 py-1.5 rounded-lg border border-muted/30 hover:bg-dark hover:text-light hover:border-dark transition-all mt-0.5 shadow-sm">
                             <span>View</span>
                             <span class="material-icons text-[14px]">arrow_forward</span>
                         </a>
                     </div>
 
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1">
-                            <div class="flex text-yellow-400">
-                                <span class="material-icons text-[14px]">star</span>
-                                <span class="material-icons text-[14px]">star</span>
-                                <span class="material-icons text-[14px]">star</span>
-                                <span class="material-icons text-[14px]">star</span>
-                                <span class="material-icons text-[14px]">star_half</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-auto pt-4 border-t border-muted/20 flex items-center justify-between">
+                    <div class="mt-auto pt-4 border-t border-muted/20">
                         <div class="flex flex-col">
-                            {% if x.mrp > x.selling_price %}
-                            <span class="text-[11px] font-bold text-muted line-through">${{ x.mrp }}</span>
-                            {% endif %}
-                            <span class="text-2xl font-black text-dark">${{ x.selling_price }}</span>
-                        </div>
-
-                        <form action="{% url 'add_to_cart' x.id %}" method="POST">
-                            {% csrf_token %}
-                            {% if x.id in cart_variant_ids %}
-                            <button type="button" disabled
-                                class="bg-green-50 text-green-600 border border-green-200 p-2.5 rounded-xl flex items-center justify-center shadow-sm cursor-not-allowed"
-                                title="Already in Cart">
-                                <span class="material-icons text-[20px]">check_circle</span>
-                            </button>
+                            {% if x.min_variant_price and x.max_variant_price and x.min_variant_price < x.max_variant_price %}
+                                <span class="text-[11px] font-bold text-muted">From</span>
+                                <span class="text-2xl font-black text-dark">₹{{ x.min_variant_price }}</span>
                             {% else %}
-                            <button type="submit" {% if x.stock_quantity < 0 %}disabled{% endif %}
-                                class="bg-dark text-light p-2.5 rounded-xl hover:bg-accent hover:text-dark transition-all duration-300 border border-transparent hover:border-dark shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed group/cart"
-                                title="Add to Cart">
-                                <span
-                                    class="material-icons text-[20px] transition-transform group-hover/cart:rotate-12">add_shopping_cart</span>
-                            </button>
+                                <span class="text-2xl font-black text-dark">₹{{ x.min_variant_price|default:0 }}</span>
                             {% endif %}
-                        </form>
+                            {% if x.max_variant_price and x.max_variant_price > x.min_variant_price %}
+                                <span class="text-xs text-muted">Up to ₹{{ x.max_variant_price }}</span>
+                            {% endif %}
+                        </div>
                     </div>
+
                 </div>
             </div>
 
             {% empty %}
             <div
-                class="col-span-full flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-dashed border-muted/50">
-                <span class="material-icons text-7xl mb-4 text-muted/30">inventory_2</span>
-                <h3 class="text-xl font-extrabold text-dark mb-2">No Products Found</h3>
-                <p class="text-muted font-medium max-w-sm text-center">We couldn't find any products matching your
-                    current filters or category selection.</p>
-                <a href="{% url 'search' %}?category=all"
-                    class="mt-6 bg-dark text-light px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition-opacity shadow-md inline-block">Clear
-                    All Filters</a>
+                class="col-span-full text-center py-24 bg-white rounded-3xl border-2 border-dashed border-muted/50 shadow-sm">
+                <h3 class="text-xl font-black text-dark">No products found</h3>
+                <p class="text-muted text-sm mt-2">Try another category or check back later.</p>
             </div>
+
             {% endfor %}
 
         </div>
@@ -287,52 +244,71 @@
             <nav class="flex items-center gap-2">
                 <!-- Previous Button -->
                 {% if page_obj.has_previous %}
-                <a href="?page=1" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm" title="First Page">
+                <a href="?page=1"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm"
+                    title="First Page">
                     <span class="material-icons text-sm">first_page</span>
                 </a>
-                <a href="?page={{ page_obj.previous_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm" title="Previous Page">
+                <a href="?page={{ page_obj.previous_page_number }}"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm"
+                    title="Previous Page">
                     <span class="material-icons text-sm">chevron_left</span>
                 </a>
                 {% else %}
-                <button disabled class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
+                <button disabled
+                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
                     <span class="material-icons text-sm">first_page</span>
                 </button>
-                <button disabled class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
+                <button disabled
+                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
                     <span class="material-icons text-sm">chevron_left</span>
                 </button>
                 {% endif %}
 
                 <!-- Page Numbers -->
                 {% for num in paginator.page_range %}
-                    {% if page_obj.number == num %}
-                    <button disabled class="w-10 h-10 flex items-center justify-center rounded-xl border border-transparent bg-dark text-light font-bold shadow-md cursor-default">{{ num }}</button>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{ num }}</a>
+                {% if page_obj.number == num %}
+                <button disabled
+                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-transparent bg-dark text-light font-bold shadow-md cursor-default">{{
+                    num }}</button>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a href="?page={{ num }}"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">
+                    {{ num }}</a>
                     {% elif num == 1 %}
-                    <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{ num }}</a>
+                    <a href="?page={{ num }}"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{
+                        num }}</a>
                     {% elif num == paginator.num_pages %}
-                    <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{ num }}</a>
+                    <a href="?page={{ num }}"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{
+                        num }}</a>
                     {% elif num == page_obj.number|add:'-4' or num == page_obj.number|add:'4' %}
                     <span class="px-2 text-muted font-bold tracking-widest">...</span>
                     {% endif %}
-                {% endfor %}
+                    {% endfor %}
 
-                <!-- Next Button -->
-                {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm" title="Next Page">
-                    <span class="material-icons text-sm">chevron_right</span>
-                </a>
-                <a href="?page={{ paginator.num_pages }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm" title="Last Page">
-                    <span class="material-icons text-sm">last_page</span>
-                </a>
-                {% else %}
-                <button disabled class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
-                    <span class="material-icons text-sm">chevron_right</span>
-                </button>
-                <button disabled class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
-                    <span class="material-icons text-sm">last_page</span>
-                </button>
-                {% endif %}
+                    <!-- Next Button -->
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm"
+                        title="Next Page">
+                        <span class="material-icons text-sm">chevron_right</span>
+                    </a>
+                    <a href="?page={{ paginator.num_pages }}"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted hover:text-dark hover:border-dark hover:bg-white transition-all shadow-sm"
+                        title="Last Page">
+                        <span class="material-icons text-sm">last_page</span>
+                    </a>
+                    {% else %}
+                    <button disabled
+                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
+                        <span class="material-icons text-sm">chevron_right</span>
+                    </button>
+                    <button disabled
+                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-muted/30 cursor-not-allowed opacity-50">
+                        <span class="material-icons text-sm">last_page</span>
+                    </button>
+                    {% endif %}
             </nav>
             {% endif %}
 
@@ -344,7 +320,7 @@
     <script>
         // Auto-submit form when category checkbox is changed
         document.querySelectorAll('.category-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
+            checkbox.addEventListener('change', function () {
                 // Handle "all" checkbox logic
                 if (this.value === 'all' && this.checked) {
                     // If "all" is checked, uncheck other categories

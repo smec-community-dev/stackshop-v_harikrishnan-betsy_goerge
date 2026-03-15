@@ -9,11 +9,17 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 <body class="bg-[#F0F0DB] font-sans flex min-h-screen text-[#30364F]">
-    <aside class="w-64 bg-[#30364F] flex flex-col flex-shrink-0 shadow-xl z-10">
+    <aside id="dashboardSidebar" class="hidden md:flex w-64 bg-[#30364F] flex-col flex-shrink-0 shadow-xl z-10">
         {% include "customer_templates/profile_sidebar.html" %}
     </aside>
 
-    <main class="flex-grow flex flex-col items-center justify-start p-8 overflow-y-auto">
+    <main id="dashboardMain" class="flex-grow flex flex-col items-center justify-start p-4 md:p-8 overflow-y-auto">
+        <div class="w-full max-w-5xl mb-4 md:hidden">
+            <button id="sidebarToggleBtn" onclick="toggleSidebar()" class="flex items-center gap-2 px-3 py-2 bg-[#30364F] text-[#F0F0DB] rounded-lg shadow-md">
+                <span class="material-icons">menu</span>
+                <span class="font-bold text-sm">Menu</span>
+            </button>
+        </div>
         <div class="bg-white rounded-xl shadow-sm w-full max-w-5xl p-8 lg:p-10">
             <div class="flex flex-wrap justify-between items-center mb-8">
                 <div>
@@ -51,7 +57,7 @@
                     {% endif %}
 
                     <div class="flex items-center justify-between gap-3">
-                        <a href="{% url 'productsingle' review.product.variants.first.id %}" class="text-xs font-bold text-[#30364F] hover:text-[#1f2937] transition">View Product</a>
+                        <a href="{% url 'productsingle' review.product.id %}" class="text-xs font-bold text-[#30364F] hover:text-[#1f2937] transition">View Product</a>
                         <div class="text-xs text-[#6B7280]">ID: {{ review.id }}</div>
                     </div>
                 </div>
@@ -77,5 +83,30 @@
 
         </div>
     </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('dashboardSidebar');
+            const main = document.getElementById('dashboardMain');
+            if (!sidebar || !main) return;
+
+            sidebar.classList.toggle('hidden');
+            if (sidebar.classList.contains('hidden')) {
+                main.classList.remove('md:ml-64');
+            } else {
+                main.classList.add('md:ml-64');
+            }
+        }
+
+        document.addEventListener('click', function (event) {
+            const sidebar = document.getElementById('dashboardSidebar');
+            const toggleBtn = document.getElementById('sidebarToggleBtn');
+            if (!sidebar || !toggleBtn) return; 
+            if (window.innerWidth >= 768) return;
+            if (!sidebar.classList.contains('hidden') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                sidebar.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>

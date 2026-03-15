@@ -81,6 +81,28 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
+
+    @property
+    def min_variant_price(self):
+        variant = self.variants.order_by('selling_price').first()
+        return variant.selling_price if variant else 0
+
+    @property
+    def max_variant_price(self):
+        variant = self.variants.order_by('-selling_price').first()
+        return variant.selling_price if variant else 0
+
+    @property
+    def total_stock(self):
+        return self.variants.aggregate(models.Sum('stock_quantity'))['stock_quantity__sum'] or 0
+
+    @property
+    def display_image(self):
+        variant = self.variants.filter(images__is_primary=True).prefetch_related('images').first() or self.variants.prefetch_related('images').first()
+        if variant and variant.images.first():
+            return variant.images.first().image_url.url
+        return None
+
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.name)
@@ -94,6 +116,7 @@ class Product(models.Model):
             self.slug = slug
 
         super().save(*args, **kwargs)
+
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
     sku_code = models.CharField(max_length=100, unique=True, blank=True)

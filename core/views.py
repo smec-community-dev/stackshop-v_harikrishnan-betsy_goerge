@@ -51,46 +51,82 @@ def search_and_filter_view(request):
     user = request.user
 
     if query:
-        product_var = ProductVariant.objects.filter(
-            product__approval_status="approved").filter(
+        matched_variants = ProductVariant.objects.filter(
+            product__approval_status="approved", product__is_active=True
+        ).filter(
             Q(product__name__icontains=query)
             | Q(product__description__icontains=query)
             | Q(product__subcategory__category__name__icontains=query)
         ).distinct()
     elif selected_subcategory:
-        product_var = ProductVariant.objects.filter(
-            product__subcategory__slug=selected_subcategory
+        matched_variants = ProductVariant.objects.filter(
+            product__subcategory__slug=selected_subcategory,
+            product__approval_status="approved",
+            product__is_active=True,
         ).distinct()
     elif selected_categories:
-        product_var = ProductVariant.objects.all()
+        matched_variants = ProductVariant.objects.filter(
+            product__approval_status="approved", product__is_active=True
+        )
     elif min_price or max_price:
-        product_var = ProductVariant.objects.all()
+        matched_variants = ProductVariant.objects.filter(
+            product__approval_status="approved", product__is_active=True
+        )
     else:
-        product_var = ProductVariant.objects.none()
+        matched_variants = ProductVariant.objects.none()
 
     if selected_categories and "all" not in selected_categories:
-        product_var = product_var.filter(
+        matched_variants = matched_variants.filter(
             product__subcategory__category__slug__in=selected_categories
         ).distinct()
 
     if min_price:
         try:
             min_price_val = float(min_price)
-            product_var = product_var.filter(selling_price__gte=min_price_val)
+            matched_variants = matched_variants.filter(selling_price__gte=min_price_val)
         except (ValueError, TypeError):
             pass
 
     if max_price:
         try:
             max_price_val = float(max_price)
-            product_var = product_var.filter(selling_price__lte=max_price_val)
+            matched_variants = matched_variants.filter(selling_price__lte=max_price_val)
         except (ValueError, TypeError):
             pass
 
     if sort_by == "price-low-high":
-        product_var = product_var.order_by("selling_price")
+        matched_variants = matched_variants.order_by("selling_price")
     elif sort_by == "price-high-low":
-        product_var = product_var.order_by("-selling_price")
+        matched_variants = matched_variants.order_by("-selling_price")
+    elif sort_by == "newest":
+        matched_variants = matched_variants.order_by("-created_at")
+
+    product_ids = matched_variants.values_list('product_id', flat=True).distinct()
+    product_var = Product.objects.filter(id__in=product_ids, approval_status='approved', is_active=True).select_related('subcategory__category').prefetch_related('variants__images')
+
+    if selected_categories and "all" not in selected_categories:
+        product_var = product_var.filter(
+            subcategory__category__slug__in=selected_categories
+        ).distinct()
+
+    if min_price:
+        try:
+            min_price_val = float(min_price)
+            product_var = product_var.filter(min_variant_price__gte=min_price_val)
+        except (ValueError, TypeError):
+            pass
+
+    if max_price:
+        try:
+            max_price_val = float(max_price)
+            product_var = product_var.filter(max_variant_price__lte=max_price_val)
+        except (ValueError, TypeError):
+            pass
+
+    if sort_by == "price-low-high":
+        product_var = product_var.order_by("min_variant_price")
+    elif sort_by == "price-high-low":
+        product_var = product_var.order_by("-max_variant_price")
     elif sort_by == "newest":
         product_var = product_var.order_by("-created_at")
 
@@ -117,6 +153,7 @@ def search_and_filter_view(request):
             )
 
     context = {
+        "products": product_var,
         "product_var": product_var,
         "search_query": query,
         "cart_items": cart_items,

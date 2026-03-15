@@ -548,71 +548,70 @@ def set_default_address_view(request):
 
 # product_view_user-------------------------------------------------------------------
 def product_list_view(request):
-    product_var_all = (
-        ProductVariant.objects.select_related("product__subcategory__category")
-        .prefetch_related("images")
-        .filter(product__approval_status="approved")
-
+    products_all = (
+        Product.objects.filter(approval_status="approved", is_active=True)
+        .select_related("subcategory__category", "seller")
+        .prefetch_related("variants__images")
     )
     categories = Category.objects.all()
-    cart_variant_ids = []
-    wishlist_variant_ids = []
-    cart_items = []
 
-    paginator = Paginator(product_var_all, settings.PAGINATE_BY)
+    paginator = Paginator(products_all, settings.PAGINATE_BY)
     page_number = request.GET.get("page", 1)
 
     try:
-        product_var = paginator.page(page_number)
+        products_page = paginator.page(page_number)
     except PageNotAnInteger:
-        product_var = paginator.page(1)
+        products_page = paginator.page(1)
     except EmptyPage:
-        product_var = paginator.page(paginator.num_pages)
-
-    if request.user.is_authenticated:
-        cart = Cart.objects.filter(user=request.user).first()
-        if cart:
-            cart_items = CartItem.objects.filter(cart=cart).prefetch_related(
-                "variant__product__subcategory", "variant__images"
-            )
-            cart_variant_ids = list(cart_items.values_list("variant_id", flat=True))
-
-        wishlist = Wishlist.objects.filter(user=request.user, is_default=True).first()
-        if wishlist:
-            wishlist_items = WishlistItem.objects.filter(
-                wishlist=wishlist
-            ).prefetch_related("variant__product__subcategory", "variant__images")
-            wishlist_variant_ids = list(
-                wishlist_items.values_list("variant_id", flat=True)
-            )
+        products_page = paginator.page(paginator.num_pages)
 
     return render(
         request,
         "customer_templates/product_page.html",
         {
-            "product_var": product_var,
-            "cart_items": cart_items,
-            "cart_variant_ids": cart_variant_ids,
-            "wishlist_variant_ids": wishlist_variant_ids,
+            "products": products_page,
             "categories": categories,
             "paginator": paginator,
-            "page_obj": product_var,
+            "page_obj": products_page,
         },
     )
 
 
-def product_single_view(request, variant_id):
-    variant = get_object_or_404(
-        ProductVariant.objects.select_related("product__subcategory__category").prefetch_related("images"),
-        id=variant_id,
+def product_single_view(request, product_id):
+    product = get_object_or_404(
+        Product.objects.select_related("subcategory__category", "seller")
+        .prefetch_related("variants__images", "variants__attributes__option__attribute"),
+        id=product_id,
+        approval_status="approved",
+        is_active=True,
     )
 
-    reviews = Review.objects.filter(product=variant.product).select_related("user").order_by("-created_at")
+    variants = product.variants.all().order_by('id')
+    selected_variant = None
+
+    variant_id = request.GET.get("variant")
+    if variant_id:
+        selected_variant = variants.filter(id=variant_id).first()
+
+    if not selected_variant:
+        selected_variant = variants.first()
+
+    if not selected_variant:
+        messages.error(request, "No available variant for this product.")
+        return redirect("product_list")
+
+    for v in variants:
+        option_descs = []
+        for brid in v.attributes.select_related("option__attribute").all():
+            option_descs.append(f"{brid.option.attribute.name}: {brid.option.value}")
+        v.variant_label = ", ".join(sorted(option_descs)) if option_descs else "Default"
+
+    reviews = (Review.objects.filter(product=product).select_related("user").order_by("-created_at"))
     average_rating = reviews.aggregate(avg=Avg("rating"))["avg"] or 0
     total_reviews = reviews.count()
 
-    has_purchased = Review.can_user_review(request.user, variant.product)
-    user_review = Review.get_user_review(request.user, variant.product)
+    has_purchased = Review.can_user_review(request.user, product)
+    user_review = Review.get_user_review(request.user, product)
 
     cart_items = []
     wishlist_variant_ids = []
@@ -638,7 +637,9 @@ def product_single_view(request, variant_id):
         request,
         "customer_templates/productsinglepage.html",
         {
-            "variant": variant,
+            "product": product,
+            "variant": selected_variant,
+            "variants": variants,
             "cart_items": cart_items,
             "wishlist_variant_ids": wishlist_variant_ids,
             "cart_variant_ids": cart_variant_ids,
@@ -659,7 +660,7 @@ def submit_review(request, variant_id):
 
     if not OrderItem.objects.filter(order__user=request.user, variant__product=product, order__payment_status__in=["SUCCESS", "CONFIRMED", "DELIVERED"]).exists():
         messages.error(request, "Only verified buyers can add reviews.")
-        return redirect("productsingle", variant_id=variant_id)
+        return redirect("productsingle", product_id=product.id)
 
     if request.method == "POST":
         rating = request.POST.get("rating")
@@ -667,7 +668,7 @@ def submit_review(request, variant_id):
 
         if not rating or not comment:
             messages.error(request, "Rating and comment are required.")
-            return redirect("productsingle", variant_id=variant_id)
+            return redirect("productsingle", product_id=product.id)
 
         try:
             rating_value = int(rating)
@@ -675,7 +676,7 @@ def submit_review(request, variant_id):
                 raise ValueError
         except ValueError:
             messages.error(request, "Invalid rating value.")
-            return redirect("productsingle", variant_id=variant_id)
+            return redirect("productsingle", product_id=product.id)
 
         Review.objects.update_or_create(
             user=request.user,
@@ -685,7 +686,7 @@ def submit_review(request, variant_id):
 
         messages.success(request, "Thank you! Your review has been submitted.")
 
-    return redirect("productsingle", variant_id=variant_id)
+    return redirect("productsingle", product_id=product.id)
 
 
 # ----------------------------------------------------------------------------------------------------

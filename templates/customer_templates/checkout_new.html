@@ -140,7 +140,7 @@
                                     <p class="font-bold text-dark">Express Shipping</p>
                                     <p class="text-sm text-muted">Delivery in 2-3 business days</p>
                                 </div>
-                                <span class="font-bold text-dark">$9.99</span>
+                                <span class="font-bold text-dark">₹9.99</span>
                             </label>
 
                             <label class="flex items-center p-4 border-2 border-muted/30 rounded-lg cursor-pointer hover:border-accent hover:bg-light/30 transition-all has-[:checked]:border-dark has-[:checked]:bg-accent/10">
@@ -149,7 +149,7 @@
                                     <p class="font-bold text-dark">Overnight Shipping</p>
                                     <p class="text-sm text-muted">Delivery next business day</p>
                                 </div>
-                                <span class="font-bold text-dark">$24.99</span>
+                                <span class="font-bold text-dark">₹24.99</span>
                             </label>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
                                     <p class="font-semibold text-dark">{{ item.product_variant.product.name|truncatewords:3 }}</p>
                                     <p class="text-xs text-muted">Qty: {{ item.quantity }}</p>
                                 </div>
-                                <p class="font-bold text-dark">${{ item_total }}</p>
+                                <p class="font-bold text-dark">₹{{ item_total }}</p>
                             </div>
                             {% endfor %}
                         </div>
@@ -220,7 +220,7 @@
                         <div class="space-y-3 mb-6 pb-6 border-b border-muted/20">
                             <div class="flex justify-between text-sm">
                                 <span class="text-muted">Subtotal</span>
-                                <span class="font-semibold text-dark">${{ subtotal|default:"0.00" }}</span>
+                                <span class="font-semibold text-dark">₹{{ subtotal|default:"0.00" }}</span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-muted">Shipping</span>
@@ -228,14 +228,14 @@
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-muted">Tax</span>
-                                <span class="font-semibold text-dark">${{ tax|default:"0.00" }}</span>
+                                <span class="font-semibold text-dark">₹{{ tax|default:"0.00" }}</span>
                             </div>
                         </div>
 
                         <div class="mb-6">
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-dark">Total</span>
-                                <span class="font-black text-2xl text-dark">${{ total|default:"0.00" }}</span>
+                                <span class="font-black text-2xl text-dark">₹{{ total|default:"0.00" }}</span>
                             </div>
                         </div>
 

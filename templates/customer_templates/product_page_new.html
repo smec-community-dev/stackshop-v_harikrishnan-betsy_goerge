@@ -167,10 +167,10 @@
 
                                 <div class="mt-auto mb-4">
                                     {% if x.mrp > x.selling_price %}
-                                    <span class="text-[10px] font-bold text-muted line-through">${{ x.mrp }}</span>
+                                    <span class="text-[10px] font-bold text-muted line-through">₹{{ x.mrp }}</span>
                                     {% endif %}
                                     <div class="flex items-baseline gap-2">
-                                        <span class="text-lg font-black text-dark">${{ x.selling_price }}</span>
+                                        <span class="text-lg font-black text-dark">₹{{ x.selling_price }}</span>
                                         {% if x.mrp > x.selling_price %}<span class="text-[10px] font-bold text-green-600">-{{ ((x.mrp - x.selling_price) / x.mrp * 100)|floatformat:0 }}%</span>{% endif %}
                                     </div>
                                 </div>

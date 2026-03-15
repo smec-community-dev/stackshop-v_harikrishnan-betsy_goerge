@@ -176,15 +176,15 @@
                                         <div class="grid grid-cols-3 gap-3">
                                             <div class="bg-light/30 border border-muted/20 p-3 rounded-xl text-center">
                                                 <span class="block text-[10px] font-bold text-muted uppercase tracking-widest mb-0.5">Cost</span>
-                                                <span class="font-black text-dark text-sm">${{ variant.cost_price }}</span>
+                                                <span class="font-black text-dark text-sm">₹{{ variant.cost_price }}</span>
                                             </div>
                                             <div class="bg-light/30 border border-muted/20 p-3 rounded-xl text-center">
                                                 <span class="block text-[10px] font-bold text-muted uppercase tracking-widest mb-0.5">MRP</span>
-                                                <span class="font-black text-dark/50 text-sm line-through">${{ variant.mrp }}</span>
+                                                <span class="font-black text-dark/50 text-sm line-through">₹{{ variant.mrp }}</span>
                                             </div>
                                             <div class="bg-accent/20 border border-accent/50 p-3 rounded-xl text-center shadow-sm">
                                                 <span class="block text-[10px] font-black text-dark uppercase tracking-widest mb-0.5">Selling Price</span>
-                                                <span class="font-black text-dark text-lg leading-none">${{ variant.selling_price }}</span>
+                                                <span class="font-black text-dark text-lg leading-none">₹{{ variant.selling_price }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -402,7 +402,7 @@
                                            'bg-yellow-50', 'border-yellow-200', 'text-yellow-700');
                     
                     // Add new color classes
-                    badge.classList.add(`bg-${color}-50`, `border-${color}-200`, `text-${color}-700`);
+                    badge.classList.add(`bg-₹{color}-50`, `border-₹{color}-200`, `text-₹{color}-700`);
                     
                     // Update text and icon
                     icon.textContent = iconName;
