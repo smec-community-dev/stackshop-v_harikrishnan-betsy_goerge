@@ -266,26 +266,17 @@
                 {% endif %}
 
                 <!-- Page Numbers -->
-                {% for num in paginator.page_range %}
-                {% if page_obj.number == num %}
-                <button disabled
-                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-transparent bg-dark text-light font-bold shadow-md cursor-default">{{
-                    num }}</button>
-                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a href="?page={{ num }}"
-                    class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">
-                    {{ num }}</a>
-                    {% elif num == 1 %}
-                    <a href="?page={{ num }}"
-                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{
-                        num }}</a>
-                    {% elif num == paginator.num_pages %}
-                    <a href="?page={{ num }}"
-                        class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{
-                        num }}</a>
-                    {% elif num == page_obj.number|add:'-4' or num == page_obj.number|add:'4' %}
-                    <span class="px-2 text-muted font-bold tracking-widest">...</span>
+                {% for i in paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <button disabled class="w-10 h-10 flex items-center justify-center rounded-xl border border-transparent bg-dark text-light font-bold shadow-md cursor-default">{{ i }}</button>
+                    {% elif i >= page_obj.number|add:'-2' and i <= page_obj.number|add:'2' %}
+                        <a href="?page={{ i }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{ i }}</a>
+                    {% elif i == 1 or i == paginator.num_pages %}
+                        <a href="?page={{ i }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-muted/50 text-dark font-bold hover:bg-accent hover:border-dark hover:shadow-sm transition-all bg-white">{{ i }}</a>
+                    {% elif i == page_obj.number|add:'-3' or i == page_obj.number|add:'3' %}
+                        <span class="px-2 text-muted font-bold tracking-widest">...</span>
                     {% endif %}
-                    {% endfor %}
+                {% endfor %}
 
                     <!-- Next Button -->
                     {% if page_obj.has_next %}
