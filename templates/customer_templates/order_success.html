@@ -62,11 +62,21 @@
                             </div>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-widest text-muted mb-2">Razorpay Order ID</p>
+                                {%if payment_order.razorpay_order_id%}
                                 <p class="text-lg font-extrabold text-dark break-all">{{ payment_order.razorpay_order_id }}</p>
+                                {%else%}
+                                <p class="text-lg font-extrabold text-green break-all">Cash on delivery</p>
+                                {%endif%}
+                                
                             </div>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-widest text-muted mb-2">Payment ID</p>
+                                {%if payment_order.razorpay_payment_id%}
                                 <p class="text-lg font-extrabold text-dark break-all">{{ payment_order.razorpay_payment_id }}</p>
+                                {%else%}
+                                <p class="text-lg font-extrabold text-green break-all">Cash on delivery</p>
+                                {%endif%}
+
                             </div>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-widest text-muted mb-2">Order Date</p>
