@@ -141,3 +141,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PAGINATE_BY = 9
 RAZORPAY_KEY_ID = "rzp_test_SP53yJsokky8A6"
 RAZORPAY_KEY_SECRET = "C4tIR7QsO6hKLN6zjhuoyPJO"
+
+# Email otp ----------------------------------------------------------------------
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'stackshopwebsite@gmail.com'
+EMAIL_HOST_PASSWORD = 'ibeh biba tbbc xzrn'
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+#----------------------------------------------------------------------------------

@@ -31,6 +31,26 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
+
+class EmailOTP(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='email_otps')
+    otp_code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Email OTP'
+        verbose_name_plural = 'Email OTPs'
+        indexes = [
+            models.Index(fields=['user', 'is_used']),
+            models.Index(fields=['expires_at']),
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} - {self.otp_code}'
+
+
 class Address(models.Model):
     ADDRESS_TYPE_CHOICES = (('Home', 'Home'),
                             ('Work', 'Work'),

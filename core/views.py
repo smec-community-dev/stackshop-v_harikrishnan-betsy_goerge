@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect
-from .models import CustomUser
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from datetime import timedelta
+from django.core.mail import send_mail
+from django.conf import settings
 from core.decorators import admin_required, seller_required
 from customer.models import Cart, CartItem
-from .models import *
+from .models import CustomUser, EmailOTP, Category
 from seller.models import *
 from django.db.models import Q, Count
+import random
 
 
 def home_view(request):
@@ -221,28 +225,42 @@ def category_list_view(request):
     return render(request, "core_templates/categories.html", context)
 
 
+def _send_verification_otp(user):
+    otp_code = str(random.randint(100000, 999999))
+    expiry = timezone.now() + timedelta(minutes=15)
+    EmailOTP.objects.create(user=user, otp_code=otp_code, expires_at=expiry)
+
+    subject = "Your StackShop Email Verification OTP"
+    message = f"Hello {user.username},\n\nYour verification code is: {otp_code}\nThis code expires in 15 minutes.\n\nThank you for registering with StackShop."
+    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@stackshop.com")
+    send_mail(subject, message, from_email, [user.email], fail_silently=True)
+
+
 def register_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
+
         if password != confirm_password:
-            messages.error(request, "passwords doesnot match")
+            messages.error(request, "Passwords do not match")
             return render(
                 request,
                 "core_templates/registerpage.html",
                 {"username": username, "email": email},
             )
+
         if CustomUser.objects.filter(username=username).exists():
-            messages.error(request, "Invalid username !")
+            messages.error(request, "Username already taken")
             return render(
                 request,
                 "core_templates/registerpage.html",
                 {"username": username, "email": email},
             )
+
         if CustomUser.objects.filter(email=email).exists():
-            messages.error(request, "Invalid email !")
+            messages.error(request, "Email already registered")
             return render(
                 request,
                 "core_templates/registerpage.html",
@@ -250,11 +268,67 @@ def register_view(request):
             )
 
         user = CustomUser.objects.create_user(
-            username=username, email=email, password=password
+            username=username,
+            email=email,
+            password=password,
+            is_verified=False,
         )
         user.save()
-        return redirect("login")
+
+        _send_verification_otp(user)
+        request.session["pending_verification_user_id"] = user.id
+        messages.success(request, "OTP sent to your email. Please verify your account.")
+        return redirect("verify_email")
+
     return render(request, "core_templates/registerpage.html")
+
+
+def verify_email_view(request):
+    pending_user_id = request.session.get("pending_verification_user_id")
+    user = None
+    if pending_user_id:
+        user = CustomUser.objects.filter(id=pending_user_id).first()
+
+    if request.method == "POST":
+        otp_code = request.POST.get("otp")
+        if not user:
+            messages.error(request, "No user pending verification. Please register again.")
+            return redirect("register")
+
+        otp_record = (
+            EmailOTP.objects.filter(user=user, otp_code=otp_code, is_used=False)
+            .filter(expires_at__gte=timezone.now())
+            .order_by("-created_at")
+            .first()
+        )
+
+        if otp_record:
+            otp_record.is_used = True
+            otp_record.save()
+            user.is_verified = True
+            user.save()
+            request.session.pop("pending_verification_user_id", None)
+            messages.success(request, "Email verified successfully. Please login.")
+            return redirect("login")
+
+        messages.error(request, "Invalid or expired OTP. Please try again.")
+
+    return render(request, "core_templates/verify_email.html", {"user": user})
+
+
+def resend_email_otp_view(request):
+    pending_user_id = request.session.get("pending_verification_user_id")
+    user = None
+    if pending_user_id:
+        user = CustomUser.objects.filter(id=pending_user_id).first()
+
+    if not user:
+        messages.error(request, "No pending verification user found.")
+        return redirect("register")
+
+    _send_verification_otp(user)
+    messages.success(request, "A new OTP has been sent to your email.")
+    return redirect("verify_email")
 
 
 def login_view(request):
@@ -266,15 +340,21 @@ def login_view(request):
             username = user_obj.username
         except CustomUser.DoesNotExist:
             username = username
+
         user = authenticate(username=username, password=password)
         if user is not None:
+            if not user.is_verified:
+                messages.error(request, "Please verify your email before logging in. Check your inbox for OTP.")
+                request.session["pending_verification_user_id"] = user.id
+                return redirect("verify_email")
+
             login(request, user)
-            messages.success(request, "user successgully logined")
+            messages.success(request, "User successfully logged in")
             if user.is_admin:
                 return redirect("admin_dashboard")
             return redirect("home")
         else:
-            messages.error(request, "invalid credintials !")
+            messages.error(request, "Invalid credentials !")
     return render(request, "core_templates/loginpage.html")
 
 
