@@ -300,7 +300,6 @@ def checkout_view(request):
         "variant__product__subcategory", "variant__images"
     )
 
-    # Get user's addresses
     user_addresses = Address.objects.filter(user=request.user).order_by(
         "-is_default", "-created_at"
     )
@@ -310,7 +309,6 @@ def checkout_view(request):
     tax_amount = cart_total * 0.18
     total_amount = cart_total + tax_amount
 
-    # Get selected address ID and payment method from POST request
     selected_address_id = request.POST.get("address_id")
     payment_method = request.POST.get("payment_method", "online")
 
@@ -331,7 +329,6 @@ def checkout_view(request):
     }
 
     if request.method == "POST" and payment_method == "cod":
-        # Handle Cash on Delivery
         selected_address_id = request.POST.get("address_id")
         if not selected_address_id:
             messages.error(request, "Please select a delivery address.")
@@ -341,7 +338,6 @@ def checkout_view(request):
             Address, id=selected_address_id, user=request.user
         )
 
-        # Create COD order
         order_obj = Order.objects.create(
             user=request.user,
             address=selected_address,
@@ -349,15 +345,12 @@ def checkout_view(request):
             total_amount=total_amount,
             payment_method="cod",
             payment_status="PENDING",
-            order_status="CONFIRMED",  # COD orders are auto-confirmed
+            order_status="CONFIRMED", 
         )
 
-        # Create OrderItems and decrease stock
         for cart_item in cart_items:
-            # Decrease stock quantity
             cart_item.variant.stock_quantity -= cart_item.quantity
 
-            # Create inventory log
             InventoryLog.objects.create(
                 variant=cart_item.variant,
                 change_amount=-cart_item.quantity,
@@ -375,7 +368,6 @@ def checkout_view(request):
                 price_at_purchase=cart_item.price_at_time,
             )
 
-        # Clear cart
         cart_items.delete()
 
         messages.success(
@@ -383,7 +375,6 @@ def checkout_view(request):
         )
         return redirect("order_success_cod", order_id=order_obj.id)
 
-    # For online payment
     try:
         client = razorpay.Client(
             auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
@@ -579,19 +570,18 @@ def product_list_view(request):
     except EmptyPage:
         products_page = paginator.page(paginator.num_pages)
 
-    # Add is_in_wishlist for logged-in users
-    if request.user.is_authenticated:
-        try:
-            default_wishlist = Wishlist.objects.get(user=request.user, is_default=True)
-            wishlist_variant_ids = set(
-                WishlistItem.objects.filter(wishlist=default_wishlist).values_list(
-                    "variant__product_id", flat=True
-                )
-            )
-        except Wishlist.DoesNotExist:
-            wishlist_variant_ids = set()
-    else:
-        wishlist_variant_ids = set()
+    # if request.user.is_authenticated:
+    #     try:
+    #         default_wishlist = Wishlist.objects.get(user=request.user, is_default=True)
+    #         wishlist_variant_ids = set(
+    #             WishlistItem.objects.filter(wishlist=default_wishlist).values_list(
+    #                 "variant__product_id", flat=True
+    #             )
+    #         )
+    #     except Wishlist.DoesNotExist:
+    #         wishlist_variant_ids = set()
+    # else:
+    #     wishlist_variant_ids = set()
 
     cart_items = []
     if request.user.is_authenticated:
@@ -599,8 +589,8 @@ def product_list_view(request):
         if cart:
             cart_items = CartItem.objects.filter(cart=cart)
 
-    for product in products_page:
-        product.is_in_wishlist = product.id in wishlist_variant_ids
+    # for product in products_page:
+    #     product.is_in_wishlist = product.id in wishlist_variant_ids
 
     return render(
         request,
@@ -829,10 +819,8 @@ def payment_success(request):
         cart_items = CartItem.objects.filter(cart=cart)
 
         for cart_item in cart_items:
-            # Decrease stock quantity
             cart_item.variant.stock_quantity -= cart_item.quantity
 
-            # Create inventory log
             InventoryLog.objects.create(
                 variant=cart_item.variant,
                 change_amount=-cart_item.quantity,
