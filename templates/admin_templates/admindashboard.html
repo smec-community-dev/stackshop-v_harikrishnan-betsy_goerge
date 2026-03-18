@@ -101,6 +101,15 @@
             </div>
         </header>
         <div class="p-8">
+            {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                <div class="p-3 rounded-lg mb-2 {% if message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             
             <section id="content-sellers" class="page-content block">
 
@@ -168,20 +177,20 @@
 
                                 <td class="p-4 text-right">
                                     {% if seller.verification_status|lower == 'pending' %}
-                                    <button type="button" onclick="openSellerVerificationModal({{ seller.id }}, '{{ seller.store_name }}')"
+                                    <a href="{% url 'sellerverification' seller.id %}"
                                         class="text-xs font-bold bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors shadow-sm">
                                         Review
-                                    </button>
+                                    </a>
                                     {% elif seller.verification_status|lower == 'approved' %}
-                                    <button type="button" onclick="openSellerVerificationModal({{ seller.id }}, '{{ seller.store_name }}')"
+                                    <a href="{% url 'sellerverification' seller.id %}"
                                         class="text-xs font-bold border border-green-500 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition-colors">
                                         Edit Remarks
-                                    </button>
+                                    </a>
                                     {% elif seller.verification_status|lower == 'rejected' %}
-                                    <button type="button" onclick="openSellerVerificationModal({{ seller.id }}, '{{ seller.store_name }}')"
+                                    <a href="{% url 'sellerverification' seller.id %}"
                                         class="text-xs font-bold border border-red-500 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors">
                                         Edit Remarks
-                                    </button>
+                                    </a>
                                     {% endif %}
                                 </td>
 
@@ -288,20 +297,20 @@
 
                                 <td class="p-4 text-right">
                                     {% if product.product.approval_status|lower == 'pending' %}
-                                    <button type="button" onclick="openProductVerificationModal({{ product.id }}, '{{ product.product.name }}')"
+                                    <a href="{% url 'productverification' product.id %}"
                                         class="text-xs font-bold bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors shadow-sm">
                                         Verify
-                                    </button>
+                                    </a>
                                     {% elif product.product.approval_status|lower == 'approved' %}
-                                    <button type="button" onclick="openProductVerificationModal({{ product.id }}, '{{ product.product.name }}')"
+                                    <a href="{% url 'productverification' product.id %}"
                                         class="text-xs font-bold border border-green-500 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition-colors">
                                         Edit Remarks
-                                    </button>
+                                    </a>
                                     {% elif product.product.approval_status|lower == 'rejected' %}
-                                    <button type="button" onclick="openProductVerificationModal({{ product.id }}, '{{ product.product.name }}')"
+                                    <a href="{% url 'productverification' product.id %}"
                                         class="text-xs font-bold border border-red-500 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors">
                                         Edit Remarks
-                                    </button>
+                                    </a>
                                     {% endif %}
                                 </td>
 
@@ -331,7 +340,7 @@
                             <span class="material-icons text-accent">category</span>
                             <h3 class="font-extrabold text-dark text-lg">Product Attributes</h3>
                         </div>
-                        <form id="attribute-form" class="space-y-4">
+                        <form id="attribute-form" class="space-y-4" action="{% url 'save_attribute' %}" method="post">
                             {% csrf_token %}
                             <div>
                                 <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">
@@ -367,7 +376,7 @@
                             <span class="material-icons text-accent">list_alt</span>
                             <h3 class="font-extrabold text-dark text-lg">Attribute Options</h3>
                         </div>
-                        <form id="attribute-option-form" class="space-y-4">
+                        <form id="attribute-option-form" class="space-y-4" action="{% url 'save_attribute_option' %}" method="post">
                             {% csrf_token %}
                             <div>
                                 <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">
@@ -400,88 +409,145 @@
 
                 </div>
 
-                <!-- Ads/Banners and Offers/Coupons Sections -->
+                <!-- Category & Subcategory Management -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
+                        <div class="flex items-center gap-2 mb-6 border-b border-muted/20 pb-4">
+                            <span class="material-icons text-accent">folder</span>
+                            <h3 class="font-extrabold text-dark text-lg">Create Category</h3>
+                        </div>
+                        <form id="category-form" class="space-y-4" action="{% url 'save_category' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div>
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Category Name</label>
+                                <input type="text" id="id_category_name" name="name" placeholder="e.g., Electronics"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Description</label>
+                                <textarea id="id_category_description" name="description" rows="3"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark"
+                                    placeholder="Short category description (optional)"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Category Image</label>
+                                <input type="file" id="id_category_image_url" name="image_url"
+                                    class="w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-light file:text-dark hover:file:bg-accent cursor-pointer">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="id_category_active" name="is_active" checked>
+                                <label for="id_category_active" class="text-xs font-medium text-dark">Active</label>
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Create Category</button>
+                        </form>
+                        <div id="category-message" class="mt-4 hidden p-3 rounded-lg text-sm font-medium"></div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
+                        <div class="flex items-center gap-2 mb-6 border-b border-muted/20 pb-4">
+                            <span class="material-icons text-accent">subdirectory_arrow_right</span>
+                            <h3 class="font-extrabold text-dark text-lg">Create SubCategory</h3>
+                        </div>
+                        <form id="subcategory-form" class="space-y-4" action="{% url 'save_subcategory' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div>
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Parent Category</label>
+                                <select id="id_subcategory_category" name="category"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white"
+                                    required>
+                                    <option value="">-- Select Category --</option>
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">SubCategory Name</label>
+                                <input type="text" id="id_subcategory_name" name="name" placeholder="e.g., Mobile Phones"
+                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark"
+                                    required>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="id_subcategory_active" name="is_active" checked>
+                                <label for="id_subcategory_active" class="text-xs font-medium text-dark">Active</label>
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Create SubCategory</button>
+                        </form>
+                        <div id="subcategory-message" class="mt-4 hidden p-3 rounded-lg text-sm font-medium"></div>
+                    </div>
+                </div>
+
+                <!-- Ads/Banners and Variant Attribute Bridge -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
 
                     <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
                         <div class="flex items-center gap-2 mb-6 border-b border-muted/20 pb-4">
                             <span class="material-icons text-accent">ad_units</span>
-                            <h3 class="font-extrabold text-dark text-lg">Manage Ads/Banners</h3>
+                            <h3 class="font-extrabold text-dark text-lg">Create Banner</h3>
                         </div>
-                        <form class="space-y-4">
-                            {% csrf_token%}
-
+                        <form action="{% url 'save_banner' %}" method="post" enctype="multipart/form-data" class="space-y-4">
+                            {% csrf_token %}
                             <div>
-                                <label
-                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner
-                                    Title</label>
-                                <input type="text" placeholder="Summer Sale Hero"
-                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner Title</label>
+                                <input type="text" name="title" placeholder="Summer Sale Hero" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark" required>
                             </div>
                             <div>
-                                <label
-                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner
-                                    Image</label>
-                                <input type="file"
-                                    class="w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-light file:text-dark hover:file:bg-accent cursor-pointer">
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Banner Image</label>
+                                <input type="file" name="image_url" class="w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-light file:text-dark hover:file:bg-accent cursor-pointer">
                             </div>
                             <div>
-                                <label
-                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Target
-                                    Link / URL</label>
-                                <input type="text" placeholder="/category/summer"
-                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Redirect URL</label>
+                                <input type="url" name="redirect_url" placeholder="https://example.com" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
                             </div>
-                            <button type="button"
-                                class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Publish
-                                Banner</button>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Start Date</label>
+                                    <input type="date" name="start_date" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark" required>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">End Date</label>
+                                    <input type="date" name="end_date" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark" required>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" name="is_active" id="id_banner_active" checked>
+                                <label for="id_banner_active" class="text-xs font-medium text-dark">Active</label>
+                            </div>
+                            <button type="submit" class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Save Banner</button>
                         </form>
                     </div>
 
                     <div class="bg-white rounded-2xl border border-muted/30 shadow-sm p-6">
                         <div class="flex items-center gap-2 mb-6 border-b border-muted/20 pb-4">
-                            <span class="material-icons text-accent">local_offer</span>
-                            <h3 class="font-extrabold text-dark text-lg">Offers & Coupons</h3>
+                            <span class="material-icons text-accent">settings_input_hdmi</span>
+                            <h3 class="font-extrabold text-dark text-lg">Create Variant Attribute Bridge</h3>
                         </div>
-                        <form class="space-y-4">
-                            {%csrf_token%}
+                        <form action="{% url 'save_variant_attribute_bridge' %}" method="post" class="space-y-4">
+                            {% csrf_token %}
                             <div>
-                                <label
-                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Coupon
-                                    Code</label>
-                                <input type="text" placeholder="WELCOME20"
-                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark font-bold uppercase">
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label
-                                        class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Discount
-                                        %</label>
-                                    <input type="number" placeholder="20"
-                                        class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark">
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Expiry
-                                        Date</label>
-                                    <input type="date"
-                                        class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark text-muted">
-                                </div>
-                            </div>
-                            <div>
-                                <label
-                                    class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Applicable
-                                    Category (Optional)</label>
-                                <select
-                                    class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white">
-                                    <option>All Products</option>
-                                    <option>Electronics</option>
-                                    <option>Fashion</option>
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Variant</label>
+                                <select name="variant" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white" required>
+                                    <option value="">-- Select Variant --</option>
+                                    {% for variant in products %}
+                                    <option value="{{ variant.id }}">{{ variant.sku_code }} / {{ variant.product.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
-                            <button type="button"
-                                class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Create
-                                Offer</button>
+                            <div>
+                                <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Attribute Option</label>
+                                <select name="option" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white" required>
+                                    <option value="">-- Select Option --</option>
+                                    {% for attr in attributes %}
+                                        {% for opt in attr.options.all %}
+                                            <option value="{{ opt.id }}">{{ attr.name }}: {{ opt.value }}</option>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-dark text-light py-3 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-dark transition-colors">Save Bridge</button>
                         </form>
                     </div>
 
@@ -490,64 +556,6 @@
 
         </div>
     </main>
-
-    <!-- Seller Verification Modal -->
-    <div id="seller-verification-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-lg p-6 max-w-md w-full">
-            <h3 class="text-lg font-black text-dark mb-4">Verify Seller: <span id="seller-name-modal"></span></h3>
-            <form id="seller-verification-form" class="space-y-4">
-                {% csrf_token %}
-                <input type="hidden" id="seller_id" name="seller_id">
-                <div>
-                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Status</label>
-                    <select name="status" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="pending">Pending Review</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Remarks (Optional)</label>
-                    <textarea name="remarks" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark resize-none" rows="3" placeholder="Add your remarks here..."></textarea>
-                </div>
-                <div class="flex gap-3">
-                    <button type="button" onclick="closeSellerModal()" class="flex-1 px-4 py-2.5 border border-muted/50 rounded-xl text-sm font-bold text-dark hover:bg-light transition-colors">Cancel</button>
-                    <button type="submit" class="flex-1 px-4 py-2.5 bg-dark text-light rounded-xl text-sm font-bold hover:bg-accent hover:text-dark transition-colors">Submit</button>
-                </div>
-            </form>
-            <div id="seller-modal-message" class="mt-4 hidden p-3 rounded-lg text-sm font-medium"></div>
-        </div>
-    </div>
-
-    <!-- Product Verification Modal -->
-    <div id="product-verification-modal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-lg p-6 max-w-md w-full">
-            <h3 class="text-lg font-black text-dark mb-4">Verify Product: <span id="product-name-modal"></span></h3>
-            <form id="product-verification-form" class="space-y-4">
-                {% csrf_token %}
-                <input type="hidden" id="product_id" name="product_id">
-                <div>
-                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Status</label>
-                    <select name="status" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark bg-white" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="pending">Pending Review</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-dark uppercase tracking-widest mb-2">Remarks (Optional)</label>
-                    <textarea name="remarks" class="w-full px-4 py-2.5 border border-muted/50 rounded-xl text-sm focus:outline-none focus:border-dark resize-none" rows="3" placeholder="Add your remarks here..."></textarea>
-                </div>
-                <div class="flex gap-3">
-                    <button type="button" onclick="closeProductModal()" class="flex-1 px-4 py-2.5 border border-muted/50 rounded-xl text-sm font-bold text-dark hover:bg-light transition-colors">Cancel</button>
-                    <button type="submit" class="flex-1 px-4 py-2.5 bg-dark text-light rounded-xl text-sm font-bold hover:bg-accent hover:text-dark transition-colors">Submit</button>
-                </div>
-            </form>
-            <div id="product-modal-message" class="mt-4 hidden p-3 rounded-lg text-sm font-medium"></div>
-        </div>
-    </div>
 
     <script>
         // Tab Switcher Logic
@@ -681,230 +689,7 @@
             }
         }
 
-        // ==================== ATTRIBUTE FORM HANDLERS ====================
-
-        // Handle Attribute Form Submission
-        document.getElementById('attribute-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            
-            fetch('{% url "create_attribute" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const messageDiv = document.getElementById('attribute-message');
-                messageDiv.classList.remove('hidden');
-                
-                if (data.status === 'success') {
-                    messageDiv.classList.add('bg-green-100', 'text-green-700');
-                    messageDiv.classList.remove('bg-red-100', 'text-red-700');
-                    messageDiv.innerText = '✓ ' + data.message;
-                    
-                    // Reset form
-                    this.reset();
-                    
-                    // Auto-hide message after 3 seconds
-                    setTimeout(() => {
-                        messageDiv.classList.add('hidden');
-                    }, 3000);
-                } else {
-                    messageDiv.classList.add('bg-red-100', 'text-red-700');
-                    messageDiv.classList.remove('bg-green-100', 'text-green-700');
-                    messageDiv.innerText = '✗ ' + (data.message || 'Error creating attribute');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                const messageDiv = document.getElementById('attribute-message');
-                messageDiv.classList.remove('hidden');
-                messageDiv.classList.add('bg-red-100', 'text-red-700');
-                messageDiv.innerText = '✗ Error: ' + error.message;
-            });
-        });
-
-        // Handle Attribute Option Form Submission
-        document.getElementById('attribute-option-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            
-            fetch('{% url "create_attribute_option" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const messageDiv = document.getElementById('option-message');
-                messageDiv.classList.remove('hidden');
-                
-                if (data.status === 'success') {
-                    messageDiv.classList.add('bg-green-100', 'text-green-700');
-                    messageDiv.classList.remove('bg-red-100', 'text-red-700');
-                    messageDiv.innerText = '✓ ' + data.message;
-                    
-                    // Reset form
-                    this.reset();
-                    
-                    // Auto-hide message after 3 seconds
-                    setTimeout(() => {
-                        messageDiv.classList.add('hidden');
-                    }, 3000);
-                } else {
-                    messageDiv.classList.add('bg-red-100', 'text-red-700');
-                    messageDiv.classList.remove('bg-green-100', 'text-green-700');
-                    messageDiv.innerText = '✗ ' + (data.message || 'Error adding option');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                const messageDiv = document.getElementById('option-message');
-                messageDiv.classList.remove('hidden');
-                messageDiv.classList.add('bg-red-100', 'text-red-700');
-                messageDiv.innerText = '✗ Error: ' + error.message;
-            });
-        });
-
-        // ==================== SELLER VERIFICATION MODAL ====================
-
-        function openSellerVerificationModal(sellerId, sellerName) {
-            document.getElementById('seller-name-modal').innerText = sellerName;
-            document.getElementById('seller_id').value = sellerId;
-            document.getElementById('seller-verification-modal').classList.remove('hidden');
-        }
-
-        function closeSellerModal() {
-            document.getElementById('seller-verification-modal').classList.add('hidden');
-            document.getElementById('seller-verification-form').reset();
-            document.getElementById('seller-modal-message').classList.add('hidden');
-        }
-
-        // Close modal on background click
-        document.getElementById('seller-verification-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeSellerModal();
-            }
-        });
-
-        // Handle Seller Verification Form Submission
-        document.getElementById('seller-verification-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            
-            fetch('{% url "verify_seller_ajax" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const messageDiv = document.getElementById('seller-modal-message');
-                messageDiv.classList.remove('hidden');
-                
-                if (data.status === 'success') {
-                    messageDiv.classList.add('bg-green-100', 'text-green-700');
-                    messageDiv.classList.remove('bg-red-100', 'text-red-700');
-                    messageDiv.innerText = '✓ ' + data.message;
-                    
-                    setTimeout(() => {
-                        window.location.hash = 'sellers';
-                        location.reload();
-                    }, 1500);
-                } else {
-                    messageDiv.classList.add('bg-red-100', 'text-red-700');
-                    messageDiv.classList.remove('bg-green-100', 'text-green-700');
-                    messageDiv.innerText = '✗ ' + data.message;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                const messageDiv = document.getElementById('seller-modal-message');
-                messageDiv.classList.remove('hidden');
-                messageDiv.classList.add('bg-red-100', 'text-red-700');
-                messageDiv.innerText = '✗ Error: ' + error.message;
-            });
-        });
-
-        // ==================== PRODUCT VERIFICATION MODAL ====================
-
-        function openProductVerificationModal(productId, productName) {
-            document.getElementById('product-name-modal').innerText = productName;
-            document.getElementById('product_id').value = productId;
-            document.getElementById('product-verification-modal').classList.remove('hidden');
-        }
-
-        function closeProductModal() {
-            document.getElementById('product-verification-modal').classList.add('hidden');
-            document.getElementById('product-verification-form').reset();
-            document.getElementById('product-modal-message').classList.add('hidden');
-        }
-
-        // Close modal on background click
-        document.getElementById('product-verification-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeProductModal();
-            }
-        });
-
-        // Handle Product Verification Form Submission
-        document.getElementById('product-verification-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            
-            fetch('{% url "verify_product_ajax" %}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const messageDiv = document.getElementById('product-modal-message');
-                messageDiv.classList.remove('hidden');
-                
-                if (data.status === 'success') {
-                    messageDiv.classList.add('bg-green-100', 'text-green-700');
-                    messageDiv.classList.remove('bg-red-100', 'text-red-700');
-                    messageDiv.innerText = '✓ ' + data.message;
-                    
-                    setTimeout(() => {
-                        window.location.hash = 'products';
-                        location.reload();
-                    }, 1500);
-                } else {
-                    messageDiv.classList.add('bg-red-100', 'text-red-700');
-                    messageDiv.classList.remove('bg-green-100', 'text-green-700');
-                    messageDiv.innerText = '✗ ' + data.message;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                const messageDiv = document.getElementById('product-modal-message');
-                messageDiv.classList.remove('hidden');
-                messageDiv.classList.add('bg-red-100', 'text-red-700');
-                messageDiv.innerText = '✗ Error: ' + error.message;
-            });
-        });
-
-        // ==================== PAGE LOAD TAB DETECTION ====================
-
+        // Seller/Product verification uses direct navigation to dedicated pages (no modals).\n\n        // ==================== PAGE LOAD TAB DETECTION ====================\n
         // On page load, check if there's a hash to switch to a specific tab
         window.addEventListener('load', function() {
             const hash = window.location.hash.substring(1); // Remove the # symbol

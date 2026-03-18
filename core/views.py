@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from core.decorators import admin_required, seller_required
 from customer.models import Cart, CartItem, WishlistItem
-from .models import CustomUser, EmailOTP, Category
+from .models import CustomUser, EmailOTP, Category, Banner
 from seller.models import *
 from django.db.models import Q, Count
 import random
@@ -17,6 +17,17 @@ import random
 def home_view(request):
     user = request.user
     category_items = Category.objects.all()
+    current_time = timezone.now()
+
+    banners = (
+        Banner.objects.filter(
+            is_active=True,
+            start_date__lte=current_time,
+            end_date__gte=current_time,
+        )
+        .order_by("-created_at")
+    )
+
     product_var = (
         ProductVariant.objects.select_related("product__subcategory__category")
         .prefetch_related("images")
@@ -59,6 +70,7 @@ def home_view(request):
                 "categories": category_items,
                 "product_var": product_var,
                 "top_picks": top_picks,
+                "banners": banners,
             },
         )
     return render(
@@ -68,6 +80,7 @@ def home_view(request):
             "categories": category_items,
             "product_var": product_var,
             "top_picks": top_picks,
+            "banners": banners,
         },
     )
 
