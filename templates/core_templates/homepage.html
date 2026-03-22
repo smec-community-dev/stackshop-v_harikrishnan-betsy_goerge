@@ -137,8 +137,8 @@
                                         <p class="text-sm md:text-base text-white/90 mb-6 max-w-sm font-medium line-clamp-3">
                                             {{ banner.redirect_url|default:'Shop our latest promotions now!' }}
                                         </p>
-                                        <a href="{{ banner.redirect_url|default:'#' }}" target="_blank" class="inline-flex items-center gap-2 bg-dark text-white px-6 md:px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all active:scale-95 shadow-md">
-                                            <span>Shop Now</span>
+                                        <a href="{% if banner.redirect_url %}{{ banner.redirect_url }}{% else %}{% url 'deals' %}{% endif %}" class="inline-flex items-center gap-2 bg-dark text-white px-6 md:px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all active:scale-95 shadow-md">
+                                            <span>Shop Deals</span>
                                             <span class="material-icons text-sm">arrow_forward</span>
                                         </a>
                                     </div>
@@ -161,10 +161,10 @@
                                         Discover our curated selection of contemporary essentials. Premium quality meets modern design.
                                     </p>
                                     <div class="flex items-center gap-3 animate-fade-in-up stagger-delay-3">
-                                        <button class="bg-dark text-white px-6 md:px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all active:scale-95 flex items-center gap-2 shadow-md transform hover:scale-105">
-                                            <span>Shop Now</span>
+                                        <a href="{% url 'deals' %}" class="bg-dark text-white px-6 md:px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all active:scale-95 inline-flex items-center gap-2 shadow-md transform hover:scale-105">
+                                            <span>Shop Deals</span>
                                             <span class="material-icons text-sm">arrow_forward</span>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="absolute right-0 top-0 h-full w-1/2 hidden md:block">
