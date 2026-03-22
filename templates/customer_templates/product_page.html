@@ -156,15 +156,21 @@
 
                 <div class="group bg-slate-100 rounded-2xl overflow-hidden shadow-md hover:shadow-xl border border-slate-300 hover:border-dark/30 transition-all duration-300 flex flex-col relative">
 
-                    <div class="aspect-[4/3] bg-slate-50 relative overflow-hidden border-b border-slate-200 flex items-center justify-center p-6 group-hover:bg-slate-100 transition-colors">
-                        {% if x.display_image %}
-                        <img alt="{{ x.name }}"
-                            class="w-full h-full object-fit-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
-                            src="{{ x.display_image }}" />
-                        {% else %}
-                        <img alt="Placeholder" class="w-full h-full object-contain mix-blend-multiply opacity-40 p-4"
-                            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
-                        {% endif %}
+                    <div class="aspect-[4/3] bg-slate-50 relative overflow-hidden border-b border-slate-200 flex items-center justify-center group-hover:bg-slate-100 transition-colors">
+                        <div class="relative w-full h-full">
+                            {% if x.variants.first %}
+                                {% for image in x.variants.first.images.all %}
+                                <img alt="{{ x.name }}"
+                                    class="product-image w-full h-full object-cover mix-blend-multiply p-4 transition-transform duration-500 group-hover:scale-105 absolute inset-0 {% if not forloop.first %}opacity-0{% endif %}"
+                                    src="{{ image.image_url.url }}"
+                                    data-image-index="{{ forloop.counter0 }}"
+                                    style="z-index: {% if forloop.first %}1{% else %}0{% endif %}; opacity: {% if forloop.first %}1{% else %}0{% endif %};">
+                                {% endfor %}
+                            {% else %}
+                                <img alt="Placeholder" class="w-full h-full object-contain mix-blend-multiply opacity-40 p-4"
+                                    src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
+                            {% endif %}
+                        </div>
 
                         {% if x.total_stock <= 0 %}
                         <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center z-10">
@@ -315,6 +321,49 @@
                 }
                 // Submit the form
                 document.getElementById('filter-form').submit();
+            });
+        });
+
+        // Product image carousel functionality
+        document.querySelectorAll('.group').forEach(productCard => {
+            const images = productCard.querySelectorAll('.product-image');
+            if (images.length <= 1) return;
+
+            let currentImageIndex = 0;
+            let imageChangeInterval;
+
+            function showImage(index) {
+                images.forEach((img, i) => {
+                    if (i === index) {
+                        img.style.opacity = '1';
+                        img.style.zIndex = '1';
+                    } else {
+                        img.style.opacity = '0';
+                        img.style.zIndex = '0';
+                    }
+                });
+                currentImageIndex = index;
+            }
+
+            function nextImage() {
+                const nextIndex = (currentImageIndex + 1) % images.length;
+                showImage(nextIndex);
+            }
+
+            // Start auto-cycling on hover
+            productCard.addEventListener('mouseenter', () => {
+                imageChangeInterval = setInterval(nextImage, 600);
+            });
+
+            // Stop auto-cycling on mouse leave
+            productCard.addEventListener('mouseleave', () => {
+                clearInterval(imageChangeInterval);
+                showImage(0); // Reset to first image
+            });
+
+            // Click to manually cycle through images
+            productCard.querySelector('.relative.w-full').addEventListener('click', () => {
+                nextImage();
             });
         });
     </script>

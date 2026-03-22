@@ -108,9 +108,9 @@
                     </td>
                     <td class="p-4 text-right">
                         <div class="flex justify-end gap-2">
-                            <button onclick="editDeal({{ deal.id }})" class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-xs font-bold hover:bg-blue-200 transition">
+                            <a href="{% url 'edit_deal' deal.id %}" class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-xs font-bold hover:bg-blue-200 transition inline-flex items-center gap-1">
                                 <span class="material-icons text-sm">edit</span>
-                            </button>
+                            </a>
                             <button onclick="deleteDeal({{ deal.id }}, '{{ deal.title }}')" class="bg-red-100 text-red-700 px-3 py-1 rounded text-xs font-bold hover:bg-red-200 transition">
                                 <span class="material-icons text-sm">delete</span>
                             </button>
@@ -147,11 +147,6 @@
 
 <script>
 let deleteDealId = null;
-
-function editDeal(dealId) {
-    // For now, redirect to add_deal with edit mode (we'll implement this later)
-    window.location.href = `{% url 'add_deal' %}?edit=${dealId}`;
-}
 
 function deleteDeal(dealId, dealTitle) {
     deleteDealId = dealId;

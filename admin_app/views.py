@@ -18,7 +18,7 @@ from .models import Deal
 @admin_required
 def admin_dashboard_view(request):
     product_variants = ProductVariant.objects.all()
-    seller = SellerProfile.objects.filter(user__role="SELLER")
+    seller = SellerProfile.objects.all()
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
 
@@ -36,19 +36,52 @@ def admin_dashboard_view(request):
 
 @admin_required
 def add_deal(request):
+    edit_id = request.GET.get('edit')
+    deal = None
+    if edit_id:
+        deal = get_object_or_404(Deal, id=edit_id)
+    
     if request.method == 'POST':
-        form = DealForm(request.POST, request.FILES)
+        form = DealForm(request.POST, request.FILES, instance=deal)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Deal created successfully!')
-            return redirect('admin_dashboard')
+            if deal:
+                messages.success(request, 'Deal updated successfully!')
+            else:
+                messages.success(request, 'Deal created successfully!')
+            return redirect('manage_deals')
         else:
-            messages.error(request, 'Error creating deal. Please fix the errors below.')
+            messages.error(request, 'Error saving deal. Please fix the errors below.')
     else:
-        form = DealForm()
+        form = DealForm(instance=deal)
 
     context = {
         'deal_form': form,
+        'deal': deal,
+        'is_edit': bool(deal),
+    }
+    return render(request, 'admin_templates/add_deals.html', context)
+
+
+@admin_required
+def edit_deal(request, id):
+    deal = get_object_or_404(Deal, id=id)
+    
+    if request.method == 'POST':
+        form = DealForm(request.POST, request.FILES, instance=deal)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Deal "{deal.title}" updated successfully!')
+            return redirect('manage_deals')
+        else:
+            messages.error(request, 'Error updating deal. Please fix the errors below.')
+    else:
+        form = DealForm(instance=deal)
+
+    context = {
+        'deal_form': form,
+        'deal': deal,
+        'is_edit': True,
     }
     return render(request, 'admin_templates/add_deals.html', context)
 
@@ -85,7 +118,6 @@ def seller_verification(request, id):
         seller.verification_status = status
         seller.admin_remarks = remarks
 
-        # Update CustomUser field explicitly
         if status == "approved":
             seller.user.is_verified_seller = True
         else:

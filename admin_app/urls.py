@@ -10,6 +10,7 @@ urlpatterns = [
     path('dashboard/save-subcategory/', views.save_subcategory, name='save_subcategory'),
     path('dashboard/save-banner/', views.save_banner, name='save_banner'),
     path('add-deal/', views.add_deal, name='add_deal'),
+    path('edit-deal/<int:id>/', views.edit_deal, name='edit_deal'),
     path('manage-deals/', views.manage_deals, name='manage_deals'),
     path('delete-deal/', views.delete_deal, name='delete_deal'),
     path('dashboard/save-deal/', views.add_deal, name='save_deal'),

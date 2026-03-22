@@ -68,7 +68,7 @@
                     {% endif %}
                 </div>
                 
-                <p class="text-muted font-medium text-sm mb-3">Owner: {{ request.user.first_name }} {{ request.user.last_name }}</p>
+                <p class="text-muted font-medium text-sm mb-3">Owner: {{ request.user.first_name|default:request.user.username }} {{ request.user.last_name }}</p>
                 
                 <div class="flex items-center justify-center md:justify-start gap-6">
                     <div class="flex items-center gap-1.5 bg-light px-3 py-1 rounded-lg">
