@@ -94,10 +94,12 @@
         <div class="bg-white rounded-3xl shadow-sm border border-muted/30 overflow-hidden mb-20">
             
             <div class="hidden lg:grid grid-cols-12 gap-4 p-5 bg-light/50 border-b border-muted/20 text-[10px] font-black uppercase tracking-widest text-muted">
-                <div class="col-span-5 pl-2">Product Info</div>
+                <div class="col-span-4 pl-2">Product Info</div>
                 <div class="col-span-2">Base Price</div>
+                <div class="col-span-2">Approval</div>
+
                 <div class="col-span-2">Status</div>
-                <div class="col-span-3 text-right pr-2">Quick Actions</div>
+                <div class="col-span-2 text-right pr-2">Quick Actions</div>
             </div>
 
             <div class="divide-y divide-muted/10">
@@ -113,7 +115,7 @@
                                  data-product-stock="{{ product.variants.first.stock_quantity|default:'0' }}"
                                  onclick="toggleVariants('{{ product.id }}')">
                             
-                            <div class="col-span-5 flex items-center gap-4 w-full">
+                            <div class="col-span-4 flex items-center gap-4 w-full">
                                 <div class="w-14 h-14 rounded-xl bg-light/50 border border-muted/30 overflow-hidden flex-shrink-0 flex items-center justify-center p-1">
                                     {% if product.variants.first.images.first %}
                                         <img src="{{ product.variants.first.images.first.image_url.url }}" alt="{{ product.name }}" class="w-full h-full object-contain mix-blend-multiply">
@@ -127,9 +129,11 @@
                                         <span class="text-[9px] font-bold text-muted">ID: {{ product.id }}</span>
                                     </div>
                                     <h3 class="font-extrabold text-dark text-sm truncate" title="{{ product.name }}">{{ product.name }}</h3>
+                                    
                                     <p class="text-xs font-bold text-accent mt-0.5">{{ product.variants.count }} Variant(s)</p>
                                 </div>
                             </div>
+                            
 
                             <div class="flex items-center justify-between lg:hidden w-full pl-18">
                                 <span class="font-black text-dark">₹{{ product.variants.first.selling_price|default:"--" }}</span>
@@ -139,14 +143,34 @@
                             <div class="hidden lg:block col-span-2 font-black text-dark text-base">
                                 ₹{{ product.variants.first.selling_price|default:"--" }}
                             </div>
+                            <div class="hidden lg:block col-span-2">
+    {% if product.approval_status == "approved" %}
+        <span class="bg-green-50 text-green-600 border border-green-200 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
+            Approved
+        </span>
+    {% elif product.approval_status == "pending" %}
+        <span class="bg-yellow-50 text-yellow-600 border border-yellow-200 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
+            Pending
+        </span>
+    {% elif product.approval_status == "rejected" %}
+        <span class="bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
+            Rejected
+        </span>
+    {% endif %}
+</div>
 
                             <div class="hidden lg:block col-span-2">
-                                <span class="bg-green-50 text-green-600 border border-green-200 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
-                                    Active
-                                </span>
-                            </div>
-
-                            <div class="col-span-3 flex justify-end items-center gap-2 w-full mt-2 lg:mt-0">
+    {% if product.variants.first.stock_quantity > 0 %}
+        <span class="bg-green-50 text-green-600 border border-green-200 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
+            In Stock
+        </span>
+    {% else %}
+        <span class="bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest shadow-sm">
+            Out of Stock
+        </span>
+    {% endif %}
+</div>
+                            <div class="col-span-2 flex justify-end items-center gap-2 w-full mt-2 lg:mt-0">
 <a href="{% url 'update_product' product.slug %}" onclick="event.stopPropagation();" class="bg-accent/20 text-dark border border-accent/50 hover:bg-accent px-3 py-2 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors active:scale-95 shadow-sm">
                                     Edit
                                 </a>

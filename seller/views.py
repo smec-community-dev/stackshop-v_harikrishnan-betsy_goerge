@@ -5,7 +5,7 @@ from core.decorators import seller_required, verified_seller_required
 from .models import *
 from core.models import *
 from core.models import Category
-from django.db.models import Count, Avg, Max, Sum, Q
+from django.db.models import Count, Avg, Max, Sum, Q,F
 from customer.models import Order, OrderItem, Review
 from django.contrib import messages
 import random
@@ -71,10 +71,9 @@ def dashboard_view(request):
         .count()
     )
     revenue_from_completed = (
-        OrderItem.objects.filter(seller=seller, status="delivered").aggregate(
-            total=Sum("price_at_purchase")
-        )["total"]
-        or 0
+    OrderItem.objects.filter(seller=seller,status="delivered")
+    .aggregate(total=Sum(F("price_at_purchase") * F("quantity")))["total"]
+    or 0
     )
 
     context = {
@@ -342,54 +341,7 @@ def seller_broche_view(request):
     return render(request, "seller_templates/seller_broche.html")
 
 
-@verified_seller_required
-def add_product(request):
-    seller = request.user.seller_profile
-    categories = Category.objects.all()
-    subcategories = SubCategory.objects.all()
 
-    if request.method == "POST":
-
-        product = Product.objects.create(
-            seller=seller,
-            subcategory_id=request.POST.get("subcategory"),
-            name=request.POST.get("name"),
-            description=request.POST.get("description"),
-            brand=request.POST.get("brand"),
-            model_number=request.POST.get("model_number"),
-        )
-
-        variant = ProductVariant.objects.create(
-            product=product,
-            mrp=request.POST.get("mrp") or 0,
-            selling_price=request.POST.get("selling_price") or 0,
-            cost_price=request.POST.get("cost_price") or 0,
-            stock_quantity=request.POST.get("stock_quantity") or 0,
-            weight=request.POST.get("weight") or 0,
-            length=request.POST.get("length") or 0,
-            width=request.POST.get("width") or 0,
-            height=request.POST.get("height") or 0,
-            tax_percentage=request.POST.get("tax_percentage") or 0,
-        )
-
-        primary_image = request.FILES.get("primary_image")
-        if primary_image:
-            ProductImage.objects.create(
-                variant=variant, image_url=primary_image, is_primary=True
-            )
-
-        additional_images = request.FILES.getlist("additional_images")
-        for image in additional_images:
-            ProductImage.objects.create(
-                variant=variant, image_url=image, is_primary=False
-            )
-
-        return redirect("dashboard")
-    context = {
-        "categories": categories,
-        "subcategories": subcategories,
-    }
-    return render(request, "seller_templates/add_product.html", context)
 
 
 @verified_seller_required
@@ -612,20 +564,68 @@ def update_order_status(request):
         if status in ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"]:
             order.order_status = status
             order.save()
+    OrderItem.objects.filter(order=order).update(status=status.lower())
+
 
     return redirect("seller_customers_orders")
 
+@verified_seller_required
 def seller_analytics(request):
-   seller = request.user.seller_profile
+    seller = request.user.seller_profile
 
-   logs = InventoryLog.objects.filter(
+    logs = InventoryLog.objects.filter(
         variant__product__seller=seller
     ).select_related(
         "variant", "variant__product", "performed_by"
     )[:15]
+    total_revenue = (
+        OrderItem.objects.filter(seller=seller, status="delivered")
+        .aggregate(total=Sum(F("price_at_purchase") * F("quantity")))["total"]
+        or 0
+    )
+    order_items = OrderItem.objects.filter(seller=seller, status="delivered")
 
-   return render(request, 'seller_templates/selleranalytics.html', {
-        "logs": logs
+    total_revenue = (
+    order_items.aggregate(total=Sum(F("price_at_purchase") * F("quantity")))["total"] or 0
+)
+
+    total_orders = order_items.values("order_id").distinct().count()
+
+    avg_order_value = total_revenue / total_orders if total_orders > 0 else 0
+
+    category_data = (
+    OrderItem.objects.filter(seller=seller, status="delivered")
+    .values("variant__product__subcategory__category__name")
+    .annotate(
+        total_revenue=Sum(F("price_at_purchase") * F("quantity"))
+    )
+    .order_by("-total_revenue")
+)
+    total_category_revenue = sum(
+    item["total_revenue"] for item in category_data
+)
+    category_distribution = []
+
+    for item in category_data:
+      percent = (
+        (item["total_revenue"] / total_category_revenue) * 100
+        if total_category_revenue > 0 else 0
+    )
+
+    category_distribution.append({
+        "name": item["variant__product__subcategory__category__name"] or "Other",
+        "percent": round(percent, 1),
+        "revenue": item["total_revenue"]
+    })
+    
+
+    return render(request, 'seller_templates/selleranalytics.html', {
+        "logs": logs,
+        "total_revenue": total_revenue,   
+        "total_orders": total_orders,
+    "avg_order_value": avg_order_value,
+      "category_distribution": category_distribution,
+    "total_category_revenue": total_category_revenue,
     })
 @verified_seller_required
 def delete_product_image(request, image_id):
