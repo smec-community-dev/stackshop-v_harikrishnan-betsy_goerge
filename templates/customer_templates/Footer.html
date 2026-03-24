@@ -40,16 +40,16 @@
                         Quick Links
                     </h4>
                     <ul class="space-y-3 text-muted text-sm">
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'about_us' %}">
                             <span class="material-icons text-xs">chevron_right</span> About Us
                         </a></li>
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'our_story' %}">
                             <span class="material-icons text-xs">chevron_right</span> Our Story
                         </a></li>
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'careers' %}">
                             <span class="material-icons text-xs">chevron_right</span> Careers
                         </a></li>
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'blog' %}">
                             <span class="material-icons text-xs">chevron_right</span> Blog
                         </a></li>
                     </ul>
@@ -62,16 +62,16 @@
                         Support
                     </h4>
                     <ul class="space-y-3 text-muted text-sm">
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'contact_us' %}">
                             <span class="material-icons text-xs">chevron_right</span> Contact Us
                         </a></li>
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'shipping_info' %}">
                             <span class="material-icons text-xs">chevron_right</span> Shipping Info
                         </a></li>
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'returns_policy' %}">
                             <span class="material-icons text-xs">chevron_right</span> Returns Policy
                         </a></li>
-                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="#">
+                        <li><a class="hover:text-light hover:translate-x-1 transition-all duration-300 inline-flex items-center gap-2 font-semibold" href="{% url 'faq' %}">
                             <span class="material-icons text-xs">chevron_right</span> FAQ
                         </a></li>
                     </ul>
@@ -104,9 +104,9 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-6 text-muted text-xs uppercase font-bold tracking-widest">
                 <p class="hover:text-light transition-colors">© 2026 StackShop. All rights reserved.</p>
                 <div class="flex gap-8 flex-wrap justify-center md:justify-end">
-                    <a class="hover:text-light transition-colors transform hover:translate-y-[-2px]" href="#">Privacy Policy</a>
-                    <a class="hover:text-light transition-colors transform hover:translate-y-[-2px]" href="#">Terms & Conditions</a>
-                    <a class="hover:text-light transition-colors transform hover:translate-y-[-2px]" href="#">Sitemap</a>
+                    <a class="hover:text-light transition-colors transform hover:translate-y-[-2px]" href="{% url 'privacy_policy' %}">Privacy Policy</a>
+                    <a class="hover:text-light transition-colors transform hover:translate-y-[-2px]" href="{% url 'terms_conditions' %}">Terms & Conditions</a>
+                    <a class="hover:text-light transition-colors transform hover:translate-y-[-2px]" href="{% url 'sitemap' %}">Sitemap</a>
                 </div>
             </div>
 

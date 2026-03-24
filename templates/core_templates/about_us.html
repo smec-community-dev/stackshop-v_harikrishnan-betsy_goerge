@@ -1,0 +1,49 @@
+{% extends 'customer_templates/base.html' %}
+
+{% block title %}About Us - StackShop{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-light py-12">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-dark mb-6">About StackShop</h1>
+            <div class="prose max-w-none">
+                <p class="text-muted mb-4">
+                    Welcome to StackShop, your premier destination for quality products and exceptional shopping experiences.
+                </p>
+                <p class="text-muted mb-4">
+                    Founded with a vision to revolutionize online shopping, StackShop brings together curated collections
+                    of products from trusted sellers, ensuring quality and authenticity in every purchase.
+                </p>
+                <p class="text-muted mb-4">
+                    Our mission is to elevate your lifestyle through carefully selected items that combine style,
+                    functionality, and value. We believe in fostering a community of satisfied customers and successful sellers.
+                </p>
+                <div class="grid md:grid-cols-3 gap-6 mt-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="material-icons text-2xl text-dark">shopping_cart</span>
+                        </div>
+                        <h3 class="font-bold text-dark mb-2">Quality Products</h3>
+                        <p class="text-sm text-muted">Curated selection of premium items</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="material-icons text-2xl text-dark">local_shipping</span>
+                        </div>
+                        <h3 class="font-bold text-dark mb-2">Fast Delivery</h3>
+                        <p class="text-sm text-muted">Reliable shipping worldwide</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="material-icons text-2xl text-dark">support</span>
+                        </div>
+                        <h3 class="font-bold text-dark mb-2">24/7 Support</h3>
+                        <p class="text-sm text-muted">Always here to help</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

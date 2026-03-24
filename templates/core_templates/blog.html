@@ -1,0 +1,67 @@
+{% extends 'customer_templates/base.html' %}
+
+{% block title %}Blog - StackShop{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-light py-12">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-dark mb-4">StackShop Blog</h1>
+            <p class="text-muted text-lg">Insights, tips, and stories from the world of e-commerce</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Blog Post 1 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="h-48 bg-accent/20 flex items-center justify-center">
+                    <span class="material-icons text-6xl text-accent">article</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-dark mb-2">The Future of Online Shopping</h3>
+                    <p class="text-muted text-sm mb-4">Exploring trends that are shaping the e-commerce landscape</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-muted">March 15, 2024</span>
+                        <button class="text-accent font-semibold hover:underline">Read More</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post 2 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="h-48 bg-accent/20 flex items-center justify-center">
+                    <span class="material-icons text-6xl text-accent">shopping_bag</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-dark mb-2">Sustainable Shopping Guide</h3>
+                    <p class="text-muted text-sm mb-4">How to make eco-friendly choices in your online purchases</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-muted">March 10, 2024</span>
+                        <button class="text-accent font-semibold hover:underline">Read More</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post 3 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="h-48 bg-accent/20 flex items-center justify-center">
+                    <span class="material-icons text-6xl text-accent">store</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-dark mb-2">Seller Success Stories</h3>
+                    <p class="text-muted text-sm mb-4">Inspiring stories from successful sellers on our platform</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-muted">March 5, 2024</span>
+                        <button class="text-accent font-semibold hover:underline">Read More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <button class="bg-accent text-dark px-8 py-3 rounded-lg font-semibold hover:bg-opacity-80 transition-colors">
+                View All Posts
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

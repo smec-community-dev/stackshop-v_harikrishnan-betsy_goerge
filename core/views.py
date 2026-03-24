@@ -538,4 +538,49 @@ def deals_view(request):
     })
 
 
+# Static pages views
+def about_us_view(request):
+    return render(request, "core_templates/about_us.html")
+
+
+def our_story_view(request):
+    return render(request, "core_templates/our_story.html")
+
+
+def careers_view(request):
+    return render(request, "core_templates/careers.html")
+
+
+def blog_view(request):
+    return render(request, "core_templates/blog.html")
+
+
+def contact_us_view(request):
+    return render(request, "core_templates/contact_us.html")
+
+
+def shipping_info_view(request):
+    return render(request, "core_templates/shipping_info.html")
+
+
+def returns_policy_view(request):
+    return render(request, "core_templates/returns_policy.html")
+
+
+def faq_view(request):
+    return render(request, "core_templates/faq.html")
+
+
+def privacy_policy_view(request):
+    return render(request, "core_templates/privacy_policy.html")
+
+
+def terms_conditions_view(request):
+    return render(request, "core_templates/terms_conditions.html")
+
+
+def sitemap_view(request):
+    return render(request, "core_templates/sitemap.html")
+
+
 # Create your views here.

@@ -1,0 +1,87 @@
+{% extends 'customer_templates/base.html' %}
+
+{% block title %}Returns Policy - StackShop{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-light py-12">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-dark mb-6">Returns & Exchanges</h1>
+            <div class="prose max-w-none">
+                <p class="text-muted mb-6">
+                    We want you to be completely satisfied with your purchase. If you're not happy with your order,
+                    our hassle-free returns policy makes it easy to return or exchange items.
+                </p>
+
+                <h2 class="text-2xl font-bold text-dark mb-4">Return Window</h2>
+                <div class="bg-accent/10 p-6 rounded-lg mb-6">
+                    <p class="text-dark font-semibold mb-2">30-Day Return Policy</p>
+                    <p class="text-muted">You have 30 days from the date of delivery to initiate a return or exchange.</p>
+                </div>
+
+                <h2 class="text-2xl font-bold text-dark mb-4">Eligible Items</h2>
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <h3 class="font-bold text-dark mb-2">✓ Eligible for Return</h3>
+                        <ul class="text-muted space-y-1 text-sm">
+                            <li>• Unworn clothing and accessories</li>
+                            <li>• Items in original packaging</li>
+                            <li>• Products with all tags attached</li>
+                            <li>• Items not listed as final sale</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-dark mb-2">✗ Not Eligible for Return</h3>
+                        <ul class="text-muted space-y-1 text-sm">
+                            <li>• Final sale items</li>
+                            <li>• Personalized or custom items</li>
+                            <li>• Items damaged by misuse</li>
+                            <li>• Perishable goods</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-bold text-dark mb-4">How to Return</h2>
+                <div class="space-y-4 mb-8">
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-accent text-dark rounded-full flex items-center justify-center font-bold">1</div>
+                        <div>
+                            <h3 class="font-bold text-dark">Contact Us</h3>
+                            <p class="text-muted text-sm">Email support@stackshop.com or use our contact form</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-accent text-dark rounded-full flex items-center justify-center font-bold">2</div>
+                        <div>
+                            <h3 class="font-bold text-dark">Get Return Label</h3>
+                            <p class="text-muted text-sm">We'll provide a prepaid return shipping label</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-accent text-dark rounded-full flex items-center justify-center font-bold">3</div>
+                        <div>
+                            <h3 class="font-bold text-dark">Pack & Ship</h3>
+                            <p class="text-muted text-sm">Pack the item securely and ship it back to us</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 bg-accent text-dark rounded-full flex items-center justify-center font-bold">4</div>
+                        <div>
+                            <h3 class="font-bold text-dark">Refund Processed</h3>
+                            <p class="text-muted text-sm">Refunds are processed within 5-7 business days</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-accent/10 p-6 rounded-lg">
+                    <h3 class="font-bold text-dark mb-2">Need Help with a Return?</h3>
+                    <p class="text-muted mb-4">Our customer service team is here to assist you with any questions about returns or exchanges.</p>
+                    <button class="bg-accent text-dark px-6 py-2 rounded-lg font-semibold hover:bg-opacity-80 transition-colors">
+                        Start Return
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

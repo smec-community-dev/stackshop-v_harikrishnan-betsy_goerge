@@ -1,0 +1,102 @@
+{% extends 'customer_templates/base.html' %}
+
+{% block title %}Sitemap - StackShop{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-light py-12">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-dark mb-6">Sitemap</h1>
+            <p class="text-muted mb-8">
+                Navigate through our website easily with this comprehensive sitemap.
+                Find all the pages and sections available on StackShop.
+            </p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Main Pages -->
+                <div>
+                    <h2 class="text-xl font-bold text-dark mb-4 border-b border-accent pb-2">Main Pages</h2>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}" class="text-accent hover:underline">Home</a></li>
+                        <li><a href="{% url 'category' %}" class="text-accent hover:underline">Categories</a></li>
+                        <li><a href="{% url 'deals' %}" class="text-accent hover:underline">Deals</a></li>
+                        <li><a href="{% url 'search' %}" class="text-accent hover:underline">Search</a></li>
+                    </ul>
+                </div>
+
+                <!-- Account Pages -->
+                <div>
+                    <h2 class="text-xl font-bold text-dark mb-4 border-b border-accent pb-2">Account</h2>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'login' %}" class="text-accent hover:underline">Login</a></li>
+                        <li><a href="{% url 'register' %}" class="text-accent hover:underline">Register</a></li>
+                        <li><a href="{% url 'forgot_password' %}" class="text-accent hover:underline">Forgot Password</a></li>
+                        <li><span class="text-muted">My Account</span></li>
+                        <li><span class="text-muted">Order History</span></li>
+                        <li><span class="text-muted">Wishlist</span></li>
+                    </ul>
+                </div>
+
+                <!-- Information Pages -->
+                <div>
+                    <h2 class="text-xl font-bold text-dark mb-4 border-b border-accent pb-2">Information</h2>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'about_us' %}" class="text-accent hover:underline">About Us</a></li>
+                        <li><a href="{% url 'our_story' %}" class="text-accent hover:underline">Our Story</a></li>
+                        <li><a href="{% url 'contact_us' %}" class="text-accent hover:underline">Contact Us</a></li>
+                        <li><a href="{% url 'blog' %}" class="text-accent hover:underline">Blog</a></li>
+                        <li><a href="{% url 'careers' %}" class="text-accent hover:underline">Careers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Pages -->
+                <div>
+                    <h2 class="text-xl font-bold text-dark mb-4 border-b border-accent pb-2">Support</h2>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'faq' %}" class="text-accent hover:underline">FAQ</a></li>
+                        <li><a href="{% url 'shipping_info' %}" class="text-accent hover:underline">Shipping Info</a></li>
+                        <li><a href="{% url 'returns_policy' %}" class="text-accent hover:underline">Returns Policy</a></li>
+                        <li><span class="text-muted">Size Guide</span></li>
+                        <li><span class="text-muted">Track Order</span></li>
+                    </ul>
+                </div>
+
+                <!-- Legal Pages -->
+                <div>
+                    <h2 class="text-xl font-bold text-dark mb-4 border-b border-accent pb-2">Legal</h2>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'privacy_policy' %}" class="text-accent hover:underline">Privacy Policy</a></li>
+                        <li><a href="{% url 'terms_conditions' %}" class="text-accent hover:underline">Terms & Conditions</a></li>
+                        <li><span class="text-muted">Cookie Policy</span></li>
+                        <li><span class="text-muted">Accessibility</span></li>
+                    </ul>
+                </div>
+
+                <!-- Seller Pages -->
+                <div>
+                    <h2 class="text-xl font-bold text-dark mb-4 border-b border-accent pb-2">Seller</h2>
+                    <ul class="space-y-2">
+                        <li><span class="text-muted">Become a Seller</span></li>
+                        <li><span class="text-muted">Seller Dashboard</span></li>
+                        <li><span class="text-muted">Seller Support</span></li>
+                        <li><span class="text-muted">Seller Resources</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 p-6 bg-accent/10 rounded-lg">
+                <h3 class="font-bold text-dark mb-2">Can't find what you're looking for?</h3>
+                <p class="text-muted mb-4">Use our search function or contact our support team for assistance.</p>
+                <div class="flex gap-4">
+                    <button class="bg-accent text-dark px-4 py-2 rounded-lg font-semibold hover:bg-opacity-80 transition-colors">
+                        Search Site
+                    </button>
+                    <button class="border border-accent text-accent px-4 py-2 rounded-lg font-semibold hover:bg-accent hover:text-dark transition-colors">
+                        Contact Support
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
