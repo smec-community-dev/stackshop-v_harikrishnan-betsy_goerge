@@ -43,6 +43,12 @@
         .star-rating label:hover ~ label,
         .star-rating input:checked ~ label { color: #F59E0B; }
         .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
+
+        /* Related product compact cards */
+        .related-product-card { max-width: 230px; }
+        .related-product-card .aspect-square { min-height: 170px; }
+        .related-product-card h3 { font-size: 0.78rem; }
+        .related-product-card .text-lg { font-size: 1rem; }
     </style>
 </head>
 
@@ -326,6 +332,81 @@
                 {% endfor %}
             </div>
         </section>
+
+        {% if related_products %}
+        <section class="mb-20">
+            <div class="bg-white rounded-3xl p-8 lg:p-12 shadow-md border border-gray-100">
+                <div class="flex items-end justify-between mb-8">
+                    <div>
+                        <h2 class="text-3xl font-black text-dark mb-2">Related Products</h2>
+                        <p class="text-muted text-sm font-medium">More products from {{ product.subcategory.category.name }}</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a class="text-dark text-sm font-bold flex items-center gap-1 hover:text-accent transition-colors transform hover:translate-x-1" href="{% url 'catogory_list' %}#cat-{{ product.subcategory.category.slug }}">
+                            View All <span class="material-icons text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {% for related_product in related_products %}
+                    <div class="related-product-card bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 transition-all duration-300 flex flex-col group hover:shadow-lg hover:-translate-y-1 max-w-[230px] mx-auto">
+                        <div class="aspect-square bg-light relative overflow-hidden flex items-center justify-center group-hover:bg-light/80 transition-colors">
+                            {% if related_product.display_image %}
+                            <img alt="{{ related_product.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 mix-blend-multiply" src="{{ related_product.display_image }}" loading="lazy" />
+                            {% else %}
+                            <img alt="Placeholder" class="w-full h-full object-contain opacity-40 p-4 mix-blend-multiply" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=500" />
+                            {% endif %}
+                        </div>
+
+                        <div class="p-3 flex flex-col flex-grow text-sm">
+                            <span class="text-[9px] font-extrabold uppercase tracking-widest text-muted mb-1 truncate">
+                                {{ related_product.subcategory.name }}
+                            </span>
+
+                            <h3 class="font-bold text-dark text-xs leading-snug line-clamp-2 mb-2">
+                                <a href="{% url 'productsingle' related_product.slug %}" class="hover:text-accent transition-colors">
+                                    {{ related_product.name }}
+                                </a>
+                            </h3>
+
+                            <div class="mt-auto flex flex-col justify-end mb-3">
+                                <span class="text-base font-black text-dark">₹{{ related_product.min_variant_price|default:0 }}</span>
+                                {% if related_product.review_count %}
+                                <span class="text-[10px] text-muted font-medium mt-0.5">{{ related_product.review_count }} reviews</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2">
+                                <a href="{% url 'productsingle' related_product.slug %}" class="flex-1 inline-flex items-center justify-center text-[10px] font-bold uppercase tracking-widest bg-dark text-white px-2 py-2 rounded hover:bg-accent hover:text-dark transition-all active:scale-95 shadow-sm">
+                                    View Details
+                                </a>
+                                {% if request.user.is_authenticated %}
+                                    {% with first_variant=related_product.variants.first %}
+                                        {% if first_variant %}
+                                        <form action="{% url 'addwishlist' first_variant.id %}" method="post" class="relative z-20">
+                                            {% csrf_token %}
+                                            <button type="submit" class="w-9 h-9 rounded-full bg-light flex items-center justify-center transition-all duration-300 hover:scale-110 cursor-pointer group {% if first_variant.id in wishlist_variant_ids %}text-red-500 shadow-md{% else %}text-muted hover:text-red-500{% endif %}" title="Wishlist">
+                                                <span class="material-icons text-sm">{% if first_variant.id in wishlist_variant_ids %}favorite{% else %}favorite_border{% endif %}</span>
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full flex flex-col items-center justify-center py-20 bg-light/50 rounded-xl border-2 border-dashed border-muted/30">
+                        <span class="material-icons text-6xl mb-4 text-muted/30">inventory_2</span>
+                        <h3 class="text-lg font-bold text-dark">No Related Products</h3>
+                        <p class="text-sm text-muted">Check out other categories for more products</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
 
     </main>
 

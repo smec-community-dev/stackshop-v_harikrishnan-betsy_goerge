@@ -702,6 +702,13 @@ def product_single_view(request, product_slug=None, product_id=None):
             )
         )
 
+    # Get related products from the same subcategory
+    related_products = Product.objects.filter(
+        subcategory=product.subcategory,
+        approval_status="approved",
+        is_active=True
+    ).exclude(id=product.id).select_related('subcategory__category').prefetch_related('variants__images')[:8]
+
     return render(
         request,
         "customer_templates/productsinglepage.html",
@@ -718,6 +725,7 @@ def product_single_view(request, product_slug=None, product_id=None):
             "total_reviews": total_reviews,
             "has_purchased": has_purchased,
             "user_review": user_review,
+            "related_products": related_products,
         },
     )
 

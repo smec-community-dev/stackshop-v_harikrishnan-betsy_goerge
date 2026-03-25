@@ -167,7 +167,6 @@ def search_and_filter_view(request):
             subcategory__category__slug__in=selected_categories
         ).distinct()
 
-    # Price filtering using annotations since min/max_variant_price are properties (product-level)
     product_var = product_var.annotate(
         min_product_price=models.Min("variants__selling_price"),
         max_product_price=models.Max("variants__selling_price"),
