@@ -78,7 +78,7 @@
                     {% if user.is_authenticated %}
                         <div class="relative group py-2">
                             <button class="flex items-center gap-1 text-muted hover:text-light transition-colors focus:outline-none active:scale-95">
-                                <span class="material-icons text-xl md:text-2xl">person_outline</span>
+                                <span class="material-icons text-xl md:text-2xl"><a href="{% url 'profile' %}" class="hover:text-accent">person_outline</a></span>
                                 <span class="text-sm hidden sm:inline font-semibold"><a href="{% url 'profile' %}" class="hover:text-accent">{{ user.username|default:"guest" }}</a></span>
                             </button>
                             <div class="absolute top-full right-0 mt-1 w-64 bg-light text-dark rounded-xl shadow-2xl border border-muted/30 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
@@ -113,6 +113,10 @@
                             <a href="{% url 'login' %}" class="material-icons text-muted hover:text-light">person</a>
                         </div>
                     {% endif %}
+
+                    <button id="mobile-search-btn" class="md:hidden text-muted hover:text-light focus:outline-none transition-transform active:scale-95 mr-2">
+                        <span class="material-icons text-xl">search</span>
+                    </button>
 
                     <button id="mobile-menu-btn" class="lg:hidden text-muted hover:text-light ml-2 focus:outline-none transition-transform active:scale-95">
                         <span class="material-icons text-2xl md:text-3xl">menu</span>
@@ -167,25 +171,56 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('mobile-menu-btn');
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const searchBtn = document.getElementById('mobile-search-btn');
         const menu = document.getElementById('mobile-menu');
-        const icon = btn.querySelector('.material-icons');
+        const menuIcon = menuBtn.querySelector('.material-icons');
 
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
+        // Function to toggle menu
+        const toggleMenu = (focusSearch = false) => {
             menu.classList.toggle('hidden');
             if (menu.classList.contains('hidden')) {
-                icon.textContent = 'menu';
+                menuIcon.textContent = 'menu';
             } else {
-                icon.textContent = 'close';
+                menuIcon.textContent = 'close';
+                // Focus on search input if search button was clicked
+                if (focusSearch) {
+                    setTimeout(() => {
+                        const searchInput = menu.querySelector('input[name="q"]');
+                        if (searchInput) {
+                            searchInput.focus();
+                        }
+                    }, 100);
+                }
+            }
+        };
+
+        // Menu button click
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu(false);
+        });
+
+        // Search button click
+        searchBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // Open menu if it's closed, then focus search
+            if (menu.classList.contains('hidden')) {
+                toggleMenu(true);
+            } else {
+                // Menu is already open, just focus search
+                const searchInput = menu.querySelector('input[name="q"]');
+                if (searchInput) {
+                    searchInput.focus();
+                }
             }
         });
 
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
-            if (!menu.contains(e.target) && !btn.contains(e.target) && !menu.classList.contains('hidden')) {
+            if (!menu.contains(e.target) && !menuBtn.contains(e.target) && !searchBtn.contains(e.target) && !menu.classList.contains('hidden')) {
                 menu.classList.add('hidden');
-                icon.textContent = 'menu';
+                menuIcon.textContent = 'menu';
             }
         });
     });

@@ -49,6 +49,41 @@
         .related-product-card .aspect-square { min-height: 170px; }
         .related-product-card h3 { font-size: 0.78rem; }
         .related-product-card .text-lg { font-size: 1rem; }
+
+        /* Mobile image zoom styles */
+        #main-product-image.zoomed {
+            cursor: zoom-out;
+            transition: transform 0.3s ease;
+        }
+
+        #main-product-image:not(.zoomed) {
+            cursor: zoom-in;
+        }
+
+        /* Ensure image container maintains proper zoom behavior */
+        #image-container {
+            overflow: hidden;
+        }
+
+        #main-product-image {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* Improve touch targets for mobile */
+        @media (max-width: 767px) {
+            .thumb-btn {
+                min-width: 80px;
+                min-height: 80px;
+            }
+
+            #image-container {
+                touch-action: manipulation;
+            }
+
+            #main-product-image {
+                transition: transform 0.2s ease;
+            }
+        }
     </style>
 </head>
 
@@ -69,28 +104,36 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-20">
             
-            <div class="lg:col-span-7 flex flex-col-reverse lg:flex-row gap-4 lg:gap-6 sticky top-24 h-max">
+            <div class="lg:col-span-7 flex flex-col-reverse lg:flex-row gap-4 lg:gap-6 lg:sticky lg:top-24 h-max">
                 
-                <div class="flex lg:flex-col gap-3 overflow-auto hide-scrollbar w-full lg:w-20 xl:w-24 flex-shrink-0 snap-x">
+                <div class="flex lg:flex-col gap-3 overflow-auto hide-scrollbar w-full lg:w-20 xl:w-24 flex-shrink-0 snap-x pb-2">
                     {% for image in variant.images.all %}
-                    <button type="button" onclick="changeImage(this, '{{ image.image_url.url }}')" class="thumb-btn flex-shrink-0 w-20 h-20 xl:w-24 xl:h-24 bg-light {% if forloop.first %}border-2 border-dark{% else %}border border-muted/30 hover:border-dark/50{% endif %} rounded-xl overflow-hidden shadow-sm snap-start transition-all">
+                    <button type="button" onclick="changeImage(this, '{{ image.image_url.url }}')" class="thumb-btn flex-shrink-0 w-20 h-20 xl:w-24 xl:h-24 bg-light {% if forloop.first %}border-2 border-dark{% else %}border border-muted/30 hover:border-dark/50{% endif %} rounded-xl overflow-hidden shadow-sm snap-start transition-all active:scale-95 touch-manipulation">
                         <img src="{{ image.image_url.url }}" class="w-full h-full object-cover mix-blend-multiply p-2">
                     </button>
                     {% endfor %}
                 </div>
 
-                <div class="flex-1 aspect-square lg:aspect-auto lg:h-[600px] bg-light rounded-2xl border border-gray-100 overflow-hidden shadow-sm relative flex items-center justify-center p-8 lg:p-12 group">
+                <div class="flex-1 aspect-square lg:aspect-auto lg:h-[600px] bg-light rounded-2xl border border-gray-100 overflow-hidden shadow-sm relative flex items-center justify-center p-8 lg:p-12 group cursor-pointer" id="image-container">
                     {% if variant.mrp > variant.selling_price %}
                     <div class="absolute top-4 left-4 bg-dark text-white text-xs font-black px-4 py-1.5 rounded-lg uppercase tracking-widest z-10 shadow-md">
                         Sale
                     </div>
                     {% endif %}
-                    
+
                     {% if variant.images.first %}
-                        <img id="main-product-image" src="{{ variant.images.first.image_url.url }}" alt="{{ product.name }}" class="w-full h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105">
+                        <img id="main-product-image" src="{{ variant.images.first.image_url.url }}" alt="{{ product.name }}" class="w-full h-full object-contain mix-blend-multiply transition-transform duration-300">
                     {% else %}
                         <img id="main-product-image" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" alt="Placeholder" class="w-full h-full object-contain mix-blend-multiply transition-opacity duration-300 opacity-50">
                     {% endif %}
+
+                    <!-- Mobile touch indicators -->
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-3 py-1 rounded-full opacity-0 md:opacity-0 transition-opacity pointer-events-none" id="touch-indicator">
+                        <span class="flex items-center gap-1">
+                            <span class="material-icons text-sm">touch_app</span>
+                            Tap to zoom
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -488,6 +531,8 @@
                 mainImg.src = imageSrc;
                 mainImg.style.transform = 'scale(1)';
                 mainImg.style.opacity = '1';
+                // Reset zoom state when changing images
+                resetZoom();
             }, 150);
 
             document.querySelectorAll('.thumb-btn').forEach(btn => {
@@ -496,6 +541,143 @@
             });
             button.classList.remove('border-muted/30', 'border');
             button.classList.add('border-dark', 'border-2');
+
+            // Update current image index for swipe navigation
+            const thumbButtons = Array.from(document.querySelectorAll('.thumb-btn'));
+            currentImageIndex = thumbButtons.indexOf(button);
+        }
+
+        // Mobile image interaction variables
+        let isZoomed = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        let currentImageIndex = 0;
+        const images = Array.from(document.querySelectorAll('.thumb-btn img')).map(img => img.src);
+
+        // Touch event handlers for mobile image interaction
+        const imageContainer = document.getElementById('image-container');
+        const mainImage = document.getElementById('main-product-image');
+        const touchIndicator = document.getElementById('touch-indicator');
+
+        function showTouchIndicator() {
+            if (window.innerWidth < 768) {
+                touchIndicator.style.opacity = '1';
+                setTimeout(() => {
+                    touchIndicator.style.opacity = '0';
+                }, 2000);
+            }
+        }
+
+        // Touch start
+        imageContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        // Touch end
+        imageContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            touchEndY = e.changedTouches[0].clientY;
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            // Check if it's a tap (small movement) or swipe (larger movement)
+            if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
+                // It's a tap - toggle zoom with touch position
+                const rect = imageContainer.getBoundingClientRect();
+                const x = touchEndX - rect.left;
+                const y = touchEndY - rect.top;
+                const xPercent = (x / rect.width) * 100;
+                const yPercent = (y / rect.height) * 100;
+                toggleZoom(`${xPercent}% ${yPercent}%`);
+            } else if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                // It's a horizontal swipe - change image
+                if (deltaX > 0) {
+                    // Swipe right - previous image
+                    navigateImage(-1);
+                } else {
+                    // Swipe left - next image
+                    navigateImage(1);
+                }
+            }
+        }, { passive: true });
+
+        // Double tap to zoom
+        let lastTap = 0;
+        imageContainer.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 500 && tapLength > 0) {
+                const rect = imageContainer.getBoundingClientRect();
+                const x = e.changedTouches[0].clientX - rect.left;
+                const y = e.changedTouches[0].clientY - rect.top;
+                const xPercent = (x / rect.width) * 100;
+                const yPercent = (y / rect.height) * 100;
+                toggleZoom(`${xPercent}% ${yPercent}%`);
+                e.preventDefault();
+            }
+            lastTap = currentTime;
+        });
+
+        // Click to zoom on desktop with position capture
+        imageContainer.addEventListener('click', (e) => {
+            if (window.innerWidth >= 768) {
+                const rect = imageContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const xPercent = (x / rect.width) * 100;
+                const yPercent = (y / rect.height) * 100;
+                toggleZoom(`${xPercent}% ${yPercent}%`);
+            }
+        });
+
+        function toggleZoom(zoomOrigin = 'center center') {
+            // Set transform origin to the specified position
+            mainImage.style.transformOrigin = zoomOrigin;
+
+            if (isZoomed) {
+                mainImage.classList.remove('zoomed');
+                mainImage.style.transform = 'scale(1)';
+                isZoomed = false;
+            } else {
+                mainImage.classList.add('zoomed');
+                mainImage.style.transform = 'scale(2)';
+                isZoomed = true;
+                if (window.innerWidth < 768) {
+                    showTouchIndicator();
+                }
+            }
+        }
+
+        function navigateImage(direction) {
+            const thumbButtons = document.querySelectorAll('.thumb-btn');
+            if (thumbButtons.length === 0) return;
+
+            currentImageIndex = (currentImageIndex + direction + thumbButtons.length) % thumbButtons.length;
+            const targetButton = thumbButtons[currentImageIndex];
+            const targetImageSrc = targetButton.querySelector('img').src;
+
+            changeImage(targetButton, targetImageSrc);
+        }
+
+        // Initialize image transform origin
+        mainImage.style.transformOrigin = 'center center';
+
+        // Show touch indicator on page load for mobile
+        if (window.innerWidth < 768) {
+            setTimeout(showTouchIndicator, 1000);
+        }
+
+        // Reset zoom when changing images
+        function resetZoom() {
+            if (isZoomed) {
+                mainImage.classList.remove('zoomed');
+                mainImage.style.transform = 'scale(1)';
+                isZoomed = false;
+            }
         }
 
         function onVariantChange(select) {

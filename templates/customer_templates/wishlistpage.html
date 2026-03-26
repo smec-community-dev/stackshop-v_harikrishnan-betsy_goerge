@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html class="light scroll-smooth" lang="en">
+<html class="scroll-smooth" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -35,18 +35,18 @@
 
 <body class="bg-[#F0F0DB] font-sans flex min-h-screen text-[#30364F]">
 
-    <aside class="w-64 bg-[#30364F] flex flex-col flex-shrink-0 shadow-xl z-10">
+    <aside id="dashboardSidebar" class="hidden md:flex w-full md:w-64 bg-[#30364F] flex flex-col flex-shrink-0 shadow-xl z-10 md:min-h-screen">
         {% include "customer_templates/profile_sidebar.html" %}
     </aside>
 
     <main id="dashboardMain" class="flex-grow flex flex-col items-center justify-start p-4 md:p-8 overflow-y-auto">
-        <div class="w-full max-w-5xl mb-4 md:hidden">
+        <div class="w-full max-w-6xl mb-4 md:hidden">
             <button id="sidebarToggleBtn" onclick="toggleSidebar()" class="flex items-center gap-2 px-3 py-2 bg-[#30364F] text-[#F0F0DB] rounded-lg shadow-md">
                 <span class="material-icons">menu</span>
                 <span class="font-bold text-sm">Menu</span>
             </button>
         </div>
-        <div class="bg-white rounded-xl shadow-sm w-full max-w-5xl p-10 lg:p-14">
+        <div class="bg-white rounded-xl shadow-sm w-full max-w-6xl p-10 lg:p-14">
 
             <div
                 class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 border-b border-[#ACBAC4]/30 pb-6">

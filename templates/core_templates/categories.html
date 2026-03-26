@@ -124,8 +124,12 @@
                     {% for sub in category.subcategories.all|slice:":5" %}
                     <a href="{% url 'search' %}?subcategory={{ sub.slug }}" class="group bg-white rounded-xl overflow-hidden shadow-md border border-gray-100 hover:border-dark hover:shadow-xl transition-all duration-300 flex flex-col">
                         <div class="aspect-[4/3] bg-light relative overflow-hidden flex items-center justify-center">
+                            {% if sub.image_url %}
+                            <img src="{{ sub.image_url.url }}" alt="{{ sub.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                            {% else %}
                             <div class="absolute inset-0 bg-gradient-to-br from-dark to-dark/80 opacity-90 group-hover:scale-110 transition-transform duration-700"></div>
                             <span class="material-icons text-5xl text-white/50 relative z-10 group-hover:text-accent transition-colors">layers</span>
+                            {% endif %}
                         </div>
                         <div class="p-5 flex items-center justify-between bg-white z-10 relative">
                             <div>
