@@ -179,6 +179,8 @@
                 {% else %}
                     {% if user.is_authenticated %}
                         <a href="{% url 'becomeseller' %}" class="text-yellow-500 font-semibold px-4 py-3 rounded-lg hover:bg-light/10 flex items-center gap-2"><span class="material-icons text-[18px]">storefront</span> Become a Seller</a>
+                    {% else %}
+                        <a href="{% url 'becomeseller' %}" class="text-yellow-500 font-semibold px-4 py-3 rounded-lg hover:bg-light/10 flex items-center gap-2"><span class="material-icons text-[18px]">storefront</span> Sell something ?</a>
                     {% endif %}
                 {% endif %}
                 <a href="#" class="text-light font-semibold px-4 py-3 rounded-lg hover:bg-light/10 flex items-center gap-2"><span class="material-icons text-muted text-[18px]">campaign</span> Advertise Here</a>
